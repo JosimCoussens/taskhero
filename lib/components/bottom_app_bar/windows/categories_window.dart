@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/components/bottom_app_bar/components/widgets.dart';
 import 'package:taskhero/components/bottom_app_bar/windows/create_category_window.dart';
-import 'package:taskhero/constants.dart';
 
 Future<dynamic> showCategories(BuildContext context) {
   // Define selectedCategory outside the builder to persist between rebuilds

@@ -30,7 +30,11 @@ void showPriority(BuildContext context) {
                     final int priority = index + 1;
                     final isSelected = selectedPriority == priority;
                     return GestureDetector(
-                      onTap: () => setState(() => selectedPriority = priority),
+                      onTap:
+                          () => setState(() {
+                            selectedPriority =
+                                (selectedPriority == priority) ? 0 : priority;
+                          }),
                       child: Container(
                         decoration: BoxDecoration(
                           color:
@@ -50,12 +54,17 @@ void showPriority(BuildContext context) {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.flag, color: Colors.white),
+                              const Icon(
+                                Icons.flag,
+                                color: Colors.white,
+                                size: 36,
+                              ),
                               Text(
                                 '$priority',
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
+                                  fontSize: 18,
                                 ),
                               ),
                             ],

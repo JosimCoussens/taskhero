@@ -60,3 +60,38 @@ class WindowHeader extends StatelessWidget {
     );
   }
 }
+
+class InputTextField extends StatelessWidget {
+  final String hintText;
+  final int maxLines;
+  const InputTextField({
+    super.key,
+    required this.hintText,
+    required this.maxLines,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      maxLines: maxLines,
+      decoration: InputDecoration(
+        hintText: hintText,
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(6)),
+          borderSide: BorderSide(color: Colors.grey),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(6)),
+          borderSide: BorderSide(color: Colors.grey),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(6)),
+          borderSide: BorderSide(color: Colors.blue),
+        ),
+      ),
+    );
+  }
+}

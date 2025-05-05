@@ -49,9 +49,10 @@ class _ShopPageState extends State<ShopPage> {
   Container _showContent() {
     return Container(
       padding: const EdgeInsets.all(AppParams.generalSpacing),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/market.png'),
+          colorFilter: AppParams.backgroundImageColorFilter,
           fit: BoxFit.cover,
         ),
       ),

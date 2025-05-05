@@ -26,10 +26,7 @@ class CalendarPageState extends State<CalendarPage> {
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/waterfall.png'),
-          colorFilter: ColorFilter.mode(
-            Colors.black.withValues(alpha: 0.5),
-            BlendMode.darken,
-          ),
+          colorFilter: AppParams.backgroundImageColorFilter,
           fit: BoxFit.cover,
         ),
       ),

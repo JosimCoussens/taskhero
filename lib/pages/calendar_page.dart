@@ -34,7 +34,7 @@ class CalendarPageState extends State<CalendarPage> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppParams.generalSpacing),
         child: Column(
           spacing: 16,
           children: [

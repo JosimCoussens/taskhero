@@ -4,29 +4,21 @@ import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
 import 'package:taskhero/constants.dart';
 import 'package:taskhero/pages/home_page.dart';
 
-class ShopPage extends StatefulWidget {
-  const ShopPage({super.key});
+class InventoryPage extends StatefulWidget {
+  const InventoryPage({super.key});
 
   @override
-  State<ShopPage> createState() => _ShopPageState();
+  State<InventoryPage> createState() => _InventoryPageState();
 }
 
-class _ShopPageState extends State<ShopPage> {
+class _InventoryPageState extends State<InventoryPage> {
   // Configuration for grid layout
   final int amountPerRow = 4;
   final double spacing = 5;
   late double itemWidth;
 
   // Track which items are bought
-  List<Item> allItems = [
-    Item(
-      id: 5,
-      name: 'Silver Sword',
-      category: 'Weapons',
-      imagePath: 'assets/images/sword.png',
-      isPurchased: true,
-      price: 25,
-    ),
+  List<Item> boughtItems = [
     Item(
       id: 1,
       name: 'Axe',
@@ -36,18 +28,66 @@ class _ShopPageState extends State<ShopPage> {
       price: 20,
     ),
     Item(
-      id: 1,
-      name: 'Bow',
-      category: 'Weapons',
-      imagePath: 'assets/images/bow.png',
+      id: 2,
+      name: 'Helmet 3',
+      category: 'Armour',
+      imagePath: 'assets/images/helmets/helmet_3.png',
       isPurchased: true,
-      price: 20,
+      price: 15,
     ),
     Item(
       id: 2,
-      name: 'Helmet 1',
+      name: 'Helmet 3',
       category: 'Armour',
-      imagePath: 'assets/images/helmets/helmet_1.png',
+      imagePath: 'assets/images/helmets/helmet_3.png',
+      isPurchased: true,
+      price: 15,
+    ),
+    Item(
+      id: 2,
+      name: 'Helmet 3',
+      category: 'Armour',
+      imagePath: 'assets/images/helmets/helmet_3.png',
+      isPurchased: true,
+      price: 15,
+    ),
+    Item(
+      id: 2,
+      name: 'Helmet 3',
+      category: 'Armour',
+      imagePath: 'assets/images/helmets/helmet_3.png',
+      isPurchased: true,
+      price: 15,
+    ),
+    Item(
+      id: 2,
+      name: 'Helmet 3',
+      category: 'Armour',
+      imagePath: 'assets/images/helmets/helmet_3.png',
+      isPurchased: true,
+      price: 15,
+    ),
+    Item(
+      id: 2,
+      name: 'Helmet 3',
+      category: 'Armour',
+      imagePath: 'assets/images/helmets/helmet_3.png',
+      isPurchased: true,
+      price: 15,
+    ),
+    Item(
+      id: 2,
+      name: 'Helmet 3',
+      category: 'Armour',
+      imagePath: 'assets/images/helmets/helmet_3.png',
+      isPurchased: true,
+      price: 15,
+    ),
+    Item(
+      id: 3,
+      name: 'Helmet 2',
+      category: 'Armour',
+      imagePath: 'assets/images/helmets/helmet_2.png',
       isPurchased: true,
       price: 15,
     ),
@@ -59,6 +99,22 @@ class _ShopPageState extends State<ShopPage> {
       isPurchased: true,
       price: 15,
     ),
+    Item(
+      id: 5,
+      name: 'Silver Sword',
+      category: 'Weapons',
+      imagePath: 'assets/images/sword.png',
+      isPurchased: true,
+      price: 25,
+    ),
+    Item(
+      id: 6,
+      name: 'Helmet 1',
+      category: 'Armour',
+      imagePath: 'assets/images/helmets/helmet_1.png',
+      isPurchased: true,
+      price: 10,
+    ),
   ];
 
   Map<String, List<Item>> categorizedItems = {};
@@ -68,7 +124,7 @@ class _ShopPageState extends State<ShopPage> {
   void initState() {
     super.initState();
     // Organize items by category
-    for (Item item in allItems) {
+    for (Item item in boughtItems) {
       String category = item.category;
       if (!categorizedItems.containsKey(category)) {
         categorizedItems[category] = [];
@@ -174,7 +230,11 @@ class _ShopPageState extends State<ShopPage> {
             ),
             itemCount: items.length,
             itemBuilder: (context, index) {
-              return _buildShopItem(items[index]);
+              return _buildShopItem(
+                items[index].name,
+                items[index].imagePath,
+                items[index].price,
+              );
             },
           ),
         const SizedBox(height: 20),
@@ -183,7 +243,7 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   // Build a shop item (weapon, armor, etc.)
-  Widget _buildShopItem(Item item) {
+  Widget _buildShopItem(String id, String imagePath, int price) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.primary,
@@ -194,14 +254,14 @@ class _ShopPageState extends State<ShopPage> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(12),
-              child: Image.asset(item.imagePath, fit: BoxFit.contain),
+              child: Image.asset(imagePath, fit: BoxFit.contain),
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                item.price.toString(),
+                '$price',
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -213,23 +273,20 @@ class _ShopPageState extends State<ShopPage> {
           ),
           GestureDetector(
             onTap: () {
-              item.togglePurchased();
+              // Implement sell functionality
             },
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 6),
               decoration: BoxDecoration(
-                color:
-                    item.isPurchased
-                        ? AppColors.primaryLight
-                        : AppColors.primaryLighter,
+                color: AppColors.primaryLighter,
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(8),
                   bottomRight: Radius.circular(8),
                 ),
               ),
-              child: Text(
-                item.isPurchased ? 'Sell' : 'Buy',
+              child: const Text(
+                'Sell',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,

@@ -3,6 +3,7 @@ import 'package:taskhero/components/bottom_app_bar/components/widgets.dart';
 import 'package:taskhero/constants.dart';
 import 'package:taskhero/pages/calendar_page.dart';
 import 'package:taskhero/pages/home_page.dart';
+import 'package:taskhero/pages/inventory_page.dart';
 import 'package:taskhero/pages/shop_page.dart';
 import 'windows/categories_window.dart';
 import 'windows/difficulty_window.dart';
@@ -54,7 +55,15 @@ BottomAppBar bottomAppBar(BuildContext context) {
         IconButton(
           icon: const Icon(Icons.inventory),
           iconSize: mainIconSize,
-          onPressed: (() => {}),
+          onPressed:
+              (() => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const InventoryPage(),
+                  ),
+                ),
+              }),
         ),
       ],
     ),

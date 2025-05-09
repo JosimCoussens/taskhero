@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
+import 'package:taskhero/services/todoService.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,13 +11,34 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  List<Todo> todos = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTodos();
+  }
+
+  void _loadTodos() async {
+    List<Todo> loadedTodos = await TodoService().getAll();
+    setState(() {
+      todos = loadedTodos;
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: header(),
-      body: content(),
+      body: isLoading ? _loadingContent() : content(),
       bottomNavigationBar: bottomAppBar(context),
     );
+  }
+
+  Widget _loadingContent() {
+    return const SafeArea(child: Center(child: CircularProgressIndicator()));
   }
 
   SafeArea content() {
@@ -40,51 +62,6 @@ class HomePageState extends State<HomePage> {
           ],
         ),
       ),
-    );
-  }
-
-  Future<dynamic> showTimepicker(BuildContext context) {
-    return showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Set task date',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SfDateRangePicker(
-                view: DateRangePickerView.month,
-                selectionMode: DateRangePickerSelectionMode.single,
-                onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-                  // Save selected date: args.value
-                },
-              ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    child: const Text('Cancel'),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Choose Time'),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

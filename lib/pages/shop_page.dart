@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/classes/item.dart';
 import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
+import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/constants.dart';
-import 'package:taskhero/pages/home_page.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});

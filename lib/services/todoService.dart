@@ -25,6 +25,19 @@ class TodoService {
             .toList(),
   );
 
+  Future<List<Todo>> getPast() async => getAll().then(
+    (todos) =>
+        todos
+            .where(
+              (todo) =>
+                  todo.isCompleted == false &&
+                  todo.date.year <= DateTime.now().year &&
+                  todo.date.month <= DateTime.now().month &&
+                  todo.date.day < DateTime.now().day,
+            )
+            .toList(),
+  );
+
   Future<List<Todo>> getTomorrows() async => getAll().then(
     (todos) =>
         todos
@@ -33,6 +46,19 @@ class TodoService {
                   todo.date.year == DateTime.now().year &&
                   todo.date.month == DateTime.now().month &&
                   todo.date.day == DateTime.now().day + 1,
+            )
+            .toList(),
+  );
+
+  Future<List<Todo>> getTodayCompleted() async => getAll().then(
+    (todos) =>
+        todos
+            .where(
+              (todo) =>
+                  todo.isCompleted == true &&
+                  todo.date.year == DateTime.now().year &&
+                  todo.date.month == DateTime.now().month &&
+                  todo.date.day == DateTime.now().day,
             )
             .toList(),
   );

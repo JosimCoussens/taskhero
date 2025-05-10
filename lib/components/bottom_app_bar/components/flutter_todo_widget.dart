@@ -11,90 +11,70 @@ class TodoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A4976),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: AppColors.primary,
+        borderRadius: BorderRadius.circular(8),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Icon(
-              todo.isCompleted ? Icons.circle : Icons.circle_outlined,
-              color: Colors.white,
-              size: 28,
+      padding: const EdgeInsets.all(12),
+      child: Row(
+        children: [
+          Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 2),
             ),
-            const SizedBox(width: 16),
-
-            // Task details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Title
-                  Text(
-                    todo.title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  todo.title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
                   ),
-                  const SizedBox(height: 4),
-
-                  // Date
+                ),
+                Text(
+                  _formatDate(todo.date),
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.7),
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: todo.category == 'General' ? Colors.green : Colors.pink,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              todo.category,
+              style: const TextStyle(color: Colors.white, fontSize: 12),
+            ),
+          ),
+          if (todo.priority > 0)
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Row(
+                children: [
+                  const Icon(Icons.flag, color: Colors.white, size: 16),
+                  const SizedBox(width: 2),
                   Text(
-                    _formatDate(todo.date),
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.8),
-                      fontSize: 18,
-                    ),
+                    todo.priority.toString(),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ],
               ),
             ),
-
-            // Category indicator
-            _buildCategoryIndicator(todo.category),
-
-            const SizedBox(width: 8),
-
-            // Priority indicator
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                border: Border.all(color: AppColors.primaryLight, width: 2),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.flag_outlined, color: Colors.white),
-                    Text(
-                      todo.priority.toString(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }

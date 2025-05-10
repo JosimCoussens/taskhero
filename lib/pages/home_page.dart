@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
+import 'package:taskhero/components/bottom_app_bar/components/flutter_todo_widget.dart';
+import 'package:taskhero/constants.dart';
 import 'package:taskhero/services/todoService.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,7 +13,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  List<Todo> todos = [];
+  List<Todo> todaysTodos = [];
+  List<Todo> tomorrowTodos = [];
   bool isLoading = true;
 
   @override
@@ -21,9 +24,11 @@ class HomePageState extends State<HomePage> {
   }
 
   void _loadTodos() async {
-    List<Todo> loadedTodos = await TodoService().getAll();
+    List<Todo> todayTodosTemp = await TodoService().getTodays();
+    List<Todo> tomorrowTodosTemp = await TodoService().getTomorrows();
     setState(() {
-      todos = loadedTodos;
+      tomorrowTodosTemp = tomorrowTodosTemp;
+      todaysTodos = todayTodosTemp;
       isLoading = false;
     });
   }
@@ -44,24 +49,105 @@ class HomePageState extends State<HomePage> {
   SafeArea content() {
     return SafeArea(
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/knight.png', height: 300),
-            const SizedBox(height: 20),
-            const Text(
-              'What do you want to do today?',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Tap + to add your tasks',
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 30),
-          ],
+        child:
+            todaysTodos.isEmpty
+                ? _showNoTodos()
+                : Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/castle.png'),
+                      colorFilter: AppParams.backgroundImageColorFilter,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      showHeader('Today'),
+                      Expanded(child: showTodoList(todaysTodos)),
+                      const SizedBox(height: 16),
+                      showHeader('Tomorrow'),
+                      Expanded(child: showTodoList(tomorrowTodos)),
+                    ],
+                  ),
+                ),
+      ),
+    );
+  }
+
+  Widget showHeader(String title) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: AppColors.primaryLight,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
         ),
       ),
+    );
+  }
+
+  Widget showTodoList(List<Todo> todos) {
+    return ListView.builder(
+      itemCount: todos.length,
+      itemBuilder: (context, index) {
+        final todo = todos[index];
+        return TodoWidget(todo);
+      },
+    );
+  }
+
+  Column showTodos(String title, List<Todo> todos) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: AppColors.primaryLight,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: todos.length,
+            itemBuilder: (context, index) {
+              final todo = todos[index];
+              return TodoWidget(todo);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column _showNoTodos() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset('assets/images/knight.png', height: 300),
+        const SizedBox(height: 20),
+        const Text(
+          'What do you want to do today?',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 10),
+        const Text('Tap + to add your tasks', style: TextStyle(fontSize: 16)),
+        const SizedBox(height: 30),
+      ],
     );
   }
 }

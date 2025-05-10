@@ -79,40 +79,6 @@ class TodoWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryIndicator(String category) {
-    IconData icon;
-    Color backgroundColor;
-
-    // Set icon and color based on category
-    switch (category.toLowerCase()) {
-      case 'home':
-        icon = Icons.home;
-        backgroundColor = const Color(0xFFE94E4F);
-        break;
-      case 'work':
-        icon = Icons.work;
-        backgroundColor = const Color(0xFF4CAF50);
-        break;
-      case 'study':
-        icon = Icons.book;
-        backgroundColor = const Color(0xFF2196F3);
-        break;
-      default:
-        icon = Icons.list;
-        backgroundColor = const Color(0xFFFF9800);
-    }
-
-    return Container(
-      width: 50,
-      height: 50,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Icon(icon, color: Colors.white, size: 28),
-    );
-  }
-
   String _formatDate(DateTime date) {
     final now = DateTime.now();
 

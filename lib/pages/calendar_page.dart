@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
 import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/constants.dart';
@@ -11,7 +12,8 @@ class CalendarPage extends StatefulWidget {
 }
 
 class CalendarPageState extends State<CalendarPage> {
-  int selectedIndex = 0;
+  DateTime selectedDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +27,7 @@ class CalendarPageState extends State<CalendarPage> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/waterfall.png'),
+          image: const AssetImage('assets/images/waterfall.png'),
           colorFilter: AppParams.backgroundImageColorFilter,
           fit: BoxFit.cover,
         ),
@@ -33,9 +35,9 @@ class CalendarPageState extends State<CalendarPage> {
       child: Padding(
         padding: const EdgeInsets.all(AppParams.generalSpacing),
         child: Column(
-          spacing: 16,
           children: [
-            _showCalendarHeader(),
+            _buildCalendarHeader(),
+            const SizedBox(height: 16),
             _showActionButtons(),
             _showTaskList(),
           ],
@@ -44,46 +46,130 @@ class CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  Container _showCalendarHeader() {
+  Container _buildCalendarHeader() {
+    final startOfWeek = selectedDate.subtract(
+      Duration(days: selectedDate.weekday - 1),
+    );
+    final daysOfWeek = List.generate(
+      7,
+      (i) => startOfWeek.add(Duration(days: i)),
+    );
+
     return Container(
-      color: AppColors.primary, // Deep blue
+      color: AppColors.primary,
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Icon(Icons.chevron_left, color: Colors.white),
+            children: [
+              IconButton(
+                icon: const Icon(Icons.chevron_left, color: Colors.white),
+                onPressed: () {
+                  setState(() {
+                    selectedDate = selectedDate.subtract(
+                      const Duration(days: 7),
+                    );
+                  });
+                },
+              ),
               Text(
-                'FEBRUARY',
-                style: TextStyle(
+                DateFormat.yMMMM().format(selectedDate).toUpperCase(),
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
-              Icon(Icons.chevron_right, color: Colors.white),
+              IconButton(
+                icon: const Icon(Icons.chevron_right, color: Colors.white),
+                onPressed: () {
+                  setState(() {
+                    selectedDate = selectedDate.add(const Duration(days: 7));
+                  });
+                },
+              ),
             ],
           ),
           const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildDayColumn('MON', '7', false, false),
-              _buildDayColumn('TUE', '8', false, false),
-              _buildDayColumn('WED', '9', true, false), // Selected
-              _buildDayColumn('THU', '10', false, false),
-              _buildDayColumn('FRI', '11', false, false),
-              _buildDayColumn('SAT', '12', false, true), // Weekend
-              _buildDayColumn('SUN', '13', false, true), // Weekend
-            ],
+            children:
+                daysOfWeek.map((day) {
+                  final isSelected = DateUtils.isSameDay(day, selectedDate);
+                  final isWeekend =
+                      day.weekday == DateTime.saturday ||
+                      day.weekday == DateTime.sunday;
+                  final isToday = DateUtils.isSameDay(day, DateTime.now());
+
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedDate = day;
+                      });
+                    },
+                    child: _buildDayColumn(
+                      DateFormat.E().format(day).toUpperCase(),
+                      day.day.toString(),
+                      isSelected,
+                      isWeekend,
+                      isToday,
+                    ),
+                  );
+                }).toList(),
           ),
         ],
       ),
     );
   }
 
+  Widget _buildDayColumn(
+    String dayName,
+    String dayNumber,
+    bool isSelected,
+    bool isWeekend,
+    bool isToday,
+  ) {
+    return Column(
+      children: [
+        Text(
+          dayName,
+          style: TextStyle(
+            color: isWeekend ? Colors.red : Colors.white,
+            fontSize: 12,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isSelected ? Colors.white : Colors.transparent,
+            border:
+                isToday
+                    ? Border.all(color: AppColors.primaryLight, width: 1.5)
+                    : null,
+          ),
+          child: Center(
+            child: Text(
+              dayNumber,
+              style: TextStyle(
+                color:
+                    isSelected
+                        ? Colors.blue
+                        : (isWeekend ? Colors.red : Colors.white),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Expanded _showTaskList() {
+    // You can later filter tasks based on selectedDate here
     return Expanded(
       child: ListView(
         children: [
@@ -114,25 +200,17 @@ class CalendarPageState extends State<CalendarPage> {
       children: [
         Expanded(
           child: ElevatedButton(
-            onPressed: () {
-              setState(() {
-                selectedIndex = 0;
-              });
-            },
+            onPressed: () => setState(() => selectedDate = DateTime.now()),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              backgroundColor:
-                  selectedIndex == 0 ? AppColors.primaryLight : Colors.white,
+              backgroundColor: AppColors.primaryLight,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            child: Text(
-              'Today',
-              style: TextStyle(
-                color: selectedIndex == 0 ? Colors.white : Colors.black87,
-                fontSize: 18,
-              ),
+            child: const Text(
+              'Tasks',
+              style: TextStyle(color: Colors.white, fontSize: 18),
             ),
           ),
         ),
@@ -140,64 +218,18 @@ class CalendarPageState extends State<CalendarPage> {
         Expanded(
           child: ElevatedButton(
             onPressed: () {
-              setState(() {
-                selectedIndex = 1;
-              });
+              // Show completed logic
             },
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              backgroundColor:
-                  selectedIndex == 1 ? AppColors.primaryLight : Colors.white,
+              backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            child: Text(
+            child: const Text(
               'Completed',
-              style: TextStyle(
-                color: selectedIndex == 1 ? Colors.white : Colors.black87,
-                fontSize: 18,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDayColumn(
-    String dayName,
-    String dayNumber,
-    bool isSelected,
-    bool isWeekend,
-  ) {
-    return Column(
-      children: [
-        Text(
-          dayName,
-          style: TextStyle(
-            color: isWeekend ? Colors.red : Colors.white,
-            fontSize: 12,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: isSelected ? Colors.white : Colors.transparent,
-          ),
-          child: Center(
-            child: Text(
-              dayNumber,
-              style: TextStyle(
-                color:
-                    isSelected
-                        ? Colors.blue
-                        : (isWeekend ? Colors.red : Colors.white),
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(color: Colors.black87, fontSize: 18),
             ),
           ),
         ),
@@ -244,7 +276,7 @@ class CalendarPageState extends State<CalendarPage> {
                 Text(
                   'Today At $time',
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: Colors.white.withAlpha(150),
                     fontSize: 12,
                   ),
                 ),

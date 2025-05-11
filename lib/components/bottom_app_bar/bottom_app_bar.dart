@@ -59,6 +59,7 @@ Future<void> addTask(BuildContext context) {
   int selectedRepeat = 0;
   int? selectedPriority;
   int? selectedDifficulty;
+  DateTime? selectedDate;
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
@@ -111,8 +112,10 @@ Future<void> addTask(BuildContext context) {
                   selectedRepeat,
                   selectedPriority,
                   selectedDifficulty,
+                  selectedDate,
                   (val) => setState(() => selectedPriority = val),
                   (val) => setState(() => selectedDifficulty = val),
+                  (val) => setState(() => selectedDate = val),
                 ),
                 const SizedBox(height: 24),
               ],
@@ -131,8 +134,10 @@ Row _taskActionIcons(
   int repeatCycle,
   int? selectedPriority,
   int? selectedDifficulty,
+  DateTime? selectedDate,
   ValueChanged<int> onPriorityChanged,
   ValueChanged<int> onDifficultyChanged,
+  ValueChanged<DateTime> onDateChanged,
 ) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -140,7 +145,10 @@ Row _taskActionIcons(
       IconButton(
         icon: const Icon(Icons.access_time),
         iconSize: iconSize,
-        onPressed: () => showCalendar(context),
+        onPressed: () async {
+          final result = await showCalendar(context);
+          if (result != null) onDateChanged(result);
+        },
       ),
       IconButton(
         icon: const Icon(Icons.category),
@@ -183,6 +191,7 @@ Row _taskActionIcons(
             difficulty: selectedDifficulty ?? 0,
             priority: selectedPriority ?? 0,
             isCompleted: false,
+            date: selectedDate ?? DateTime.now(),
           );
 
           await TodoService().addTask(newTask);

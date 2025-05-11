@@ -4,6 +4,7 @@ import 'package:taskhero/components/bottom_app_bar/components/widgets.dart';
 import 'package:taskhero/constants.dart';
 
 Future<dynamic> showCalendar(BuildContext context) {
+  DateTime? selectedDate;
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -24,14 +25,16 @@ Future<dynamic> showCalendar(BuildContext context) {
               view: DateRangePickerView.month,
               selectionMode: DateRangePickerSelectionMode.single,
               onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-                // Save selected date: args.value
+                if (args.value is DateTime) {
+                  selectedDate = args.value;
+                }
               },
             ),
             const SizedBox(height: 8),
             Components().buttons(
               context,
               () => Navigator.pop(context),
-              () => Navigator.pop(context),
+              () => Navigator.pop(context, selectedDate),
             ),
           ],
         ),

@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:taskhero/firebase_options.dart';
 import 'package:taskhero/pages/home_page.dart';
-import 'package:taskhero/pages/intro_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

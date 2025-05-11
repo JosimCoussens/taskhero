@@ -62,4 +62,12 @@ class TodoService {
             )
             .toList(),
   );
+
+  addTask(newTask) {
+    FirebaseFirestore.instance
+        .collection('todos')
+        .add(newTask.toMap())
+        .then((value) => print("Task Added"))
+        .catchError((error) => print("Failed to add task: $error"));
+  }
 }

@@ -64,15 +64,19 @@ class WindowHeader extends StatelessWidget {
 class InputTextField extends StatelessWidget {
   final String hintText;
   final int maxLines;
+  final TextEditingController controller;
+
   const InputTextField({
     super.key,
     required this.hintText,
     required this.maxLines,
+    required this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       maxLines: maxLines,
       decoration: InputDecoration(
         hintText: hintText,

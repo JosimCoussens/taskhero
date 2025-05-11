@@ -3,6 +3,7 @@ import 'package:taskhero/components/bottom_app_bar/components/widgets.dart';
 import 'package:taskhero/constants.dart';
 
 Future<dynamic> showCreateCategory(BuildContext context) {
+  TextEditingController categoryNameController = TextEditingController();
   final List<Color> categoryColors = [
     Color(0xFFD9D750), // Yellow
     Color(0xFF7ED957), // Green
@@ -32,7 +33,11 @@ Future<dynamic> showCreateCategory(BuildContext context) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 16,
                   children: [
-                    InputTextField(hintText: 'Category Name', maxLines: 1),
+                    InputTextField(
+                      hintText: 'Category Name',
+                      maxLines: 1,
+                      controller: categoryNameController,
+                    ),
                     _showChooseIconButton(),
                     _showColorOverview(categoryColors),
                     Components().buttons(

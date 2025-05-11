@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/components/bottom_app_bar/components/widgets.dart';
 import 'package:taskhero/constants.dart';
 import 'package:taskhero/pages/calendar_page.dart';
 import 'package:taskhero/pages/home_page.dart';
 import 'package:taskhero/pages/inventory_page.dart';
 import 'package:taskhero/pages/shop_page.dart';
+import 'package:taskhero/services/todoService.dart';
 import 'windows/categories_window.dart';
 import 'windows/difficulty_window.dart';
 import 'windows/priority_window.dart';
@@ -85,8 +87,10 @@ GestureDetector addTaskIcon(BuildContext context, double mainIconSize) {
 }
 
 Future<dynamic> addTask(BuildContext context) {
-  String selectedRepeat = ''; // Allow deselection
+  int selectedRepeat = 0; // Allow deselection
   const iconSize = 32.0;
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   return showModalBottomSheet(
     context: context,
@@ -113,15 +117,30 @@ Future<dynamic> addTask(BuildContext context) {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
-                InputTextField(hintText: 'Title', maxLines: 1),
+                InputTextField(
+                  hintText: 'Title',
+                  maxLines: 1,
+                  controller: titleController,
+                ),
                 const SizedBox(height: 16),
-                InputTextField(hintText: 'Description', maxLines: 3),
+                InputTextField(
+                  hintText: 'Description',
+                  maxLines: 3,
+                  controller: descriptionController,
+                ),
                 const SizedBox(height: 16),
                 _showTaskRepeatCycle(selectedRepeat, (val) {
                   setState(() => selectedRepeat = val);
                 }),
                 const SizedBox(height: 16),
-                _showTaskIcons(iconSize, context),
+                _showTaskIcons(
+                  iconSize,
+                  context,
+                  titleController,
+                  descriptionController,
+                  selectedRepeat,
+                  setState,
+                ),
                 const SizedBox(height: 24),
               ],
             ),
@@ -132,7 +151,14 @@ Future<dynamic> addTask(BuildContext context) {
   );
 }
 
-Row _showTaskIcons(double iconSize, BuildContext context) {
+Row _showTaskIcons(
+  double iconSize,
+  BuildContext context,
+  TextEditingController titleController,
+  TextEditingController descriptionController,
+  int repeatCycle,
+  StateSetter setState,
+) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceAround,
     children: [
@@ -164,30 +190,59 @@ Row _showTaskIcons(double iconSize, BuildContext context) {
         icon: const Icon(Icons.send),
         iconSize: iconSize,
         color: Colors.blue,
-        onPressed: () {
-          // Submit task
-          Navigator.of(context).pop();
+        onPressed: () async {
+          final title = titleController.text.trim();
+          final description = descriptionController.text.trim();
+
+          if (title.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Please enter a title')),
+            );
+            return;
+          }
+
+          final newTask = Todo(
+            title: title,
+            description: description,
+            repeatCycle: repeatCycle,
+          );
+
+          await TodoService().addTask(newTask);
+
+          Navigator.of(context).pop(); // Close bottom sheet
         },
       ),
     ],
   );
 }
 
-Row _showTaskRepeatCycle(
-  String selectedRepeat,
-  void Function(String) onChanged,
-) {
+Row _showTaskRepeatCycle(int selectedRepeat, void Function(int) onChanged) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children:
         ['Daily', 'Weekly', 'Monthly'].map((label) {
-          final isSelected = selectedRepeat == label;
+          final isSelected =
+              selectedRepeat ==
+              ['Daily', 'Weekly', 'Monthly'].indexOf(label) + 1;
           return Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: GestureDetector(
                 onTap: () {
-                  onChanged(isSelected ? '' : label); // toggle
+                  switch (label) {
+                    case 'Daily':
+                      selectedRepeat = 1;
+                      onChanged(selectedRepeat);
+                      break;
+                    case 'Weekly':
+                      selectedRepeat = 2;
+                      onChanged(selectedRepeat);
+                      break;
+                    case 'Monthly':
+                      selectedRepeat = 3;
+                      onChanged(selectedRepeat);
+                      break;
+                  }
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 12),

@@ -5,7 +5,6 @@ class Todo {
   String description;
   DateTime date;
   String category;
-  int priority;
   bool isCompleted;
   int repeatCycle;
   int difficulty;
@@ -15,7 +14,6 @@ class Todo {
     this.description = '',
     DateTime? date,
     this.category = 'General',
-    this.priority = 1,
     this.isCompleted = false,
     this.repeatCycle = 0,
     this.difficulty = 1,
@@ -28,7 +26,6 @@ class Todo {
       description: data['description'] ?? '',
       date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
       category: data['category'] ?? 'General',
-      priority: data['priority'] ?? 1,
       isCompleted: data['isCompleted'] ?? false,
       repeatCycle: data['repeatCycle'] ?? 0,
       difficulty: data['difficulty'] ?? 1,
@@ -42,7 +39,6 @@ class Todo {
       'description': description,
       'date': date,
       'category': category,
-      'priority': priority,
       'isCompleted': isCompleted,
       'repeatCycle': repeatCycle,
       'difficulty': difficulty,

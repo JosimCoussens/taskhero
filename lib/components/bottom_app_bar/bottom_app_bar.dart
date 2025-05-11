@@ -9,7 +9,6 @@ import 'package:taskhero/pages/shop_page.dart';
 import 'package:taskhero/services/todoService.dart';
 import 'windows/categories_window.dart';
 import 'windows/difficulty_window.dart';
-import 'windows/priority_window.dart';
 import 'windows/calendar_window.dart';
 
 const double mainIconSize = 30.0;
@@ -164,14 +163,6 @@ Row _taskActionIcons(
         },
       ),
       IconButton(
-        icon: const Icon(Icons.flag),
-        iconSize: iconSize,
-        onPressed: () async {
-          final result = await showPriority(context);
-          if (result != null) onPriorityChanged(result);
-        },
-      ),
-      IconButton(
         icon: const Icon(Icons.star_border),
         iconSize: iconSize,
         onPressed: () async {
@@ -197,7 +188,6 @@ Row _taskActionIcons(
             description: descriptionController.text.trim(),
             repeatCycle: repeatCycle,
             difficulty: selectedDifficulty ?? 0,
-            priority: selectedPriority ?? 0,
             isCompleted: false,
             date: selectedDate ?? DateTime.now(),
             category: category ?? 'General',
@@ -225,7 +215,7 @@ Row _repeatCycleSelector(int selectedRepeat, ValueChanged<int> onChanged) {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: GestureDetector(
-                onTap: () => onChanged(index),
+                onTap: () => onChanged(isSelected ? -1 : index),
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(

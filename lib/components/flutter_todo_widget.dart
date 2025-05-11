@@ -60,20 +60,6 @@ class TodoWidget extends StatelessWidget {
               style: const TextStyle(color: Colors.white, fontSize: 12),
             ),
           ),
-          if (todo.priority > 0)
-            Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: Row(
-                children: [
-                  const Icon(Icons.flag, color: Colors.white, size: 16),
-                  const SizedBox(width: 2),
-                  Text(
-                    todo.priority.toString(),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
         ],
       ),
     );

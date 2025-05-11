@@ -56,7 +56,6 @@ GestureDetector addTaskIcon(BuildContext context) {
 
 Future<void> addTask(BuildContext context) {
   int selectedRepeat = 0;
-  int? selectedPriority;
   int? selectedDifficulty;
   DateTime? selectedDate;
   String? selectedCategory;
@@ -110,11 +109,9 @@ Future<void> addTask(BuildContext context) {
                   titleController,
                   descriptionController,
                   selectedRepeat,
-                  selectedPriority,
                   selectedDifficulty,
                   selectedDate,
                   selectedCategory,
-                  (val) => setState(() => selectedPriority = val),
                   (val) => setState(() => selectedDifficulty = val),
                   (val) => setState(() => selectedDate = val),
                   (val) => setState(() => selectedCategory = val),
@@ -134,11 +131,9 @@ Row _taskActionIcons(
   TextEditingController titleController,
   TextEditingController descriptionController,
   int repeatCycle,
-  int? selectedPriority,
   int? selectedDifficulty,
   DateTime? selectedDate,
   String? category,
-  ValueChanged<int> onPriorityChanged,
   ValueChanged<int> onDifficultyChanged,
   ValueChanged<DateTime> onDateChanged,
   ValueChanged<String> onCategoryChanged,

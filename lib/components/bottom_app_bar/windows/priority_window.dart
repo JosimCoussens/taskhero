@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:taskhero/components/bottom_app_bar/components/widgets.dart';
 import 'package:taskhero/constants.dart';
 
-void showPriority(BuildContext context) {
-  showModalBottomSheet(
+Future<int?> showPriority(BuildContext context) {
+  return showModalBottomSheet<int>(
     context: context,
     isScrollControlled: true,
     shape: const RoundedRectangleBorder(
@@ -12,7 +12,6 @@ void showPriority(BuildContext context) {
     backgroundColor: const Color(0xFFEFF6FF),
     builder: (context) {
       int selectedPriority = 0;
-
       return StatefulBuilder(
         builder: (context, setState) {
           return Padding(
@@ -44,7 +43,7 @@ void showPriority(BuildContext context) {
                           borderRadius: BorderRadius.circular(6),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.50),
+                              color: Colors.black.withAlpha(50),
                               offset: const Offset(6, 6),
                               blurRadius: 4,
                             ),
@@ -77,8 +76,8 @@ void showPriority(BuildContext context) {
                 const SizedBox(height: 8),
                 Components().buttons(
                   context,
-                  () => Navigator.pop(context),
-                  () => Navigator.pop(context),
+                  () => Navigator.pop(context), // Cancel
+                  () => Navigator.pop(context, selectedPriority), // Confirm
                 ),
               ],
             ),

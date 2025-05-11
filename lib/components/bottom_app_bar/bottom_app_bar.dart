@@ -12,85 +12,55 @@ import 'windows/difficulty_window.dart';
 import 'windows/priority_window.dart';
 import 'windows/calendar_window.dart';
 
+const double mainIconSize = 30.0;
+const double iconSize = 32.0;
+
 BottomAppBar bottomAppBar(BuildContext context) {
-  const mainIconSize = 30.0;
   return BottomAppBar(
     height: 100,
     color: const Color.fromARGB(255, 232, 244, 255),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(
-          icon: const Icon(Icons.home),
-          iconSize: mainIconSize,
-          onPressed:
-              (() => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                ),
-              }),
-        ),
-        IconButton(
-          icon: const Icon(Icons.calendar_month),
-          iconSize: mainIconSize,
-          onPressed:
-              (() => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CalendarPage()),
-                ),
-              }),
-        ),
-        addTaskIcon(context, mainIconSize),
-        IconButton(
-          icon: const Icon(Icons.shopping_basket),
-          iconSize: mainIconSize,
-          onPressed:
-              (() => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ShopPage()),
-                ),
-              }),
-        ),
-        IconButton(
-          icon: const Icon(Icons.inventory),
-          iconSize: mainIconSize,
-          onPressed:
-              (() => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const InventoryPage(),
-                  ),
-                ),
-              }),
-        ),
+        _navIcon(context, Icons.home, const HomePage()),
+        _navIcon(context, Icons.calendar_month, const CalendarPage()),
+        addTaskIcon(context),
+        _navIcon(context, Icons.shopping_basket, const ShopPage()),
+        _navIcon(context, Icons.inventory, const InventoryPage()),
       ],
     ),
   );
 }
 
-GestureDetector addTaskIcon(BuildContext context, double mainIconSize) {
+IconButton _navIcon(BuildContext context, IconData icon, Widget page) {
+  return IconButton(
+    icon: Icon(icon),
+    iconSize: mainIconSize,
+    onPressed:
+        () => Navigator.push(context, MaterialPageRoute(builder: (_) => page)),
+  );
+}
+
+GestureDetector addTaskIcon(BuildContext context) {
   return GestureDetector(
+    onTap: () => addTask(context),
     child: Container(
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.primaryLight,
       ),
-      child: Icon(Icons.add, color: Colors.white, size: mainIconSize),
+      child: const Icon(Icons.add, color: Colors.white, size: mainIconSize),
     ),
-    onTap: () => addTask(context),
   );
 }
 
-Future<dynamic> addTask(BuildContext context) {
-  int selectedRepeat = 0; // Allow deselection
-  const iconSize = 32.0;
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+Future<void> addTask(BuildContext context) {
+  int selectedRepeat = 0;
+  int? selectedPriority;
+  int? selectedDifficulty;
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
 
   return showModalBottomSheet(
     context: context,
@@ -99,9 +69,9 @@ Future<dynamic> addTask(BuildContext context) {
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
     backgroundColor: const Color(0xFFEFF6FF),
-    builder: (BuildContext context) {
+    builder: (context) {
       return StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
+        builder: (context, setState) {
           return Padding(
             padding: EdgeInsets.only(
               bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -129,17 +99,20 @@ Future<dynamic> addTask(BuildContext context) {
                   controller: descriptionController,
                 ),
                 const SizedBox(height: 16),
-                _showTaskRepeatCycle(selectedRepeat, (val) {
-                  setState(() => selectedRepeat = val);
-                }),
+                _repeatCycleSelector(
+                  selectedRepeat,
+                  (val) => setState(() => selectedRepeat = val),
+                ),
                 const SizedBox(height: 16),
-                _showTaskIcons(
-                  iconSize,
+                _taskActionIcons(
                   context,
                   titleController,
                   descriptionController,
                   selectedRepeat,
-                  setState,
+                  selectedPriority,
+                  selectedDifficulty,
+                  (val) => setState(() => selectedPriority = val),
+                  (val) => setState(() => selectedDifficulty = val),
                 ),
                 const SizedBox(height: 24),
               ],
@@ -151,13 +124,15 @@ Future<dynamic> addTask(BuildContext context) {
   );
 }
 
-Row _showTaskIcons(
-  double iconSize,
+Row _taskActionIcons(
   BuildContext context,
   TextEditingController titleController,
   TextEditingController descriptionController,
   int repeatCycle,
-  StateSetter setState,
+  int? selectedPriority,
+  int? selectedDifficulty,
+  ValueChanged<int> onPriorityChanged,
+  ValueChanged<int> onDifficultyChanged,
 ) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -165,26 +140,28 @@ Row _showTaskIcons(
       IconButton(
         icon: const Icon(Icons.access_time),
         iconSize: iconSize,
-        color: Colors.black87,
         onPressed: () => showCalendar(context),
       ),
       IconButton(
         icon: const Icon(Icons.category),
         iconSize: iconSize,
-        color: Colors.black87,
         onPressed: () => showCategories(context),
       ),
       IconButton(
         icon: const Icon(Icons.flag),
         iconSize: iconSize,
-        color: Colors.black87,
-        onPressed: () => showPriority(context),
+        onPressed: () async {
+          final result = await showPriority(context);
+          if (result != null) onPriorityChanged(result);
+        },
       ),
       IconButton(
         icon: const Icon(Icons.star_border),
         iconSize: iconSize,
-        color: Colors.black87,
-        onPressed: () => showDifficulty(context),
+        onPressed: () async {
+          final result = await showDifficulty(context);
+          if (result != null) onDifficultyChanged(result);
+        },
       ),
       IconButton(
         icon: const Icon(Icons.send),
@@ -192,8 +169,6 @@ Row _showTaskIcons(
         color: Colors.blue,
         onPressed: () async {
           final title = titleController.text.trim();
-          final description = descriptionController.text.trim();
-
           if (title.isEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Please enter a title')),
@@ -203,47 +178,36 @@ Row _showTaskIcons(
 
           final newTask = Todo(
             title: title,
-            description: description,
+            description: descriptionController.text.trim(),
             repeatCycle: repeatCycle,
+            difficulty: selectedDifficulty ?? 0,
+            priority: selectedPriority ?? 0,
+            isCompleted: false,
           );
 
           await TodoService().addTask(newTask);
-
-          Navigator.of(context).pop(); // Close bottom sheet
+          if (context.mounted) Navigator.of(context).pop();
         },
       ),
     ],
   );
 }
 
-Row _showTaskRepeatCycle(int selectedRepeat, void Function(int) onChanged) {
+Row _repeatCycleSelector(int selectedRepeat, ValueChanged<int> onChanged) {
+  final options = ['Daily', 'Weekly', 'Monthly'];
+
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children:
-        ['Daily', 'Weekly', 'Monthly'].map((label) {
-          final isSelected =
-              selectedRepeat ==
-              ['Daily', 'Weekly', 'Monthly'].indexOf(label) + 1;
+        options.map((label) {
+          final index = options.indexOf(label) + 1;
+          final isSelected = selectedRepeat == index;
+
           return Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: GestureDetector(
-                onTap: () {
-                  switch (label) {
-                    case 'Daily':
-                      selectedRepeat = 1;
-                      onChanged(selectedRepeat);
-                      break;
-                    case 'Weekly':
-                      selectedRepeat = 2;
-                      onChanged(selectedRepeat);
-                      break;
-                    case 'Monthly':
-                      selectedRepeat = 3;
-                      onChanged(selectedRepeat);
-                      break;
-                  }
-                },
+                onTap: () => onChanged(index),
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(

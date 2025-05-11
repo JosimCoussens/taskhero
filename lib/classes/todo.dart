@@ -8,6 +8,7 @@ class Todo {
   int priority;
   bool isCompleted;
   int repeatCycle;
+  int difficulty;
 
   Todo({
     required this.title,
@@ -17,6 +18,7 @@ class Todo {
     this.priority = 1,
     this.isCompleted = false,
     this.repeatCycle = 0,
+    this.difficulty = 1,
   }) : date = date ?? DateTime.now();
 
   // Factory method to create a Todo from Firestore document data
@@ -29,6 +31,7 @@ class Todo {
       priority: data['priority'] ?? 1,
       isCompleted: data['isCompleted'] ?? false,
       repeatCycle: data['repeatCycle'] ?? 0,
+      difficulty: data['difficulty'] ?? 1,
     );
   }
 

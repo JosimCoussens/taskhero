@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:taskhero/components/bottom_app_bar/components/widgets.dart';
 import 'package:taskhero/constants.dart';
 
-Future<dynamic> showDifficulty(BuildContext context) {
+Future<int?> showDifficulty(BuildContext context) {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -11,7 +11,7 @@ Future<dynamic> showDifficulty(BuildContext context) {
     ),
     backgroundColor: const Color(0xFFEFF6FF),
     builder: (context) {
-      String selectedDifficulty = 'Normal';
+      int selectedDifficulty = 1;
       Image coinImage = Image.asset(
         'assets/images/xp_coin.png',
         height: 20,
@@ -34,13 +34,25 @@ Future<dynamic> showDifficulty(BuildContext context) {
                 WindowHeader(title: "Choose Difficulty"),
                 const SizedBox(height: 16),
                 ...difficulties.map((difficulty) {
-                  final isSelected = selectedDifficulty == difficulty['label'];
+                  final isSelected =
+                      selectedDifficulty ==
+                      (difficulty['label'] == 'Easy'
+                          ? 0
+                          : difficulty['label'] == 'Normal'
+                          ? 1
+                          : 2);
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: GestureDetector(
                       onTap:
                           () => setState(
-                            () => selectedDifficulty = difficulty['label']!,
+                            () =>
+                                selectedDifficulty =
+                                    difficulty['label'] == 'Easy'
+                                        ? 0
+                                        : difficulty['label'] == 'Normal'
+                                        ? 1
+                                        : 2,
                           ),
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -90,7 +102,7 @@ Future<dynamic> showDifficulty(BuildContext context) {
                 Components().buttons(
                   context,
                   () => Navigator.pop(context),
-                  () => Navigator.pop(context),
+                  () => Navigator.pop(context, selectedDifficulty),
                 ),
               ],
             ),

@@ -63,7 +63,7 @@ class TodoService {
             .toList(),
   );
 
-  addTask(newTask) {
+  addTask(Todo newTask) async {
     FirebaseFirestore.instance.collection('todos').add(newTask.toMap());
   }
 }

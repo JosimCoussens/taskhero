@@ -37,6 +37,15 @@ class Todo {
 
   // Convert Todo instance back to a map (if needed for storing in Firestore)
   Map<String, dynamic> toMap() {
-    return {'title': title, 'description': description};
+    return {
+      'title': title,
+      'description': description,
+      'date': date,
+      'category': category,
+      'priority': priority,
+      'isCompleted': isCompleted,
+      'repeatCycle': repeatCycle,
+      'difficulty': difficulty,
+    };
   }
 }

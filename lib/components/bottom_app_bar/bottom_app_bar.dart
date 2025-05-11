@@ -60,6 +60,7 @@ Future<void> addTask(BuildContext context) {
   int? selectedPriority;
   int? selectedDifficulty;
   DateTime? selectedDate;
+  String? selectedCategory;
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
@@ -113,9 +114,11 @@ Future<void> addTask(BuildContext context) {
                   selectedPriority,
                   selectedDifficulty,
                   selectedDate,
+                  selectedCategory,
                   (val) => setState(() => selectedPriority = val),
                   (val) => setState(() => selectedDifficulty = val),
                   (val) => setState(() => selectedDate = val),
+                  (val) => setState(() => selectedCategory = val),
                 ),
                 const SizedBox(height: 24),
               ],
@@ -135,9 +138,11 @@ Row _taskActionIcons(
   int? selectedPriority,
   int? selectedDifficulty,
   DateTime? selectedDate,
+  String? category,
   ValueChanged<int> onPriorityChanged,
   ValueChanged<int> onDifficultyChanged,
   ValueChanged<DateTime> onDateChanged,
+  ValueChanged<String> onCategoryChanged,
 ) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -153,7 +158,10 @@ Row _taskActionIcons(
       IconButton(
         icon: const Icon(Icons.category),
         iconSize: iconSize,
-        onPressed: () => showCategories(context),
+        onPressed: () async {
+          final result = await showCategories(context);
+          if (result != null) onCategoryChanged(result);
+        },
       ),
       IconButton(
         icon: const Icon(Icons.flag),
@@ -192,6 +200,7 @@ Row _taskActionIcons(
             priority: selectedPriority ?? 0,
             isCompleted: false,
             date: selectedDate ?? DateTime.now(),
+            category: category ?? 'General',
           );
 
           await TodoService().addTask(newTask);

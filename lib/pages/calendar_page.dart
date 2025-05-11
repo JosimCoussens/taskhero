@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
 import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/constants.dart';
+import 'package:taskhero/services/todoService.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -13,14 +15,26 @@ class CalendarPage extends StatefulWidget {
 
 class CalendarPageState extends State<CalendarPage> {
   DateTime selectedDate = DateTime.now();
+  List<Todo> completedTodos = [];
+  List<Todo> uncompletedTodos = [];
 
   @override
   Widget build(BuildContext context) {
+    _fetchTasks();
     return Scaffold(
       appBar: header(),
       body: showContent(),
       bottomNavigationBar: bottomAppBar(context),
     );
+  }
+
+  void _fetchTasks() async {
+    final completed = await TodoService.getCompletedTasks(selectedDate);
+    final uncompleted = await TodoService.getUncompletedTasks(selectedDate);
+    setState(() {
+      completedTodos = completed;
+      uncompletedTodos = uncompleted;
+    });
   }
 
   Container showContent() {
@@ -103,7 +117,19 @@ class CalendarPageState extends State<CalendarPage> {
                   final isToday = DateUtils.isSameDay(day, DateTime.now());
 
                   return GestureDetector(
-                    onTap: () => setState(() => selectedDate = day),
+                    onTap: () async {
+                      final uncompleted = await TodoService.getUncompletedTasks(
+                        day,
+                      );
+                      final completed = await TodoService.getCompletedTasks(
+                        day,
+                      );
+                      setState(() {
+                        selectedDate = day;
+                        uncompletedTodos = uncompleted;
+                        completedTodos = completed;
+                      });
+                    },
                     child: _buildDayColumn(
                       DateFormat.E().format(day).toUpperCase(),
                       day.day.toString(),
@@ -270,27 +296,33 @@ class CalendarPageState extends State<CalendarPage> {
 
   Expanded _showTaskList() {
     return Expanded(
-      child: ListView(
+      child: ListView.builder(
         padding: const EdgeInsets.only(top: 8),
-        children: [
-          _buildTaskItem('Buy Grocery', '16:45', null, null),
-          const SizedBox(height: 12),
-          _buildTaskItem(
-            'Do homework',
-            '16:45',
-            'University',
-            Colors.blue.shade200,
-            priority: 1,
-          ),
-          const SizedBox(height: 12),
-          _buildTaskItem(
-            'Take out dog',
-            '16:45',
-            'Home',
-            Colors.red.shade200,
-            priority: 1,
-          ),
-        ],
+        itemCount:
+            _selectedButtonIndex == 0
+                ? uncompletedTodos.length
+                : completedTodos.length,
+        itemBuilder: (context, index) {
+          final todo =
+              _selectedButtonIndex == 0
+                  ? uncompletedTodos[index]
+                  : completedTodos[index];
+          return Column(
+            children: [
+              _buildTaskItem(
+                todo.title,
+                DateFormat.jm().format(todo.date),
+                todo.category,
+                Colors.green,
+              ),
+              if (index !=
+                  (_selectedButtonIndex == 0
+                      ? uncompletedTodos.length - 1
+                      : completedTodos.length - 1))
+                const SizedBox(height: 8),
+            ],
+          );
+        },
       ),
     );
   }
@@ -299,9 +331,8 @@ class CalendarPageState extends State<CalendarPage> {
     String title,
     String time,
     String? category,
-    Color? categoryColor, {
-    int priority = 0,
-  }) {
+    Color? categoryColor,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.primary,
@@ -348,20 +379,6 @@ class CalendarPageState extends State<CalendarPage> {
               child: Text(
                 category,
                 style: const TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            ),
-          if (priority > 0)
-            Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: Row(
-                children: [
-                  const Icon(Icons.flag, color: Colors.white, size: 16),
-                  const SizedBox(width: 2),
-                  Text(
-                    '$priority',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ],
               ),
             ),
         ],

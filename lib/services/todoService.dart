@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:taskhero/classes/todo.dart';
 
 class TodoService {
-  Future<List<Todo>> getAll() async {
+  static Future<List<Todo>> getAll() async {
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection('todos').get();
 
@@ -65,5 +65,35 @@ class TodoService {
 
   addTask(Todo newTask) async {
     FirebaseFirestore.instance.collection('todos').add(newTask.toMap());
+  }
+
+  static Future<List<Todo>> getCompletedTasks(DateTime day) {
+    return getAll().then(
+      (todos) =>
+          todos
+              .where(
+                (todo) =>
+                    todo.isCompleted == true &&
+                    todo.date.year == day.year &&
+                    todo.date.month == day.month &&
+                    todo.date.day == day.day,
+              )
+              .toList(),
+    );
+  }
+
+  static Future<List<Todo>> getUncompletedTasks(DateTime day) {
+    return getAll().then(
+      (todos) =>
+          todos
+              .where(
+                (todo) =>
+                    todo.isCompleted == false &&
+                    todo.date.year == day.year &&
+                    todo.date.month == day.month &&
+                    todo.date.day == day.day,
+              )
+              .toList(),
+    );
   }
 }

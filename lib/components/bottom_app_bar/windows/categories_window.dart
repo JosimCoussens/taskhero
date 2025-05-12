@@ -105,14 +105,7 @@ Future<dynamic> showCategories(BuildContext context) {
                           selectedCategory,
                           (value) => setState(() => selectedCategory = value),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            showCreateCategory(context);
-                          },
-                          child: Container(
-                            // ... rest of the code remains the same
-                          ),
-                        ),
+                        _buildAddCategoryTile(context),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -132,6 +125,52 @@ Future<dynamic> showCategories(BuildContext context) {
         },
       );
     },
+  );
+}
+
+GestureDetector _buildAddCategoryTile(BuildContext context) {
+  bool isSelected = false;
+  return GestureDetector(
+    onTap: () {
+      isSelected = !isSelected;
+      showCreateCategory(context);
+    },
+    child: Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.greenAccent.withValues(alpha: 1.0),
+            Colors.greenAccent.withValues(alpha: 0.85),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            offset: const Offset(0, 4),
+            blurRadius: 6,
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.add, size: 30, color: Colors.black.withValues(alpha: 0.7)),
+          const SizedBox(height: 8),
+          Text(
+            'Create Category',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.black.withValues(alpha: 0.7),
+            ),
+          ),
+        ],
+      ),
+    ),
   );
 }
 

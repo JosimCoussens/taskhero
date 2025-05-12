@@ -6,7 +6,7 @@ import 'package:taskhero/pages/calendar_page.dart';
 import 'package:taskhero/pages/home_page.dart';
 import 'package:taskhero/pages/inventory_page.dart';
 import 'package:taskhero/pages/shop_page.dart';
-import 'package:taskhero/services/todoService.dart';
+import 'package:taskhero/services/todo_service.dart';
 import 'windows/categories_window.dart';
 import 'windows/difficulty_window.dart';
 import 'windows/calendar_window.dart';

@@ -1,6 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:taskhero/classes/category.dart';
 import 'package:taskhero/components/bottom_app_bar/components/widgets.dart';
 import 'package:taskhero/constants.dart';
+import 'package:taskhero/services/category_service.dart';
 
 Future<dynamic> showCreateCategory(BuildContext context) {
   TextEditingController categoryNameController = TextEditingController();
@@ -14,6 +18,8 @@ Future<dynamic> showCreateCategory(BuildContext context) {
     Color(0xFFB150D9), // Purple
     Color(0xFFD9507E), // Pink
   ];
+  Color selectedColor = categoryColors[0]; // Default selected color
+
   return showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
@@ -31,19 +37,39 @@ Future<dynamic> showCreateCategory(BuildContext context) {
                 WindowHeader(title: "Create New Category"),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 16,
                   children: [
                     InputTextField(
                       hintText: 'Category Name',
                       maxLines: 1,
                       controller: categoryNameController,
                     ),
-                    _showChooseIconButton(),
-                    _showColorOverview(categoryColors),
+                    _showChooseIconButton(context),
+                    _showColorOverview(categoryColors, (color) {
+                      selectedColor = color;
+                    }),
                     Components().buttons(
                       context,
                       () => Navigator.pop(context),
-                      () => Navigator.pop(context),
+                      () async {
+                        String categoryName =
+                            categoryNameController.text.trim();
+                        if (categoryName.isNotEmpty) {
+                          Category newCategory = Category(
+                            name: categoryName,
+                            color: selectedColor,
+                            iconName: AppIcons.icons[0].id,
+                          );
+                          await CategoryService.addCategory(newCategory);
+                          Navigator.pop(context);
+                        } else {
+                          // Show an error message if the category name is empty
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Category name cannot be empty'),
+                            ),
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -56,13 +82,16 @@ Future<dynamic> showCreateCategory(BuildContext context) {
   );
 }
 
-Row _showColorOverview(List<Color> categoryColors) {
+Row _showColorOverview(
+  List<Color> categoryColors,
+  Function(Color) onColorSelected,
+) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children:
         categoryColors.map((color) {
           return GestureDetector(
-            onTap: () {},
+            onTap: () => onColorSelected(color),
             child: Container(
               width: 34,
               height: 34,
@@ -73,9 +102,49 @@ Row _showColorOverview(List<Color> categoryColors) {
   );
 }
 
-ElevatedButton _showChooseIconButton() {
+ElevatedButton _showChooseIconButton(BuildContext context) {
   return ElevatedButton(
-    onPressed: () {},
+    onPressed: () async {
+      String? selectedIcon = await showModalBottomSheet<String>(
+        context: context,
+        builder: (BuildContext context) {
+          return GridView.builder(
+            padding: const EdgeInsets.all(16),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+            ),
+            itemCount: AppIcons.icons.length,
+            itemBuilder: (BuildContext context, int index) {
+              final icon = AppIcons.icons[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pop(context, icon.id);
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    icon.icon,
+                    const SizedBox(height: 8),
+                    Text(
+                      icon.id,
+                      style: const TextStyle(fontSize: 12),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      );
+
+      if (selectedIcon != null) {
+        // Handle the selected icon (e.g., update the state or UI)
+        print('Selected Icon: $selectedIcon');
+      }
+    },
     style: ButtonStyle(
       padding: WidgetStateProperty.all(
         EdgeInsets.symmetric(vertical: 16, horizontal: 16),

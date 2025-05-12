@@ -64,7 +64,19 @@ class TodoService {
   );
 
   addTask(Todo newTask) async {
-    FirebaseFirestore.instance.collection('todos').add(newTask.toMap());
+    // Generate unique id
+    String id = DateTime.now().millisecondsSinceEpoch.toString();
+    newTask.id = id;
+    FirebaseFirestore.instance.collection('todos').doc(id).set(newTask.toMap());
+  }
+
+  static Future<void> toggleCompletion(Todo todo) async {
+    todo.isCompleted = !todo.isCompleted;
+    // UPdate and save the todo
+    await FirebaseFirestore.instance
+        .collection('todos')
+        .doc(todo.id)
+        .update(todo.toMap());
   }
 
   static Future<List<Todo>> getCompletedTasks(DateTime day) {
@@ -95,5 +107,12 @@ class TodoService {
               )
               .toList(),
     );
+  }
+
+  static Future<List<Todo>> getAllUncompleted() async {
+    List<Todo> todos = await getAll();
+    todos = todos.where((todo) => todo.isCompleted == false).toList();
+    todos.sort((a, b) => a.date.compareTo(b.date));
+    return todos;
   }
 }

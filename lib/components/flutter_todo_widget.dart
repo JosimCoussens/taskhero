@@ -5,8 +5,9 @@ import 'package:taskhero/constants.dart';
 
 class TodoWidget extends StatelessWidget {
   final Todo todo;
+  final void Function()? toggleCompletion;
 
-  const TodoWidget(this.todo, {super.key});
+  const TodoWidget(this.todo, this.toggleCompletion, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +19,17 @@ class TodoWidget extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       child: Row(
         children: [
-          Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 2),
+          GestureDetector(
+            onTap: () {
+              toggleCompletion!();
+            },
+            child: Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 2),
+              ),
             ),
           ),
           const SizedBox(width: 12),

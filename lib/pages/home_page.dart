@@ -14,8 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  List<Todo> todaysTodos = [];
-  List<Todo> todayCompletedTodos = [];
+  List<Todo> uncompletedTodos = [];
   bool isLoading = true;
 
   @override
@@ -25,12 +24,10 @@ class HomePageState extends State<HomePage> {
   }
 
   Future<void> _loadTodos() async {
-    final today = await TodoService().getTodays();
-    final completed = await TodoService().getTodayCompleted();
+    final todosTemp = await TodoService.getAllUncompleted();
 
     setState(() {
-      todaysTodos = today;
-      todayCompletedTodos = completed;
+      uncompletedTodos = todosTemp;
       isLoading = false;
     });
   }
@@ -49,7 +46,7 @@ class HomePageState extends State<HomePage> {
   }
 
   Widget _buildContent() {
-    if (todaysTodos.isEmpty && todayCompletedTodos.isEmpty) {
+    if (uncompletedTodos.isEmpty) {
       return _buildEmptyState();
     }
 
@@ -65,20 +62,26 @@ class HomePageState extends State<HomePage> {
         ),
         child: ListView(
           children: [
-            if (todaysTodos.isNotEmpty)
-              ..._buildTodoSection('Today', todaysTodos),
-            if (todayCompletedTodos.isNotEmpty)
-              ..._buildTodoSection('Completed', todayCompletedTodos),
+            if (uncompletedTodos.isNotEmpty)
+              ..._buildTodoSection('Today', uncompletedTodos),
           ],
         ),
       ),
     );
   }
 
+  Future<void> toggleCompletion(Todo todo) async {
+    await TodoService.toggleCompletion(todo);
+    final updatedTodos = await TodoService.getAllUncompleted();
+    setState(() {
+      uncompletedTodos = updatedTodos;
+    });
+  }
+
   List<Widget> _buildTodoSection(String title, List<Todo> todos) {
     final widgets = <Widget>[];
     for (int i = 0; i < todos.length; i++) {
-      widgets.add(TodoWidget(todos[i]));
+      widgets.add(TodoWidget(todos[i], () => toggleCompletion(todos[i])));
       if (i < todos.length - 1) {
         widgets.add(const SizedBox(height: 10)); // Add gap between widgets
       }

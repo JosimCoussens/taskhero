@@ -23,13 +23,10 @@ class TodoWidget extends StatelessWidget {
             onTap: () {
               toggleCompletion!();
             },
-            child: Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
-              ),
+            child: Icon(
+              todo.isCompleted ? Icons.check_circle : Icons.circle_outlined,
+              color: Colors.white,
+              size: 24,
             ),
           ),
           const SizedBox(width: 12),

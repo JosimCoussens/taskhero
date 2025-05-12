@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
+import 'package:taskhero/components/flutter_todo_widget.dart';
 import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/constants.dart';
 import 'package:taskhero/services/todoService.dart';
@@ -309,12 +310,7 @@ class CalendarPageState extends State<CalendarPage> {
                   : completedTodos[index];
           return Column(
             children: [
-              _buildTaskItem(
-                todo.title,
-                DateFormat.jm().format(todo.date),
-                todo.category,
-                Colors.green,
-              ),
+              TodoWidget(todo, () => toggleCompletion(todo)),
               if (index !=
                   (_selectedButtonIndex == 0
                       ? uncompletedTodos.length - 1
@@ -327,62 +323,11 @@ class CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  Widget _buildTaskItem(
-    String title,
-    String time,
-    String? category,
-    Color? categoryColor,
-  ) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.primary,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2)),
-        ],
-      ),
-      padding: const EdgeInsets.all(14),
-      child: Row(
-        children: [
-          Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 2),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (category != null)
-            Container(
-              margin: const EdgeInsets.only(left: 8),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                color: categoryColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                category,
-                style: const TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            ),
-        ],
-      ),
-    );
+  Future<void> toggleCompletion(Todo todo) async {
+    await TodoService.toggleCompletion(todo);
+    final updatedTodos = await TodoService.getAllUncompleted();
+    setState(() {
+      uncompletedTodos = updatedTodos;
+    });
   }
 }

@@ -35,12 +35,12 @@ class AppParams {
       icon: const Icon(Icons.fitness_center),
     ),
     Category(
-      name: 'Design',
+      name: 'Hobbies',
       color: Colors.tealAccent,
       icon: const Icon(Icons.brush),
     ),
     Category(
-      name: 'University',
+      name: 'School',
       color: Colors.indigoAccent,
       icon: const Icon(Icons.school_outlined),
     ),

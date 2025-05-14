@@ -69,8 +69,28 @@ class TodoService {
   }
 
   static Future<void> toggleCompletion(Todo todo) async {
-    todo.isCompleted = !todo.isCompleted;
-    // UPdate and save the todo
+    if (todo.isCompleted == true) {
+      todo.isCompleted = false;
+    } else {
+      switch (todo.repeatCycle) {
+        case 0: // No repeat
+          todo.isCompleted = !todo.isCompleted;
+          break;
+        case 1: // Daily
+          todo.date = todo.date.add(const Duration(days: 1));
+          break;
+        case 2: // Weekly
+          todo.date = todo.date.add(const Duration(days: 7));
+          break;
+        case 3: // Monthly
+          todo.date =
+              todo.date.month < 12
+                  ? DateTime(todo.date.year, todo.date.month + 1, todo.date.day)
+                  : DateTime(todo.date.year + 1, 1, todo.date.day);
+          break;
+      }
+    }
+    // Update and save the todo
     await FirebaseFirestore.instance
         .collection('todos')
         .doc(todo.id)

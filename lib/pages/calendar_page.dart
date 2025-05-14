@@ -25,7 +25,11 @@ class CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       appBar: AppHeader(title: 'Calendar'),
       body: showContent(),
-      bottomNavigationBar: bottomAppBar(context),
+      bottomNavigationBar: bottomAppBar(context, () {
+        setState(() {
+          _fetchTasks();
+        });
+      }),
     );
   }
 

@@ -14,7 +14,7 @@ import 'windows/calendar_window.dart';
 const double mainIconSize = 30.0;
 const double iconSize = 32.0;
 
-BottomAppBar bottomAppBar(BuildContext context) {
+BottomAppBar bottomAppBar(BuildContext context, Function onTaskAdded) {
   return BottomAppBar(
     height: 100,
     color: const Color.fromARGB(255, 232, 244, 255),
@@ -23,7 +23,7 @@ BottomAppBar bottomAppBar(BuildContext context) {
       children: [
         _navIcon(context, Icons.home, const HomePage()),
         _navIcon(context, Icons.calendar_month, const CalendarPage()),
-        addTaskIcon(context),
+        addTaskIcon(context, onTaskAdded),
         _navIcon(context, Icons.shopping_basket, const ShopPage()),
         _navIcon(context, Icons.inventory, const InventoryPage()),
       ],
@@ -40,9 +40,9 @@ IconButton _navIcon(BuildContext context, IconData icon, Widget page) {
   );
 }
 
-GestureDetector addTaskIcon(BuildContext context) {
+GestureDetector addTaskIcon(BuildContext context, Function onTaskAdded) {
   return GestureDetector(
-    onTap: () => addTask(context),
+    onTap: () => addTask(context, onTaskAdded),
     child: Container(
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
@@ -54,7 +54,7 @@ GestureDetector addTaskIcon(BuildContext context) {
   );
 }
 
-Future<void> addTask(BuildContext context) {
+Future<void> addTask(BuildContext context, Function onTaskAdded) {
   int selectedRepeat = 0;
   int? selectedDifficulty;
   DateTime? selectedDate;
@@ -115,6 +115,7 @@ Future<void> addTask(BuildContext context) {
                   (val) => setState(() => selectedDifficulty = val),
                   (val) => setState(() => selectedDate = val),
                   (val) => setState(() => selectedCategory = val),
+                  onTaskAdded,
                 ),
                 const SizedBox(height: 24),
               ],
@@ -137,6 +138,7 @@ Row _taskActionIcons(
   ValueChanged<int> onDifficultyChanged,
   ValueChanged<DateTime> onDateChanged,
   ValueChanged<String> onCategoryChanged,
+  Function onTaskAdded,
 ) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -190,6 +192,7 @@ Row _taskActionIcons(
           );
 
           await TodoService().addTask(newTask);
+          onTaskAdded.call();
           if (context.mounted) Navigator.of(context).pop();
         },
       ),

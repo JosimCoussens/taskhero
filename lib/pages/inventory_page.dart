@@ -157,7 +157,9 @@ class _InventoryPageState extends State<InventoryPage> {
     return Scaffold(
       appBar: AppHeader(title: 'Inventory'),
       body: _showContent(),
-      bottomNavigationBar: bottomAppBar(context),
+      bottomNavigationBar: bottomAppBar(context, () {
+        setState(() {});
+      }),
     );
   }
 

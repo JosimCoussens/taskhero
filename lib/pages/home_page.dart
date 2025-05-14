@@ -37,7 +37,11 @@ class HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppHeader(title: "Home"),
       body: isLoading ? _buildLoading() : _buildContent(),
-      bottomNavigationBar: bottomAppBar(context),
+      bottomNavigationBar: bottomAppBar(context, () {
+        setState(() {
+          _loadTodos();
+        });
+      }),
     );
   }
 
@@ -81,7 +85,12 @@ class HomePageState extends State<HomePage> {
   List<Widget> _buildTodoSection(String title, List<Todo> todos) {
     final widgets = <Widget>[];
     for (int i = 0; i < todos.length; i++) {
-      widgets.add(TodoWidget(todos[i], () => toggleCompletion(todos[i])));
+      widgets.add(
+        TodoWidget(todos[i], () async {
+          await toggleCompletion(todos[i]);
+          setState(() {});
+        }),
+      );
       if (i < todos.length - 1) {
         widgets.add(const SizedBox(height: 10)); // Add gap between widgets
       }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:taskhero/classes/icon.dart';
+import 'package:taskhero/classes/category.dart';
 
 class AppColors {
   static const Color primaryLighter = Color(0xff64BAFB);
@@ -13,18 +13,61 @@ class AppParams {
     Colors.black.withValues(alpha: 0.4),
     BlendMode.darken,
   );
-}
-
-class AppIcons {
-  static List<AppIcon> icons = [
-    AppIcon(id: 'home', icon: Icon(Icons.home)),
-    AppIcon(id: 'work', icon: Icon(Icons.work)),
-    AppIcon(id: 'school', icon: Icon(Icons.school)),
-    AppIcon(id: 'shopping', icon: Icon(Icons.shopping_cart)),
-    AppIcon(id: 'fitness', icon: Icon(Icons.fitness_center)),
-    AppIcon(id: 'travel', icon: Icon(Icons.airplanemode_active)),
-    AppIcon(id: 'entertainment', icon: Icon(Icons.movie)),
-    AppIcon(id: 'health', icon: Icon(Icons.local_hospital)),
-    AppIcon(id: 'finance', icon: Icon(Icons.attach_money)),
+  static List<Category> categories = [
+    Category(
+      name: 'General',
+      color: Colors.blueAccent,
+      icon: const Icon(Icons.category_outlined),
+    ),
+    Category(
+      name: 'Grocery',
+      color: Colors.greenAccent,
+      icon: const Icon(Icons.shopping_bag_outlined),
+    ),
+    Category(
+      name: 'Work',
+      color: Colors.orangeAccent,
+      icon: const Icon(Icons.work_outline),
+    ),
+    Category(
+      name: 'Sport',
+      color: Colors.cyanAccent,
+      icon: const Icon(Icons.fitness_center),
+    ),
+    Category(
+      name: 'Design',
+      color: Colors.tealAccent,
+      icon: const Icon(Icons.brush),
+    ),
+    Category(
+      name: 'University',
+      color: Colors.indigoAccent,
+      icon: const Icon(Icons.school_outlined),
+    ),
+    Category(
+      name: 'Social',
+      color: Colors.pinkAccent,
+      icon: const Icon(Icons.campaign_outlined),
+    ),
+    Category(
+      name: 'Music',
+      color: Colors.purpleAccent,
+      icon: const Icon(Icons.music_note_outlined),
+    ),
+    Category(
+      name: 'Health',
+      color: Colors.lightGreenAccent,
+      icon: const Icon(Icons.health_and_safety_outlined),
+    ),
+    Category(
+      name: 'Movie',
+      color: Colors.lightBlueAccent,
+      icon: const Icon(Icons.movie_outlined),
+    ),
+    Category(
+      name: 'Home',
+      color: Colors.orange.shade200,
+      icon: const Icon(Icons.home_outlined),
+    ),
   ];
 }

@@ -48,19 +48,19 @@ class TodoWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Expanded(
-                        child: Text(
-                          todo.title,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          overflow: TextOverflow.ellipsis,
+                      Text(
+                        todo.title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      if (todo.repeatCycle > 0)
+                      if (todo.repeatCycle > 0) ...[
+                        const SizedBox(width: 8),
                         const Icon(Icons.repeat, color: Colors.white, size: 18),
+                      ],
                     ],
                   ),
                   Text(

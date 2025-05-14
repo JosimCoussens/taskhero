@@ -35,7 +35,7 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(),
+      appBar: AppHeader(title: "Home"),
       body: isLoading ? _buildLoading() : _buildContent(),
       bottomNavigationBar: bottomAppBar(context),
     );

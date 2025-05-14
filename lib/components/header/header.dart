@@ -1,51 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:taskhero/constants.dart';
 
-AppBar header() {
-  return AppBar(
-    automaticallyImplyLeading: false, // Do not show back arrow
-    backgroundColor: Colors.white,
-    elevation: 0,
-    toolbarHeight: 64,
-    title: Stack(
-      alignment: Alignment.center,
-      children: [
-        // Centered Title
-        const Text(
-          'Home',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+class AppHeader extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
 
-        // Left & Right Widgets
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Icon(Icons.filter_list, color: Colors.black),
-            Row(
-              children: [
-                const Text(
-                  '112',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Image.asset('assets/images/xp_coin.png', height: 20, width: 20),
-                const SizedBox(width: 12),
-                const CircleAvatar(
-                  radius: 18,
-                  backgroundImage: AssetImage('assets/images/avatar.png'),
-                ),
-              ],
+  const AppHeader({super.key, this.title = 'Home'});
+
+  @override
+  Size get preferredSize => const Size.fromHeight(64);
+
+  @override
+  Widget build(BuildContext context) {
+    int xp = AppParams.xp;
+    String avatarPath = AppParams.avatarPath;
+
+    return AppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor: Colors.white,
+      elevation: 0,
+      toolbarHeight: preferredSize.height,
+      title: Stack(
+        alignment: Alignment.center,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
             ),
-          ],
-        ),
-      ],
-    ),
-  );
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Icon(Icons.filter_list, color: Colors.black),
+              Row(
+                children: [
+                  Text(
+                    xp.toString(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Image.asset(
+                    'assets/images/xp_coin.png',
+                    height: 20,
+                    width: 20,
+                  ),
+                  const SizedBox(width: 12),
+                  CircleAvatar(
+                    radius: 18,
+                    backgroundImage: AssetImage(avatarPath),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }

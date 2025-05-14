@@ -23,7 +23,7 @@ class CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     _fetchTasks();
     return Scaffold(
-      appBar: header(),
+      appBar: AppHeader(title: 'Calendar'),
       body: showContent(),
       bottomNavigationBar: bottomAppBar(context),
     );

@@ -99,7 +99,7 @@ class _ShopPageState extends State<ShopPage> {
     }
 
     return Scaffold(
-      appBar: header(),
+      appBar: AppHeader(title: "Shop"),
       body: _showContent(),
       bottomNavigationBar: bottomAppBar(context),
     );

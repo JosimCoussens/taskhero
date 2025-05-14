@@ -133,4 +133,8 @@ class TodoService {
     todos.sort((a, b) => a.date.compareTo(b.date));
     return todos;
   }
+
+  static Future<void> delete(Todo todo) {
+    return FirebaseFirestore.instance.collection('todos').doc(todo.id).delete();
+  }
 }

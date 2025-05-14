@@ -2,75 +2,90 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/constants.dart';
+import 'package:taskhero/services/todo_service.dart';
 
 class TodoWidget extends StatelessWidget {
   final Todo todo;
-  final void Function()? toggleCompletion;
+  final VoidCallback? toggleCompletion;
 
-  const TodoWidget(this.todo, this.toggleCompletion, {super.key});
+  const TodoWidget(this.todo, this.toggleCompletion);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.primary,
-        borderRadius: BorderRadius.circular(8),
+    return Dismissible(
+      key: Key(todo.title + todo.date.toString()), // Use unique key
+      direction: DismissDirection.endToStart,
+      onDismissed: (_) => {TodoService.delete(todo)},
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(left: 20),
+        color: Colors.red,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 20),
+          child: Icon(Icons.delete, color: Colors.white, size: 32),
+        ),
       ),
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () {
-              toggleCompletion!();
-            },
-            child: Icon(
-              todo.isCompleted ? Icons.check_circle : Icons.circle_outlined,
-              color: Colors.white,
-              size: 24,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.primary,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () => toggleCompletion?.call(),
+              child: Icon(
+                todo.isCompleted ? Icons.check_circle : Icons.circle_outlined,
+                color: Colors.white,
+                size: 24,
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  spacing: 5,
-                  children: [
-                    Text(
-                      todo.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          todo.title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
-                    if (todo.repeatCycle > 0)
-                      Icon(Icons.repeat, color: Colors.white, size: 18),
-                  ],
-                ),
-                Text(
-                  _formatDate(todo.date),
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.7),
-                    fontSize: 14,
+                      if (todo.repeatCycle > 0)
+                        const Icon(Icons.repeat, color: Colors.white, size: 18),
+                    ],
                   ),
-                ),
-              ],
+                  Text(
+                    _formatDate(todo.date),
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.7),
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: todo.category == 'General' ? Colors.green : Colors.pink,
-              borderRadius: BorderRadius.circular(12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: todo.category == 'General' ? Colors.green : Colors.pink,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                todo.category,
+                style: const TextStyle(color: Colors.white, fontSize: 12),
+              ),
             ),
-            child: Text(
-              todo.category,
-              style: const TextStyle(color: Colors.white, fontSize: 12),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

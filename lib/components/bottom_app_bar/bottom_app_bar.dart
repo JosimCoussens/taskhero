@@ -206,6 +206,10 @@ Future<dynamic> showErrorDialog(BuildContext context, String text) {
           content: Text(text),
           actions: [
             TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: AppColors.primaryLight,
+                foregroundColor: Colors.white,
+              ),
               onPressed: () => Navigator.of(context).pop(),
               child: const Text('OK'),
             ),

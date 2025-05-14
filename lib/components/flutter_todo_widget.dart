@@ -34,13 +34,20 @@ class TodoWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  todo.title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
+                Row(
+                  spacing: 5,
+                  children: [
+                    Text(
+                      todo.title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    if (todo.repeatCycle > 0)
+                      Icon(Icons.repeat, color: Colors.white, size: 18),
+                  ],
                 ),
                 Text(
                   _formatDate(todo.date),

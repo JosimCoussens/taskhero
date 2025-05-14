@@ -172,9 +172,10 @@ Row _taskActionIcons(
         onPressed: () async {
           final title = titleController.text.trim();
           if (title.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Please enter a title')),
-            );
+            showErrorDialog(context, 'Title cannot be empty');
+            return;
+          } else if (title.length > 25) {
+            showErrorDialog(context, 'Title cannot be more than 25 characters');
             return;
           }
 
@@ -193,6 +194,23 @@ Row _taskActionIcons(
         },
       ),
     ],
+  );
+}
+
+Future<dynamic> showErrorDialog(BuildContext context, String text) {
+  return showDialog(
+    context: context,
+    builder:
+        (context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(text),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
   );
 }
 

@@ -3,6 +3,7 @@ import 'package:taskhero/classes/item.dart';
 import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
 import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/constants.dart';
+import 'package:taskhero/services/item_service.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -35,15 +36,12 @@ class _ShopPageState extends State<ShopPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate item width based on screen size
     double totalSpacing = spacing * (amountPerRow - 1);
     itemWidth =
         (MediaQuery.of(context).size.width -
             (AppParams.generalSpacing * 2) -
             totalSpacing) /
         amountPerRow;
-
-    // Build section widgets here instead of initState to ensure itemWidth is calculated
     sectionWidgets = [];
     for (var category in ['Weapons', 'Armour', 'Shields']) {
       if (categorizedItems.containsKey(category) &&
@@ -171,7 +169,7 @@ class _ShopPageState extends State<ShopPage> {
           ),
           GestureDetector(
             onTap: () {
-              item.togglePurchased();
+              ItemService.buy(item);
             },
             child: Container(
               width: double.infinity,

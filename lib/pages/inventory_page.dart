@@ -5,6 +5,7 @@ import 'package:taskhero/components/bottom_app_bar/components/styles.dart';
 import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/constants.dart';
 import 'package:taskhero/pages/shop_page.dart';
+import 'package:taskhero/services/item_service.dart';
 
 class InventoryPage extends StatefulWidget {
   const InventoryPage({super.key});
@@ -27,6 +28,7 @@ class _InventoryPageState extends State<InventoryPage> {
 
   @override
   void initState() {
+    fetchBoughtItems();
     super.initState();
     // Organize items by category
     for (Item item in boughtItems) {
@@ -38,6 +40,38 @@ class _InventoryPageState extends State<InventoryPage> {
     }
   }
 
+  Future<void> fetchBoughtItems() async {
+    List<Item> itemsTemp = await ItemService.getBoughtItems();
+
+    // Rebuild categorized items and sections
+    Map<String, List<Item>> newCategorizedItems = {};
+    List<Widget> newSectionWidgets = [];
+
+    for (var item in itemsTemp) {
+      String category = item.category.name;
+      if (!newCategorizedItems.containsKey(category)) {
+        newCategorizedItems[category] = [];
+      }
+      newCategorizedItems[category]!.add(item);
+    }
+
+    for (ItemCategory category in ItemCategory.values) {
+      String categoryName = category.name;
+      if (newCategorizedItems.containsKey(categoryName) &&
+          newCategorizedItems[categoryName]!.isNotEmpty) {
+        newSectionWidgets.add(
+          _buildSection(categoryName, newCategorizedItems[categoryName]!),
+        );
+      }
+    }
+
+    setState(() {
+      boughtItems = itemsTemp;
+      categorizedItems = newCategorizedItems;
+      sectionWidgets = newSectionWidgets;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double totalSpacing = spacing * (amountPerRow - 1);
@@ -47,11 +81,12 @@ class _InventoryPageState extends State<InventoryPage> {
             totalSpacing) /
         amountPerRow;
     sectionWidgets = [];
-    for (var category in ['Weapons', 'Armour', 'Shields']) {
-      if (categorizedItems.containsKey(category) &&
-          categorizedItems[category]!.isNotEmpty) {
+    for (ItemCategory category in ItemCategory.values) {
+      String categoryName = category.name;
+      if (categorizedItems.containsKey(categoryName) &&
+          categorizedItems[categoryName]!.isNotEmpty) {
         sectionWidgets.add(
-          _buildSection(category, categorizedItems[category] ?? []),
+          _buildSection(categoryName, categorizedItems[categoryName] ?? []),
         );
       }
     }

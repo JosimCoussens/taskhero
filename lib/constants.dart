@@ -79,7 +79,7 @@ class AppParams {
       name: 'Silver Sword',
       category: ItemCategory.Weapons,
       imagePath: 'assets/images/sword.png',
-      isPurchased: true,
+      isPurchased: false,
       price: 25,
     ),
     Item(
@@ -87,7 +87,7 @@ class AppParams {
       name: 'Axe',
       category: ItemCategory.Weapons,
       imagePath: 'assets/images/axe.png',
-      isPurchased: true,
+      isPurchased: false,
       price: 20,
     ),
     Item(
@@ -95,7 +95,7 @@ class AppParams {
       name: 'Bow',
       category: ItemCategory.Weapons,
       imagePath: 'assets/images/bow.png',
-      isPurchased: true,
+      isPurchased: false,
       price: 20,
     ),
     Item(
@@ -103,7 +103,7 @@ class AppParams {
       name: 'Helmet 1',
       category: ItemCategory.Armour,
       imagePath: 'assets/images/helmets/helmet_1.png',
-      isPurchased: true,
+      isPurchased: false,
       price: 15,
     ),
     Item(
@@ -111,7 +111,7 @@ class AppParams {
       name: 'Shield 1',
       category: ItemCategory.Shields,
       imagePath: 'assets/images/shields/shield_1.png',
-      isPurchased: true,
+      isPurchased: false,
       price: 15,
     ),
   ];

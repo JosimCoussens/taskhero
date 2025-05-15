@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:taskhero/classes/item.dart';
 import 'package:taskhero/constants.dart';
 import 'package:taskhero/firebase_options.dart';
 import 'package:taskhero/pages/home_page.dart';
+import 'package:taskhero/services/item_service.dart';
 import 'package:taskhero/services/user_service.dart';
 
 Future<void> main() async {
@@ -25,7 +27,15 @@ class _MyAppState extends State<MyApp> {
       AppParams.xp = await UserService.getXp();
     }
 
+    Future<void> setItems() async {
+      var boughtItems = await ItemService.getBoughtItems();
+      for (var item in AppParams.allItems) {
+        item.isPurchased = boughtItems.any((bought) => bought.id == item.id);
+      }
+    }
+
     setXp();
+    setItems();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

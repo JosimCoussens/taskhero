@@ -3,6 +3,13 @@ import 'package:taskhero/classes/item.dart';
 import 'package:taskhero/constants.dart';
 
 class ItemService {
+  static Future<void> setAppItems() async {
+    var boughtItems = await ItemService.getBoughtItems();
+    for (var item in AppParams.allItems) {
+      item.isPurchased = boughtItems.any((bought) => bought.id == item.id);
+    }
+  }
+
   static Future<List<Item>> getBoughtItems() {
     // get list from firebase
     return FirebaseFirestore.instance
@@ -10,34 +17,40 @@ class ItemService {
         .doc('properties')
         .get()
         .then((value) {
-          List<int> inventory =
-              (value.data()?['inventory'] as List<dynamic>)
-                  .map((e) => e as int)
-                  .toList();
-          // get items from allItems
-          return AppParams.allItems
-              .where((item) => inventory.contains(item.id))
-              .toList();
+          List<Item> items = [];
+          for (var id in value.data()!['inventory']) {
+            items.add(AppParams.allItems.firstWhere((i) => i.id == id));
+          }
+          return items;
         });
   }
 
   static Future<void> buy(Item item) async {
-    item.isPurchased = true;
-    // get list from firebase
-    List<int> inventory =
-        (await FirebaseFirestore.instance
-            .collection('user')
-            .doc('properties')
-            .get()
-            .then(
-              (value) => value.data()?['inventory'] as List<dynamic>,
-            )).map((e) => e as int).toList();
-    // add item to inventory
-    inventory.add(item.id);
-    // update firebase
+    AppParams.allItems.where((i) => i.id == item.id).first.isPurchased = true;
+    // Update firebase
     await FirebaseFirestore.instance
         .collection('user')
         .doc('properties')
-        .update({'inventory': inventory});
+        .update({
+          'inventory':
+              AppParams.allItems
+                  .where((i) => i.isPurchased)
+                  .map((e) => e.id)
+                  .toList(),
+        });
+  }
+
+  static Future<void> sell(Item item) async {
+    AppParams.allItems.where((i) => i.id == item.id).first.isPurchased = false;
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc('properties')
+        .update({
+          'inventory':
+              AppParams.allItems
+                  .where((i) => i.isPurchased)
+                  .map((e) => e.id)
+                  .toList(),
+        });
   }
 }

@@ -13,7 +13,6 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
-  // Configuration for grid layout
   final int amountPerRow = 4;
   final double spacing = 5;
   late double itemWidth;
@@ -47,7 +46,9 @@ class _ShopPageState extends State<ShopPage> {
       if (categorizedItems.containsKey(category) &&
           categorizedItems[category]!.isNotEmpty) {
         sectionWidgets.add(
-          _buildSection(category, categorizedItems[category] ?? []),
+          _buildSection(category, categorizedItems[category] ?? [], () {
+            setState(() {});
+          }),
         );
       }
     }
@@ -85,7 +86,11 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   // Build a section with title and items
-  Widget _buildSection(String title, List<Item> items) {
+  Widget _buildSection(
+    String title,
+    List<Item> items,
+    Function onItemTransaction,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -130,7 +135,7 @@ class _ShopPageState extends State<ShopPage> {
             ),
             itemCount: items.length,
             itemBuilder: (context, index) {
-              return _buildShopItem(items[index]);
+              return _buildShopItem(items[index], onItemTransaction);
             },
           ),
         const SizedBox(height: 20),
@@ -139,7 +144,7 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   // Build a shop item (weapon, armor, etc.)
-  Widget _buildShopItem(Item item) {
+  Widget _buildShopItem(Item item, Function onItemTransaction) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.primary,
@@ -168,8 +173,14 @@ class _ShopPageState extends State<ShopPage> {
             ],
           ),
           GestureDetector(
-            onTap: () {
-              ItemService.buy(item);
+            onTap: () async {
+              if (item.isPurchased) {
+                await ItemService.sell(item);
+                onItemTransaction();
+              } else {
+                await ItemService.buy(item);
+                onItemTransaction();
+              }
             },
             child: Container(
               width: double.infinity,

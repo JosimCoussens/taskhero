@@ -75,7 +75,7 @@ class AppParams {
   ];
   static List<Item> allItems = [
     Item(
-      id: 5,
+      id: 0,
       name: 'Silver Sword',
       category: ItemCategory.Weapons,
       imagePath: 'assets/images/sword.png',
@@ -91,7 +91,7 @@ class AppParams {
       price: 20,
     ),
     Item(
-      id: 1,
+      id: 2,
       name: 'Bow',
       category: ItemCategory.Weapons,
       imagePath: 'assets/images/bow.png',
@@ -99,7 +99,7 @@ class AppParams {
       price: 20,
     ),
     Item(
-      id: 2,
+      id: 3,
       name: 'Helmet 1',
       category: ItemCategory.Armour,
       imagePath: 'assets/images/helmets/helmet_1.png',

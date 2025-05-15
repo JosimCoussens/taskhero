@@ -1,7 +1,11 @@
+// ignore_for_file: constant_identifier_names
+
+enum ItemCategory { Weapons, Armour, Shields }
+
 class Item {
   int id;
   String name;
-  String category;
+  ItemCategory category;
   String imagePath;
   bool isPurchased;
   int price;
@@ -15,8 +19,10 @@ class Item {
     this.isPurchased = false,
   });
 
-  // Method
   void togglePurchased() {
     isPurchased = !isPurchased;
   }
+
+  // Optional: Category to String
+  String get categoryName => category.name;
 }

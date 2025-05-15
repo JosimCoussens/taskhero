@@ -8,7 +8,7 @@ class TodoWidget extends StatelessWidget {
   final Todo todo;
   final VoidCallback? toggleCompletion;
 
-  const TodoWidget(this.todo, this.toggleCompletion);
+  const TodoWidget(this.todo, this.toggleCompletion, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class TodoWidget extends StatelessWidget {
                   Text(
                     _formatDate(todo.date),
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.7),
+                      color: Colors.white.withValues(alpha: 0.7),
                       fontSize: 14,
                     ),
                   ),

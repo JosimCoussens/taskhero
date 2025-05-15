@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/classes/item.dart';
 import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
+import 'package:taskhero/components/bottom_app_bar/components/styles.dart';
 import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/constants.dart';
+import 'package:taskhero/pages/shop_page.dart';
 
 class InventoryPage extends StatefulWidget {
   const InventoryPage({super.key});
@@ -18,104 +20,7 @@ class _InventoryPageState extends State<InventoryPage> {
   late double itemWidth;
 
   // Track which items are bought
-  List<Item> boughtItems = [
-    Item(
-      id: 1,
-      name: 'Axe',
-      category: 'Weapons',
-      imagePath: 'assets/images/axe.png',
-      isPurchased: true,
-      price: 20,
-    ),
-    Item(
-      id: 2,
-      name: 'Helmet 3',
-      category: 'Armour',
-      imagePath: 'assets/images/helmets/helmet_3.png',
-      isPurchased: true,
-      price: 15,
-    ),
-    Item(
-      id: 2,
-      name: 'Helmet 3',
-      category: 'Armour',
-      imagePath: 'assets/images/helmets/helmet_3.png',
-      isPurchased: true,
-      price: 15,
-    ),
-    Item(
-      id: 2,
-      name: 'Helmet 3',
-      category: 'Armour',
-      imagePath: 'assets/images/helmets/helmet_3.png',
-      isPurchased: true,
-      price: 15,
-    ),
-    Item(
-      id: 2,
-      name: 'Helmet 3',
-      category: 'Armour',
-      imagePath: 'assets/images/helmets/helmet_3.png',
-      isPurchased: true,
-      price: 15,
-    ),
-    Item(
-      id: 2,
-      name: 'Helmet 3',
-      category: 'Armour',
-      imagePath: 'assets/images/helmets/helmet_3.png',
-      isPurchased: true,
-      price: 15,
-    ),
-    Item(
-      id: 2,
-      name: 'Helmet 3',
-      category: 'Armour',
-      imagePath: 'assets/images/helmets/helmet_3.png',
-      isPurchased: true,
-      price: 15,
-    ),
-    Item(
-      id: 2,
-      name: 'Helmet 3',
-      category: 'Armour',
-      imagePath: 'assets/images/helmets/helmet_3.png',
-      isPurchased: true,
-      price: 15,
-    ),
-    Item(
-      id: 3,
-      name: 'Helmet 2',
-      category: 'Armour',
-      imagePath: 'assets/images/helmets/helmet_2.png',
-      isPurchased: true,
-      price: 15,
-    ),
-    Item(
-      id: 4,
-      name: 'Shield 1',
-      category: 'Shields',
-      imagePath: 'assets/images/shields/shield_1.png',
-      isPurchased: true,
-      price: 15,
-    ),
-    Item(
-      id: 5,
-      name: 'Silver Sword',
-      category: 'Weapons',
-      imagePath: 'assets/images/sword.png',
-      isPurchased: true,
-      price: 25,
-    ),
-    Item(
-      id: 6,
-      name: 'Helmet 1',
-      category: 'Armour',
-      imagePath: 'assets/images/helmets/helmet_1.png',
-      isPurchased: true,
-      price: 10,
-    ),
-  ];
+  List<Item> boughtItems = [];
 
   Map<String, List<Item>> categorizedItems = {};
   List<Widget> sectionWidgets = [];
@@ -125,7 +30,7 @@ class _InventoryPageState extends State<InventoryPage> {
     super.initState();
     // Organize items by category
     for (Item item in boughtItems) {
-      String category = item.category;
+      String category = item.category.name;
       if (!categorizedItems.containsKey(category)) {
         categorizedItems[category] = [];
       }
@@ -135,15 +40,12 @@ class _InventoryPageState extends State<InventoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate item width based on screen size
     double totalSpacing = spacing * (amountPerRow - 1);
     itemWidth =
         (MediaQuery.of(context).size.width -
             (AppParams.generalSpacing * 2) -
             totalSpacing) /
         amountPerRow;
-
-    // Build section widgets here instead of initState to ensure itemWidth is calculated
     sectionWidgets = [];
     for (var category in ['Weapons', 'Armour', 'Shields']) {
       if (categorizedItems.containsKey(category) &&
@@ -168,20 +70,61 @@ class _InventoryPageState extends State<InventoryPage> {
       padding: const EdgeInsets.all(AppParams.generalSpacing),
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/market.png'),
+          image: AssetImage('assets/images/armoury.png'),
           colorFilter: AppParams.backgroundImageColorFilter,
           fit: BoxFit.cover,
         ),
       ),
-      child: Column(
-        children: [
-          // Rest of the UI - Scrollable content
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(children: sectionWidgets),
+      child:
+          boughtItems.isEmpty
+              ? _buildEmptyInventoryMessage()
+              : Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(children: sectionWidgets),
+                    ),
+                  ),
+                ],
+              ),
+    );
+  }
+
+  Widget _buildEmptyInventoryMessage() {
+    return Expanded(
+      child: Center(
+        child: Column(
+          spacing: 10,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'No items in your inventory.',
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-        ],
+            const Text(
+              'Visit the market to buy weapons, armour or shields!',
+              style: TextStyle(fontSize: 18, color: Colors.white70),
+              textAlign: TextAlign.center,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ShopPage()),
+                );
+              },
+              style: Styles().goToPageButtonStyle,
+              child: const Text(
+                'Go to Market',
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

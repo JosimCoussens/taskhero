@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/classes/category.dart';
+import 'package:taskhero/classes/item.dart';
 
 class AppColors {
   static const Color primaryLighter = Color(0xff64BAFB);
@@ -70,6 +71,48 @@ class AppParams {
       name: 'Home',
       color: Colors.orange.shade200,
       icon: const Icon(Icons.home_outlined),
+    ),
+  ];
+  static List<Item> allItems = [
+    Item(
+      id: 5,
+      name: 'Silver Sword',
+      category: ItemCategory.Weapons,
+      imagePath: 'assets/images/sword.png',
+      isPurchased: true,
+      price: 25,
+    ),
+    Item(
+      id: 1,
+      name: 'Axe',
+      category: ItemCategory.Weapons,
+      imagePath: 'assets/images/axe.png',
+      isPurchased: true,
+      price: 20,
+    ),
+    Item(
+      id: 1,
+      name: 'Bow',
+      category: ItemCategory.Weapons,
+      imagePath: 'assets/images/bow.png',
+      isPurchased: true,
+      price: 20,
+    ),
+    Item(
+      id: 2,
+      name: 'Helmet 1',
+      category: ItemCategory.Armour,
+      imagePath: 'assets/images/helmets/helmet_1.png',
+      isPurchased: true,
+      price: 15,
+    ),
+    Item(
+      id: 4,
+      name: 'Shield 1',
+      category: ItemCategory.Shields,
+      imagePath: 'assets/images/shields/shield_1.png',
+      isPurchased: true,
+      price: 15,
     ),
   ];
 }

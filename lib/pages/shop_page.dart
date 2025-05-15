@@ -17,50 +17,6 @@ class _ShopPageState extends State<ShopPage> {
   final double spacing = 5;
   late double itemWidth;
 
-  // Track which items are bought
-  List<Item> allItems = [
-    Item(
-      id: 5,
-      name: 'Silver Sword',
-      category: 'Weapons',
-      imagePath: 'assets/images/sword.png',
-      isPurchased: true,
-      price: 25,
-    ),
-    Item(
-      id: 1,
-      name: 'Axe',
-      category: 'Weapons',
-      imagePath: 'assets/images/axe.png',
-      isPurchased: true,
-      price: 20,
-    ),
-    Item(
-      id: 1,
-      name: 'Bow',
-      category: 'Weapons',
-      imagePath: 'assets/images/bow.png',
-      isPurchased: true,
-      price: 20,
-    ),
-    Item(
-      id: 2,
-      name: 'Helmet 1',
-      category: 'Armour',
-      imagePath: 'assets/images/helmets/helmet_1.png',
-      isPurchased: true,
-      price: 15,
-    ),
-    Item(
-      id: 4,
-      name: 'Shield 1',
-      category: 'Shields',
-      imagePath: 'assets/images/shields/shield_1.png',
-      isPurchased: true,
-      price: 15,
-    ),
-  ];
-
   Map<String, List<Item>> categorizedItems = {};
   List<Widget> sectionWidgets = [];
 
@@ -68,8 +24,8 @@ class _ShopPageState extends State<ShopPage> {
   void initState() {
     super.initState();
     // Organize items by category
-    for (Item item in allItems) {
-      String category = item.category;
+    for (Item item in AppParams.allItems) {
+      String category = item.category.name;
       if (!categorizedItems.containsKey(category)) {
         categorizedItems[category] = [];
       }

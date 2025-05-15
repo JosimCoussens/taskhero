@@ -4,7 +4,9 @@ import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
 import 'package:taskhero/components/flutter_todo_widget.dart';
 import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/constants.dart';
+import 'package:taskhero/services/item_service.dart';
 import 'package:taskhero/services/todo_service.dart';
+import 'package:taskhero/services/user_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,8 +21,22 @@ class HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    super.initState();
     _loadTodos();
+    _setXp();
+    _setItems();
+    super.initState();
+  }
+
+  Future<void> _setXp() async {
+    AppParams.xp = await UserService.getXp();
+  }
+
+  Future<void> _setItems() async {
+    var boughtItems = await ItemService.getBoughtItems();
+    for (var item in AppParams.allItems) {
+      item.isPurchased = boughtItems.any((bought) => bought.id == item.id);
+    }
+    isLoading = false;
   }
 
   Future<void> _loadTodos() async {
@@ -28,7 +44,6 @@ class HomePageState extends State<HomePage> {
 
     setState(() {
       uncompletedTodos = todosTemp;
-      isLoading = false;
     });
   }
 

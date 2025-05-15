@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:taskhero/classes/item.dart';
 import 'package:taskhero/constants.dart';
+import 'package:taskhero/services/user_service.dart';
 
 class ItemService {
   static Future<void> setAppItems() async {
@@ -25,7 +26,10 @@ class ItemService {
         });
   }
 
-  static Future<void> buy(Item item) async {
+  static Future<bool> buy(Item item) async {
+    if (AppParams.xp.value < item.price) {
+      return false;
+    }
     AppParams.allItems.where((i) => i.id == item.id).first.isPurchased = true;
     // Update firebase
     await FirebaseFirestore.instance
@@ -38,9 +42,12 @@ class ItemService {
                   .map((e) => e.id)
                   .toList(),
         });
+    // Update xp
+    UserService.setXp(AppParams.xp.value - item.price);
+    return true;
   }
 
-  static Future<void> sell(Item item) async {
+  static Future<void> sell(Item item, int sellprice) async {
     AppParams.allItems.where((i) => i.id == item.id).first.isPurchased = false;
     await FirebaseFirestore.instance
         .collection('user')
@@ -52,5 +59,7 @@ class ItemService {
                   .map((e) => e.id)
                   .toList(),
         });
+    // Update xp
+    UserService.setXp(AppParams.xp.value + sellprice);
   }
 }

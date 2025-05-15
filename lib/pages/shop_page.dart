@@ -62,6 +62,10 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
+  void refresh() {
+    setState(() {});
+  }
+
   Container _showContent() {
     return Container(
       padding: const EdgeInsets.all(AppParams.generalSpacing),
@@ -145,6 +149,7 @@ class _ShopPageState extends State<ShopPage> {
 
   // Build a shop item (weapon, armor, etc.)
   Widget _buildShopItem(Item item, Function onItemTransaction) {
+    int sellPrice = (item.price / 2).floor();
     return Container(
       decoration: BoxDecoration(
         color: AppColors.primary,
@@ -162,7 +167,7 @@ class _ShopPageState extends State<ShopPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                item.price.toString(),
+                item.isPurchased ? sellPrice.toString() : item.price.toString(),
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -172,40 +177,69 @@ class _ShopPageState extends State<ShopPage> {
               const Icon(Icons.circle, color: Colors.amber, size: 16),
             ],
           ),
-          GestureDetector(
-            onTap: () async {
-              if (item.isPurchased) {
-                await ItemService.sell(item);
-                onItemTransaction();
-              } else {
-                await ItemService.buy(item);
-                onItemTransaction();
-              }
-            },
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              decoration: BoxDecoration(
-                color:
-                    item.isPurchased
-                        ? AppColors.primaryLight
-                        : AppColors.primaryLighter,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(8),
-                  bottomRight: Radius.circular(8),
-                ),
-              ),
-              child: Text(
-                item.isPurchased ? 'Sell' : 'Buy',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
+          if (AppParams.xp.value >= item.price)
+            _buildPurchaseButton(item, sellPrice, onItemTransaction),
+          if (AppParams.xp.value < item.price) _showBuyRestriction(),
         ],
+      ),
+    );
+  }
+
+  Container _showBuyRestriction() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.redAccent, Colors.red],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(8),
+          bottomRight: Radius.circular(8),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [const Icon(Icons.lock, color: Colors.white, size: 16)],
+      ),
+    );
+  }
+
+  GestureDetector _buildPurchaseButton(
+    Item item,
+    int sellPrice,
+    Function onItemTransaction,
+  ) {
+    return GestureDetector(
+      onTap: () async {
+        if (item.isPurchased) {
+          await ItemService.sell(item, sellPrice);
+          refresh();
+        } else {
+          await ItemService.buy(item);
+          refresh();
+        }
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        decoration: BoxDecoration(
+          color:
+              item.isPurchased
+                  ? AppColors.primaryLight
+                  : AppColors.primaryLighter,
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(8),
+            bottomRight: Radius.circular(8),
+          ),
+        ),
+        child: Text(
+          item.isPurchased ? 'Sell' : 'Buy',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }

@@ -11,7 +11,6 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    int xp = AppParams.xp;
     String avatarPath = AppParams.avatarPath;
 
     return AppBar(
@@ -36,13 +35,18 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
               const Icon(Icons.filter_list, color: Colors.black),
               Row(
                 children: [
-                  Text(
-                    xp.toString(),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  ValueListenableBuilder(
+                    valueListenable: AppParams.xp,
+                    builder: (context, xp, _) {
+                      return Text(
+                        AppParams.xp.value.toString(),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(width: 4),
                   Image.asset(

@@ -28,7 +28,7 @@ class HomePageState extends State<HomePage> {
   }
 
   Future<void> _setXp() async {
-    AppParams.xp = await UserService.getXp();
+    AppParams.xp.value = await UserService.getXp();
   }
 
   Future<void> _setItems() async {

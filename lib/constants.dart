@@ -11,7 +11,7 @@ class AppColors {
 class AppParams {
   static const String avatarPath = 'assets/images/avatar.png';
   static const double generalSpacing = 16.0;
-  static int xp = -1;
+  static ValueNotifier<int> xp = ValueNotifier<int>(0);
   static ColorFilter backgroundImageColorFilter = ColorFilter.mode(
     Colors.black.withValues(alpha: 0.4),
     BlendMode.darken,

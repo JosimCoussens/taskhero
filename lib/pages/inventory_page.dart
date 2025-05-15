@@ -3,6 +3,7 @@ import 'package:taskhero/classes/item.dart';
 import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
 import 'package:taskhero/components/bottom_app_bar/components/styles.dart';
 import 'package:taskhero/components/header/header.dart';
+import 'package:taskhero/components/shop/shop_item.dart';
 import 'package:taskhero/constants.dart';
 import 'package:taskhero/pages/shop_page.dart';
 import 'package:taskhero/services/item_service.dart';
@@ -60,7 +61,9 @@ class _InventoryPageState extends State<InventoryPage> {
       if (newCategorizedItems.containsKey(categoryName) &&
           newCategorizedItems[categoryName]!.isNotEmpty) {
         newSectionWidgets.add(
-          _buildSection(categoryName, newCategorizedItems[categoryName]!),
+          _buildSection(categoryName, newCategorizedItems[categoryName]!, () {
+            setState(() {});
+          }),
         );
       }
     }
@@ -86,7 +89,9 @@ class _InventoryPageState extends State<InventoryPage> {
       if (categorizedItems.containsKey(categoryName) &&
           categorizedItems[categoryName]!.isNotEmpty) {
         sectionWidgets.add(
-          _buildSection(categoryName, categorizedItems[categoryName] ?? []),
+          _buildSection(categoryName, categorizedItems[categoryName] ?? [], () {
+            fetchBoughtItems();
+          }),
         );
       }
     }
@@ -165,7 +170,11 @@ class _InventoryPageState extends State<InventoryPage> {
   }
 
   // Build a section with title and items
-  Widget _buildSection(String title, List<Item> items) {
+  Widget _buildSection(
+    String title,
+    List<Item> items,
+    Function onItemTransaction,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -210,73 +219,11 @@ class _InventoryPageState extends State<InventoryPage> {
             ),
             itemCount: items.length,
             itemBuilder: (context, index) {
-              return _buildShopItem(
-                items[index].name,
-                items[index].imagePath,
-                items[index].price,
-              );
+              return ShopItem(items[index], onItemTransaction);
             },
           ),
         const SizedBox(height: 20),
       ],
-    );
-  }
-
-  // Build a shop item (weapon, armor, etc.)
-  Widget _buildShopItem(String id, String imagePath, int price) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.primary,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Image.asset(imagePath, fit: BoxFit.contain),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '$price',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(width: 4),
-              const Icon(Icons.circle, color: Colors.amber, size: 16),
-            ],
-          ),
-          GestureDetector(
-            onTap: () {
-              // Implement sell functionality
-            },
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              decoration: BoxDecoration(
-                color: AppColors.primaryLighter,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(8),
-                  bottomRight: Radius.circular(8),
-                ),
-              ),
-              child: const Text(
-                'Sell',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

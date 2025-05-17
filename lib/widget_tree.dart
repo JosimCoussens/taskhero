@@ -1,0 +1,28 @@
+import 'package:flutter/material.dart';
+import 'package:taskhero/auth.dart';
+import 'package:taskhero/pages/home_page.dart';
+import 'package:taskhero/pages/login_page.dart';
+
+class WidgetTree extends StatefulWidget {
+  const WidgetTree({Key? key}) : super(key: key);
+
+  @override
+  State<WidgetTree> createState() => _WidgetTreeState();
+}
+
+class _WidgetTreeState extends State<WidgetTree> {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: Auth().authStateChanges,
+      builder: (context, snapshot) {
+        // If there is a user, snapshot has data
+        if (snapshot.hasData) {
+          return HomePage();
+        } else {
+          return const LoginPage();
+        }
+      },
+    );
+  }
+}

@@ -1,13 +1,96 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:taskhero/auth.dart';
 import 'package:taskhero/constants.dart';
+import 'package:taskhero/pages/login_page.dart';
 
-class AppHeader extends StatelessWidget implements PreferredSizeWidget {
+class AppHeader extends StatefulWidget implements PreferredSizeWidget {
   final String title;
 
   const AppHeader({super.key, this.title = 'Home'});
 
   @override
+  State<AppHeader> createState() => _AppHeaderState();
+
+  @override
   Size get preferredSize => const Size.fromHeight(64);
+}
+
+class _AppHeaderState extends State<AppHeader> {
+  final User? user = Auth().currentUser;
+  OverlayEntry? _overlayEntry;
+
+  void _toggleUserMenu(BuildContext context) {
+    if (_overlayEntry != null) {
+      _removeOverlay();
+    } else {
+      _showOverlay(context);
+    }
+  }
+
+  void _showOverlay(BuildContext context) {
+    final renderBox = context.findRenderObject() as RenderBox;
+    final offset = renderBox.localToGlobal(Offset.zero);
+
+    _overlayEntry = OverlayEntry(
+      builder:
+          (context) => Positioned(
+            top: offset.dy + widget.preferredSize.height,
+            right: 16,
+            child: Material(
+              elevation: 8,
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                width: 220,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user?.email ?? 'User Email',
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () async {
+                        _removeOverlay();
+                        await Auth().signOut();
+                        if (mounted) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginPage(),
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text('Sign Out'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+    );
+
+    Overlay.of(context).insert(_overlayEntry!);
+  }
+
+  void _removeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+  @override
+  void dispose() {
+    _removeOverlay();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +100,12 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       backgroundColor: Colors.white,
       elevation: 0,
-      toolbarHeight: preferredSize.height,
+      toolbarHeight: widget.preferredSize.height,
       title: Stack(
         alignment: Alignment.center,
         children: [
           Text(
-            title,
+            widget.title,
             style: const TextStyle(
               color: Colors.black,
               fontSize: 20,
@@ -32,7 +115,6 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Icon(Icons.filter_list, color: Colors.black),
               Row(
                 children: [
                   ValueListenableBuilder(
@@ -54,12 +136,14 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                     height: 20,
                     width: 20,
                   ),
-                  const SizedBox(width: 12),
-                  CircleAvatar(
-                    radius: 18,
-                    backgroundImage: AssetImage(avatarPath),
-                  ),
                 ],
+              ),
+              GestureDetector(
+                onTap: () => _toggleUserMenu(context),
+                child: CircleAvatar(
+                  radius: 18,
+                  backgroundImage: AssetImage(avatarPath),
+                ),
               ),
             ],
           ),

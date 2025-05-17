@@ -36,7 +36,10 @@ class HomePageState extends State<HomePage> {
     for (var item in AppParams.allItems) {
       item.isPurchased = boughtItems.any((bought) => bought.id == item.id);
     }
-    isLoading = false;
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<void> _loadTodos() async {

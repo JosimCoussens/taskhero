@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/auth.dart';
 import 'package:taskhero/pages/home_page.dart';
+import 'package:taskhero/pages/intro_page.dart';
 import 'package:taskhero/pages/login_page.dart';
 
 class WidgetTree extends StatefulWidget {
-  const WidgetTree({Key? key}) : super(key: key);
+  const WidgetTree({super.key});
 
   @override
   State<WidgetTree> createState() => _WidgetTreeState();
@@ -20,7 +21,7 @@ class _WidgetTreeState extends State<WidgetTree> {
         if (snapshot.hasData) {
           return HomePage();
         } else {
-          return const LoginPage();
+          return const IntroPage();
         }
       },
     );

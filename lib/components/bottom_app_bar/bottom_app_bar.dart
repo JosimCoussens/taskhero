@@ -185,7 +185,7 @@ Row _taskActionIcons(
             title: title,
             description: descriptionController.text.trim(),
             repeatCycle: repeatCycle,
-            difficulty: selectedDifficulty ?? 0,
+            difficulty: selectedDifficulty ?? 1,
             isCompleted: false,
             date: selectedDate ?? DateTime.now(),
             category: category ?? 'General',

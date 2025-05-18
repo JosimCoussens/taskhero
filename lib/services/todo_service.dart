@@ -111,7 +111,7 @@ class TodoService {
     todoFromDb.update(todo.toMap());
   }
 
-  static void _setXp(Todo todo) {
+  static Future<void> _setXp(Todo todo) async {
     // Update xp
     int xpToAdd = 0;
     int baseXp = 50;
@@ -126,13 +126,15 @@ class TodoService {
         xpToAdd = (baseXp * 1.25).ceil().toInt();
         break;
     }
+
     int newXp = AppParams.xp.value + xpToAdd;
     int requiredXp = XpService.requiredXp();
     if (newXp >= requiredXp) {
       LevelService.setLevel(AppParams.level.value + 1);
-      XpService.setXp(newXp - requiredXp);
+      await XpService.setXp(newXp - requiredXp);
+    } else {
+      await XpService.setXp(newXp);
     }
-    XpService.setXp(newXp);
   }
 
   static Future<DocumentReference<Map<String, dynamic>>> _getTodo(

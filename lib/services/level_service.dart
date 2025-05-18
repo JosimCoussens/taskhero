@@ -14,6 +14,7 @@ class LevelService {
 
   static Future<void> setLevel(int level) async {
     AppParams.level.value = level;
+    AppParams.showLevelUpDialog.value = true;
     await FirebaseFirestore.instance
         .collection('users')
         .doc(AppParams.userId)

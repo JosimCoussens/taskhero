@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
+import 'package:taskhero/components/levelup_dialog.dart';
 import 'package:taskhero/components/todo_widget.dart';
 import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/constants.dart';
@@ -19,14 +20,24 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppHeader(title: "Home"),
-      body: isLoading ? _buildLoading() : _buildContent(),
-      bottomNavigationBar: bottomAppBar(context, () {
-        setState(() {
-          _loadTodos();
-        });
-      }),
+    return ValueListenableBuilder(
+      valueListenable: AppParams.showLevelUpDialog,
+      builder: (context, showLevelUpDialog, _) {
+        return Scaffold(
+          appBar: AppHeader(title: "Home"),
+          body:
+              isLoading
+                  ? _buildLoading()
+                  : showLevelUpDialog
+                  ? levelUpDialog()
+                  : _buildContent(),
+          bottomNavigationBar: bottomAppBar(context, () {
+            setState(() {
+              _loadTodos();
+            });
+          }),
+        );
+      },
     );
   }
 

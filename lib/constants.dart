@@ -120,4 +120,5 @@ class AppParams {
   static ValueNotifier<int> money = ValueNotifier<int>(0);
   static ValueNotifier<int> xp = ValueNotifier<int>(0);
   static ValueNotifier<int> level = ValueNotifier<int>(0);
+  static ValueNotifier<bool> showLevelUpDialog = ValueNotifier<bool>(false);
 }

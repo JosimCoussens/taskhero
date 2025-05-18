@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
+import 'package:taskhero/components/levelup_dialog.dart';
 import 'package:taskhero/components/todo_widget.dart';
 import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/constants.dart';
@@ -22,14 +23,19 @@ class CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     _fetchTasks();
-    return Scaffold(
-      appBar: AppHeader(title: 'Calendar'),
-      body: showContent(),
-      bottomNavigationBar: bottomAppBar(context, () {
-        setState(() {
-          _fetchTasks();
-        });
-      }),
+    return ValueListenableBuilder(
+      valueListenable: AppParams.showLevelUpDialog,
+      builder: (context, showLevelUpDialog, _) {
+        return Scaffold(
+          appBar: AppHeader(title: "Calendar"),
+          body: showLevelUpDialog ? levelUpDialog() : showContent(),
+          bottomNavigationBar: bottomAppBar(context, () {
+            setState(() {
+              _fetchTasks();
+            });
+          }),
+        );
+      },
     );
   }
 

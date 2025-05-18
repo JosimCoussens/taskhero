@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:taskhero/auth.dart';
 import 'package:taskhero/constants.dart';
 import 'package:taskhero/pages/home_page.dart';
+import 'package:taskhero/services/user_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -43,12 +44,14 @@ class _LoginPageState extends State<LoginPage> {
         email: _controllerEmail.text,
         password: _controllerPassword.text,
       );
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
-        );
-      }
+      await UserService.createUser(FirebaseAuth.instance.currentUser!.uid);
+      AppParams.userId = FirebaseAuth.instance.currentUser!.uid;
+      mounted
+          ? Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          )
+          : null;
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;

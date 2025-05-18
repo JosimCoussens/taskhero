@@ -22,13 +22,13 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     _loadTodos();
-    _setXp();
+    _setMoney();
     _setItems();
     super.initState();
   }
 
-  Future<void> _setXp() async {
-    AppParams.money.value = await UserService.getXp();
+  Future<void> _setMoney() async {
+    AppParams.money.value = await UserService.getMoney();
   }
 
   Future<void> _setItems() async {

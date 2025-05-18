@@ -5,8 +5,8 @@ import 'package:taskhero/components/flutter_todo_widget.dart';
 import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/constants.dart';
 import 'package:taskhero/services/item_service.dart';
+import 'package:taskhero/services/money_service.dart';
 import 'package:taskhero/services/todo_service.dart';
-import 'package:taskhero/services/user_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -28,7 +28,7 @@ class HomePageState extends State<HomePage> {
   }
 
   Future<void> _setMoney() async {
-    AppParams.money.value = await UserService.getMoney();
+    AppParams.money.value = await MoneyService.getMoney();
   }
 
   Future<void> _setItems() async {

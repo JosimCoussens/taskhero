@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:taskhero/classes/item.dart';
 import 'package:taskhero/constants.dart';
-import 'package:taskhero/services/user_service.dart';
+import 'package:taskhero/services/money_service.dart';
 
 class ItemService {
   static Future<void> setAppItems() async {
@@ -41,7 +41,7 @@ class ItemService {
                   .toList(),
         });
     // Update money
-    await UserService.setMoney(AppParams.money.value - item.price);
+    await MoneyService.setMoney(AppParams.money.value - item.price);
   }
 
   static Future<void> sell(Item item, int sellprice) async {
@@ -57,6 +57,6 @@ class ItemService {
                   .toList(),
         });
     // Update xp
-    await UserService.setMoney(AppParams.money.value + sellprice);
+    await MoneyService.setMoney(AppParams.money.value + sellprice);
   }
 }

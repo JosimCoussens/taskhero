@@ -4,7 +4,6 @@ import 'package:taskhero/auth.dart';
 import 'package:taskhero/components/header/progressbar.dart';
 import 'package:taskhero/components/header/user_overlay.dart';
 import 'package:taskhero/constants.dart';
-import 'package:taskhero/services/xp_service.dart';
 
 class AppHeader extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -50,11 +49,7 @@ class _AppHeaderState extends State<AppHeader> {
               ),
             ],
           ),
-          ProgressBar(
-            userXp: AppParams.xp.value,
-            maxXp: XpService.requiredXp(),
-            level: AppParams.level.value,
-          ),
+          ProgressBar(),
         ],
       ),
     );

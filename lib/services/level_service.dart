@@ -13,6 +13,7 @@ class LevelService {
   }
 
   static Future<void> setLevel(int level) async {
+    AppParams.level.value = level;
     await FirebaseFirestore.instance
         .collection('users')
         .doc(AppParams.userId)

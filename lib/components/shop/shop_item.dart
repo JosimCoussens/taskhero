@@ -38,7 +38,7 @@ Container ShopItem(Item item, Function onItemTransaction) {
         if (AppParams.xp.value < item.price && !item.isPurchased)
           _showBuyRestriction(),
         if (AppParams.xp.value >= item.price && !item.isPurchased)
-          _showBuyRestriction(),
+          _buildPurchaseButton(item, sellPrice, onItemTransaction),
       ],
     ),
   );

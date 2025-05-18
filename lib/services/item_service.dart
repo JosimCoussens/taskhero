@@ -26,8 +26,8 @@ class ItemService {
         });
   }
 
-  static Future<bool> buy(Item item) async {
-    if (AppParams.xp.value < item.price) return false;
+  static Future<void> buy(Item item) async {
+    if (AppParams.xp.value < item.price) return;
     AppParams.allItems.where((i) => i.id == item.id).first.isPurchased = true;
     // Update firebase
     await FirebaseFirestore.instance
@@ -41,8 +41,7 @@ class ItemService {
                   .toList(),
         });
     // Update xp
-    UserService.setXp(AppParams.xp.value - item.price);
-    return true;
+    await UserService.setXp(AppParams.xp.value - item.price);
   }
 
   static Future<void> sell(Item item, int sellprice) async {
@@ -58,6 +57,6 @@ class ItemService {
                   .toList(),
         });
     // Update xp
-    UserService.setXp(AppParams.xp.value + sellprice);
+    await UserService.setXp(AppParams.xp.value + sellprice);
   }
 }

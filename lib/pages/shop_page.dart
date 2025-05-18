@@ -16,7 +16,6 @@ class _ShopPageState extends State<ShopPage> {
   final int amountPerRow = 4;
   final double spacing = 5;
   late double itemWidth;
-
   Map<String, List<Item>> categorizedItems = {};
   List<Widget> sectionWidgets = [];
 
@@ -46,9 +45,7 @@ class _ShopPageState extends State<ShopPage> {
       if (categorizedItems.containsKey(category) &&
           categorizedItems[category]!.isNotEmpty) {
         sectionWidgets.add(
-          _buildSection(category, categorizedItems[category] ?? [], () {
-            setState(() {});
-          }),
+          _buildSection(category, categorizedItems[category] ?? []),
         );
       }
     }
@@ -60,10 +57,6 @@ class _ShopPageState extends State<ShopPage> {
         setState(() {});
       }),
     );
-  }
-
-  void refresh() {
-    setState(() {});
   }
 
   Container _showContent() {
@@ -89,12 +82,12 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
+  void _refresh() {
+    setState(() {});
+  }
+
   // Build a section with title and items
-  Widget _buildSection(
-    String title,
-    List<Item> items,
-    Function onItemTransaction,
-  ) {
+  Widget _buildSection(String title, List<Item> items) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -139,7 +132,7 @@ class _ShopPageState extends State<ShopPage> {
             ),
             itemCount: items.length,
             itemBuilder: (context, index) {
-              return ShopItem(items[index], onItemTransaction);
+              return ShopItem(items[index], () => _refresh());
             },
           ),
         const SizedBox(height: 20),

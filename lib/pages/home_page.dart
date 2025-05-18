@@ -32,11 +32,7 @@ class HomePageState extends State<HomePage> {
   }
 
   Future<void> _setItems() async {
-    var boughtItems = await ItemService.getBoughtItems();
-    for (var item in AppParams.allItems) {
-      item.isPurchased = boughtItems.any((bought) => bought.id == item.id);
-    }
-
+    await ItemService.setAppItems();
     setState(() {
       isLoading = false;
     });

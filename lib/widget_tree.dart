@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/auth.dart';
+import 'package:taskhero/constants.dart';
 import 'package:taskhero/pages/home_page.dart';
 import 'package:taskhero/pages/intro_page.dart';
-import 'package:taskhero/pages/login_page.dart';
 
 class WidgetTree extends StatefulWidget {
   const WidgetTree({super.key});
@@ -19,6 +19,7 @@ class _WidgetTreeState extends State<WidgetTree> {
       builder: (context, snapshot) {
         // If there is a user, snapshot has data
         if (snapshot.hasData) {
+          AppParams.userId = snapshot.data!.uid;
           return HomePage();
         } else {
           return const IntroPage();

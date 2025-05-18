@@ -14,8 +14,8 @@ class ItemService {
   static Future<List<Item>> getBoughtItems() {
     // get list from firebase
     return FirebaseFirestore.instance
-        .collection('user')
-        .doc('properties')
+        .collection('users')
+        .doc(AppParams.userId)
         .get()
         .then((value) {
           List<Item> items = [];
@@ -27,14 +27,12 @@ class ItemService {
   }
 
   static Future<bool> buy(Item item) async {
-    if (AppParams.xp.value < item.price) {
-      return false;
-    }
+    if (AppParams.xp.value < item.price) return false;
     AppParams.allItems.where((i) => i.id == item.id).first.isPurchased = true;
     // Update firebase
     await FirebaseFirestore.instance
-        .collection('user')
-        .doc('properties')
+        .collection('users')
+        .doc(AppParams.userId)
         .update({
           'inventory':
               AppParams.allItems
@@ -50,8 +48,8 @@ class ItemService {
   static Future<void> sell(Item item, int sellprice) async {
     AppParams.allItems.where((i) => i.id == item.id).first.isPurchased = false;
     await FirebaseFirestore.instance
-        .collection('user')
-        .doc('properties')
+        .collection('users')
+        .doc(AppParams.userId)
         .update({
           'inventory':
               AppParams.allItems

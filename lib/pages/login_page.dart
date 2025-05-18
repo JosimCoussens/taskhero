@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taskhero/auth.dart';
+import 'package:taskhero/constants.dart';
 import 'package:taskhero/pages/home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -23,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
         password: _controllerPassword.text,
       );
       if (mounted) {
+        AppParams.userId = FirebaseAuth.instance.currentUser!.uid;
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const HomePage()),

@@ -3,25 +3,19 @@ import 'package:taskhero/constants.dart';
 
 class UserService {
   static Future<int> getXp() async {
-    DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await FirebaseFirestore.instance
-            .collection('user')
-            .doc('properties')
-            .get();
-
-    if (snapshot.exists) {
-      Map<String, dynamic>? data = snapshot.data();
-      if (data != null && data.containsKey('xp')) {
-        return data['xp'] as int;
-      }
-    }
-    throw Exception('Document does not exist');
+    var data =
+        (await FirebaseFirestore.instance
+                .collection('users')
+                .doc(AppParams.userId)
+                .get())
+            .data();
+    return data?['xp'] ?? (throw Exception('Document does not exist'));
   }
 
   static Future<void> setXp(int xp) async {
     await FirebaseFirestore.instance
-        .collection('user')
-        .doc('properties')
+        .collection('users')
+        .doc(AppParams.userId)
         .update({'xp': xp});
     AppParams.xp.value = xp;
   }

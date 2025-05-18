@@ -1,10 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:taskhero/classes/todo.dart';
+import 'package:taskhero/constants.dart';
 
 class TodoService {
   static Future<List<Todo>> getAll() async {
     QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection('todos').get();
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(AppParams.userId)
+            .collection('todos')
+            .get();
 
     return snapshot.docs
         .map((doc) => Todo.fromFirestore(doc.data() as Map<String, dynamic>))
@@ -62,10 +67,16 @@ class TodoService {
   );
 
   addTask(Todo newTask) async {
+    if (AppParams.userId == null) throw Exception('User not logged in.');
     // Generate unique id
     String id = DateTime.now().millisecondsSinceEpoch.toString();
     newTask.id = id;
-    FirebaseFirestore.instance.collection('todos').doc(id).set(newTask.toMap());
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(AppParams.userId)
+        .collection('todos')
+        .doc(id)
+        .set(newTask.toMap());
   }
 
   static Future<void> toggleCompletion(Todo todo) async {
@@ -91,11 +102,17 @@ class TodoService {
       }
     }
     // Update and save the todo
-    await FirebaseFirestore.instance
-        .collection('todos')
-        .doc(todo.id)
-        .update(todo.toMap());
+    var todoFromDb = await _getTodo(todo.id!);
+    todoFromDb.update(todo.toMap());
   }
+
+  static Future<DocumentReference<Map<String, dynamic>>> _getTodo(
+    String todoId,
+  ) async => FirebaseFirestore.instance
+      .collection('users')
+      .doc(AppParams.userId)
+      .collection('todos')
+      .doc(todoId.toString());
 
   static Future<List<Todo>> getCompletedTasks(DateTime day) {
     return getAll().then(
@@ -135,6 +152,6 @@ class TodoService {
   }
 
   static Future<void> delete(Todo todo) {
-    return FirebaseFirestore.instance.collection('todos').doc(todo.id).delete();
+    return _getTodo(todo.id!).then((doc) => doc.delete());
   }
 }

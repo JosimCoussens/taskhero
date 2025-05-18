@@ -6,6 +6,7 @@ class UserService {
       'money': 50,
       'xp': 0,
       'inventory': [],
+      'level': 0,
     });
   }
 }

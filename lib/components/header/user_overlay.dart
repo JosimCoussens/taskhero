@@ -14,9 +14,13 @@ OverlayEntry userOverlay(
         (context) => Stack(
           children: [
             GestureDetector(
-              onTap: () => removeOverlay,
+              onTap: () => removeOverlay(),
               behavior: HitTestBehavior.translucent,
-              child: Container(color: Colors.transparent),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: Colors.transparent,
+              ),
             ),
             Positioned(
               top: offset.dy + widget.preferredSize.height,

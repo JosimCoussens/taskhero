@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/constants.dart';
+import 'package:taskhero/services/level_service.dart';
+import 'package:taskhero/services/xp_service.dart';
 
 class TodoService {
   static Future<List<Todo>> getAll() async {
@@ -101,9 +103,36 @@ class TodoService {
           break;
       }
     }
+    // Update xp
+    _setXp(todo);
+
     // Update and save the todo
     var todoFromDb = await _getTodo(todo.id!);
     todoFromDb.update(todo.toMap());
+  }
+
+  static void _setXp(Todo todo) {
+    // Update xp
+    int xpToAdd = 0;
+    int baseXp = 50;
+    switch (todo.difficulty) {
+      case 0: // Easy
+        xpToAdd = (baseXp * 0.75).ceil().toInt();
+        break;
+      case 1: // Medium
+        xpToAdd = (baseXp * 1).toInt();
+        break;
+      case 2: // Hard
+        xpToAdd = (baseXp * 1.25).ceil().toInt();
+        break;
+    }
+    int newXp = AppParams.xp.value + xpToAdd;
+    int requiredXp = XpService.requiredXp();
+    if (newXp >= requiredXp) {
+      LevelService.setLevel(AppParams.level.value + 1);
+      XpService.setXp(newXp - requiredXp);
+    }
+    XpService.setXp(newXp);
   }
 
   static Future<DocumentReference<Map<String, dynamic>>> _getTodo(

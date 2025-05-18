@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taskhero/auth.dart';
+import 'package:taskhero/components/header/progressbar.dart';
 import 'package:taskhero/components/header/user_overlay.dart';
 import 'package:taskhero/constants.dart';
+import 'package:taskhero/services/xp_service.dart';
 
 class AppHeader extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -13,7 +15,7 @@ class AppHeader extends StatefulWidget implements PreferredSizeWidget {
   State<AppHeader> createState() => _AppHeaderState();
 
   @override
-  Size get preferredSize => const Size.fromHeight(64);
+  Size get preferredSize => const Size.fromHeight(80);
 }
 
 class _AppHeaderState extends State<AppHeader> {
@@ -35,13 +37,23 @@ class _AppHeaderState extends State<AppHeader> {
       backgroundColor: Colors.white,
       elevation: 0,
       toolbarHeight: widget.preferredSize.height,
-      title: Stack(
-        alignment: Alignment.center,
+      title: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          _PageTitle(widget: widget),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [_userMoney(), _userAvatar(context, avatarPath)],
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              _PageTitle(widget: widget),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [_userMoney(), _userAvatar(context, avatarPath)],
+              ),
+            ],
+          ),
+          ProgressBar(
+            userXp: AppParams.xp.value,
+            maxXp: XpService.requiredXp(),
+            level: AppParams.level.value,
           ),
         ],
       ),

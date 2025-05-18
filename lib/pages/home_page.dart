@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
-import 'package:taskhero/components/flutter_todo_widget.dart';
+import 'package:taskhero/components/todo_widget.dart';
 import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/constants.dart';
-import 'package:taskhero/services/item_service.dart';
-import 'package:taskhero/services/money_service.dart';
 import 'package:taskhero/services/todo_service.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,33 +18,6 @@ class HomePageState extends State<HomePage> {
   bool isLoading = true;
 
   @override
-  void initState() {
-    _loadTodos();
-    _setMoney();
-    _setItems();
-    super.initState();
-  }
-
-  Future<void> _setMoney() async {
-    AppParams.money.value = await MoneyService.getMoney();
-  }
-
-  Future<void> _setItems() async {
-    await ItemService.setAppItems();
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  Future<void> _loadTodos() async {
-    final todosTemp = await TodoService.getAllUncompleted();
-
-    setState(() {
-      uncompletedTodos = todosTemp;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppHeader(title: "Home"),
@@ -57,6 +28,23 @@ class HomePageState extends State<HomePage> {
         });
       }),
     );
+  }
+
+  @override
+  void initState() {
+    _loadTodos();
+    super.initState();
+  }
+
+  Future<void> _loadTodos() async {
+    final todosTemp = await TodoService.getAllUncompleted();
+
+    setState(() {
+      uncompletedTodos = todosTemp;
+      setState(() {
+        isLoading = false;
+      });
+    });
   }
 
   Widget _buildLoading() {

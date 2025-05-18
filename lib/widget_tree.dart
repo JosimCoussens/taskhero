@@ -3,6 +3,10 @@ import 'package:taskhero/auth.dart';
 import 'package:taskhero/constants.dart';
 import 'package:taskhero/pages/home_page.dart';
 import 'package:taskhero/pages/intro_page.dart';
+import 'package:taskhero/services/item_service.dart';
+import 'package:taskhero/services/level_service.dart';
+import 'package:taskhero/services/money_service.dart';
+import 'package:taskhero/services/xp_service.dart';
 
 class WidgetTree extends StatefulWidget {
   const WidgetTree({super.key});
@@ -20,11 +24,32 @@ class _WidgetTreeState extends State<WidgetTree> {
         // If there is a user, snapshot has data
         if (snapshot.hasData) {
           AppParams.userId = snapshot.data!.uid;
-          return HomePage();
+          return FutureBuilder(
+            future: Future.wait([_getMoneyAndXp(), _getItems()]),
+            builder: (context, futureSnapshot) {
+              // If the future is still loading, show a loading indicator
+              if (futureSnapshot.connectionState == ConnectionState.waiting) {
+                return const SafeArea(
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+              return HomePage();
+            },
+          );
         } else {
           return const IntroPage();
         }
       },
     );
+  }
+
+  Future<void> _getMoneyAndXp() async {
+    AppParams.money.value = await MoneyService.getMoney();
+    AppParams.xp.value = await XpService.getXp();
+    AppParams.level.value = await LevelService.getLevel();
+  }
+
+  Future<void> _getItems() async {
+    await ItemService.setAppItems();
   }
 }

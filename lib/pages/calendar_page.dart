@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
-import 'package:taskhero/components/flutter_todo_widget.dart';
+import 'package:taskhero/components/todo_widget.dart';
 import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/constants.dart';
 import 'package:taskhero/services/todo_service.dart';

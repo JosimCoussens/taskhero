@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:taskhero/classes/item.dart';
 import 'package:taskhero/constants.dart';
@@ -30,14 +31,14 @@ Container ShopItem(Item item, Function onItemTransaction) {
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(Icons.circle, color: Colors.amber, size: 16),
+            Image.asset(AppParams.coinPath, width: 16, height: 16),
           ],
         ),
         if (item.isPurchased)
           _buildPurchaseButton(item, sellPrice, onItemTransaction),
-        if (AppParams.xp.value < item.price && !item.isPurchased)
+        if (AppParams.money.value < item.price && !item.isPurchased)
           _showBuyRestriction(),
-        if (AppParams.xp.value >= item.price && !item.isPurchased)
+        if (AppParams.money.value >= item.price && !item.isPurchased)
           _buildPurchaseButton(item, sellPrice, onItemTransaction),
       ],
     ),

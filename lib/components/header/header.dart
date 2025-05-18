@@ -125,10 +125,10 @@ class _AppHeaderState extends State<AppHeader> {
               Row(
                 children: [
                   ValueListenableBuilder(
-                    valueListenable: AppParams.xp,
+                    valueListenable: AppParams.money,
                     builder: (context, xp, _) {
                       return Text(
-                        AppParams.xp.value.toString(),
+                        AppParams.money.value.toString(),
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 16,
@@ -138,11 +138,7 @@ class _AppHeaderState extends State<AppHeader> {
                     },
                   ),
                   const SizedBox(width: 4),
-                  Image.asset(
-                    'assets/images/xp_coin.png',
-                    height: 20,
-                    width: 20,
-                  ),
+                  Image.asset(AppParams.coinPath, height: 20, width: 20),
                 ],
               ),
               GestureDetector(

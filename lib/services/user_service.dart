@@ -9,14 +9,14 @@ class UserService {
                 .doc(AppParams.userId)
                 .get())
             .data();
-    return data?['xp'] ?? (throw Exception('Document does not exist'));
+    return data?['money'] ?? (throw Exception('Document does not exist'));
   }
 
-  static Future<void> setXp(int xp) async {
+  static Future<void> setMoney(int money) async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(AppParams.userId)
-        .update({'xp': xp});
-    AppParams.xp.value = xp;
+        .update({'money': money});
+    AppParams.money.value = money;
   }
 }

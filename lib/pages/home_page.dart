@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
 import 'package:taskhero/components/levelup_dialog.dart';
-import 'package:taskhero/components/todo_widget.dart';
+import 'package:taskhero/components/task_list.dart';
 import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/constants.dart';
 import 'package:taskhero/services/todo_service.dart';
@@ -77,10 +77,14 @@ class HomePageState extends State<HomePage> {
             colorFilter: AppParams.backgroundImageColorFilter,
           ),
         ),
-        child: ListView(
+        child: Column(
           children: [
-            if (uncompletedTodos.isNotEmpty)
-              ..._buildTodoSection('Today', uncompletedTodos),
+            _buildSectionHeader('What do you want to do today?'),
+            showTaskList(uncompletedTodos, () {
+              setState(() {
+                _loadTodos();
+              });
+            }),
           ],
         ),
       ),
@@ -93,28 +97,6 @@ class HomePageState extends State<HomePage> {
     setState(() {
       uncompletedTodos = updatedTodos;
     });
-  }
-
-  List<Widget> _buildTodoSection(String title, List<Todo> todos) {
-    final widgets = <Widget>[];
-    for (int i = 0; i < todos.length; i++) {
-      widgets.add(
-        TodoWidget(todos[i], () async {
-          await toggleCompletion(todos[i]);
-          setState(() {});
-        }),
-      );
-      if (i < todos.length - 1) {
-        widgets.add(const SizedBox(height: 10)); // Add gap between widgets
-      }
-    }
-
-    return [
-      _buildSectionHeader(title),
-      const SizedBox(height: 8),
-      ...widgets,
-      const SizedBox(height: 16),
-    ];
   }
 
   Widget _buildSectionHeader(String title) {

@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/components/bottom_app_bar/bottom_app_bar.dart';
 import 'package:taskhero/components/levelup_dialog.dart';
-import 'package:taskhero/components/todo_widget.dart';
+import 'package:taskhero/components/task_list.dart';
 import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/constants.dart';
 import 'package:taskhero/services/todo_service.dart';
@@ -65,7 +65,14 @@ class CalendarPageState extends State<CalendarPage> {
             const SizedBox(height: 16),
             _showActionButtons(),
             const SizedBox(height: 12),
-            _showTaskList(),
+            showTaskList(
+              _selectedButtonIndex == 0 ? uncompletedTodos : completedTodos,
+              () {
+                setState(() {
+                  _fetchTasks();
+                });
+              },
+            ),
           ],
         ),
       ),
@@ -303,41 +310,5 @@ class CalendarPageState extends State<CalendarPage> {
         ),
       ],
     );
-  }
-
-  Expanded _showTaskList() {
-    return Expanded(
-      child: ListView.builder(
-        padding: const EdgeInsets.only(top: 8),
-        itemCount:
-            _selectedButtonIndex == 0
-                ? uncompletedTodos.length
-                : completedTodos.length,
-        itemBuilder: (context, index) {
-          final todo =
-              _selectedButtonIndex == 0
-                  ? uncompletedTodos[index]
-                  : completedTodos[index];
-          return Column(
-            children: [
-              TodoWidget(todo, () => toggleCompletion(todo)),
-              if (index !=
-                  (_selectedButtonIndex == 0
-                      ? uncompletedTodos.length - 1
-                      : completedTodos.length - 1))
-                const SizedBox(height: 8),
-            ],
-          );
-        },
-      ),
-    );
-  }
-
-  Future<void> toggleCompletion(Todo todo) async {
-    await TodoService.toggleCompletion(todo);
-    final updatedTodos = await TodoService.getAllUncompleted();
-    setState(() {
-      uncompletedTodos = updatedTodos;
-    });
   }
 }

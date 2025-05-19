@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/constants.dart';
-import 'package:taskhero/services/todo_service.dart';
 
 class TodoWidget extends StatelessWidget {
   final Todo todo;
   final VoidCallback? toggleCompletion;
+  final VoidCallback? dismis;
 
-  const TodoWidget(this.todo, this.toggleCompletion, {super.key});
+  const TodoWidget(this.todo, this.toggleCompletion, this.dismis, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
       key: Key(todo.title + todo.date.toString()), // Use unique key
       direction: DismissDirection.endToStart,
-      onDismissed: (_) => {TodoService.delete(todo)},
+      onDismissed: (_) {
+        dismis?.call();
+      },
       background: Container(
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(left: 20),

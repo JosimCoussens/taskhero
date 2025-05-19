@@ -15,6 +15,7 @@ class AppParams {
   static const String avatarPath = 'assets/images/avatar.png';
   static const String coinPath = 'assets/images/coin.png';
   static const String xpPath = 'assets/images/xp_coin.png';
+  static const String calendarName = 'taskhero';
 
   static const double generalSpacing = 16.0;
   static ColorFilter backgroundImageColorFilter = ColorFilter.mode(

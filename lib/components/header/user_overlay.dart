@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/auth.dart';
-import 'package:taskhero/calendar_client.dart';
 import 'package:taskhero/components/header/header.dart';
 import 'package:taskhero/pages/login_page.dart';
 
@@ -45,10 +44,6 @@ OverlayEntry userOverlay(
                         style: const TextStyle(fontWeight: FontWeight.w500),
                       ),
                       const SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: _createEvent,
-                        child: const Text('Create Event'),
-                      ),
                       const SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: () async {
@@ -70,20 +65,5 @@ OverlayEntry userOverlay(
             ),
           ],
         ),
-  );
-}
-
-Future<void> _createEvent() async {
-  CalendarClient calendarClient = CalendarClient();
-  await calendarClient.insert(
-    title: 'test2',
-    description: 'test',
-    location: '',
-    attendeeEmailList: [],
-    shouldNotifyAttendees: false,
-    // Start of the day
-    startTime: DateTime.now(),
-    // End of the day
-    endTime: DateTime.now().add(const Duration(hours: 1)),
   );
 }

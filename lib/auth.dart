@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
 import 'package:http/http.dart' as http;
-import 'package:taskhero/calendar_client.dart';
+import 'package:taskhero/services/calendar/calendar_client.dart';
 import 'package:taskhero/google_client.dart';
 
 class Auth {

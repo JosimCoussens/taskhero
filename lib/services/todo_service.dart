@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/constants.dart';
+import 'package:taskhero/services/calendar/calendar_service.dart';
 import 'package:taskhero/services/level_service.dart';
 import 'package:taskhero/services/xp_service.dart';
 
@@ -79,6 +80,8 @@ class TodoService {
         .collection('todos')
         .doc(id)
         .set(newTask.toMap());
+    // Add the event to the calendar
+    await CalendarService.createEvent(newTask);
   }
 
   static Future<void> toggleCompletion(Todo todo) async {
@@ -182,7 +185,10 @@ class TodoService {
     return todos;
   }
 
-  static Future<void> delete(Todo todo) {
+  static Future<void> delete(Todo todo) async {
+    // Delete the event from the calendar
+    CalendarService.deleteEvent(todo.id!);
+    // Delete the todo from the database
     return _getTodo(todo.id!).then((doc) => doc.delete());
   }
 }

@@ -23,9 +23,15 @@ class _WidgetTreeState extends State<WidgetTree> {
       builder: (context, snapshot) {
         // If there is a user, snapshot has data
         if (snapshot.hasData) {
+          // Get login method from snapshot
+          AppParams.loginMethod = snapshot.data!.providerData[0].providerId;
           AppParams.userId = snapshot.data!.uid;
           return FutureBuilder(
-            future: Future.wait([_getMoneyAndXp(), _getItems()]),
+            future: Future.wait([
+              _getMoneyAndXp(),
+              _getItems(),
+              Auth().initializeCalendar(),
+            ]),
             builder: (context, futureSnapshot) {
               // If the future is still loading, show a loading indicator
               if (futureSnapshot.connectionState == ConnectionState.waiting) {

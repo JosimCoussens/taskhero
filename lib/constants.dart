@@ -9,10 +9,13 @@ class AppColors {
 }
 
 class AppParams {
+  static String? userId;
+  static String? loginMethod;
+
   static const String avatarPath = 'assets/images/avatar.png';
   static const String coinPath = 'assets/images/coin.png';
   static const String xpPath = 'assets/images/xp_coin.png';
-  static String? userId;
+
   static const double generalSpacing = 16.0;
   static ColorFilter backgroundImageColorFilter = ColorFilter.mode(
     Colors.black.withValues(alpha: 0.4),
@@ -117,6 +120,7 @@ class AppParams {
       price: 15,
     ),
   ];
+
   static ValueNotifier<int> money = ValueNotifier<int>(0);
   static ValueNotifier<int> xp = ValueNotifier<int>(0);
   static ValueNotifier<int> level = ValueNotifier<int>(0);

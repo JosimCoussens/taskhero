@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:taskhero/auth.dart';
 import 'package:taskhero/constants.dart';
-import 'package:taskhero/pages/home_page.dart';
 import 'package:taskhero/services/user_service.dart';
+import 'package:taskhero/widget_tree.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
         AppParams.userId = FirebaseAuth.instance.currentUser!.uid;
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => const WidgetTree()),
         );
       }
     } on FirebaseAuthException catch (e) {
@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
       mounted
           ? Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => const WidgetTree()),
           )
           : null;
     } on FirebaseAuthException catch (e) {
@@ -185,10 +185,11 @@ class _LoginPageState extends State<LoginPage> {
           await UserService.createUser(FirebaseAuth.instance.currentUser!.uid);
           AppParams.userId = FirebaseAuth.instance.currentUser!.uid;
           if (isLogged) {
+            // Go to widget tree
             mounted
                 ? Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
+                  MaterialPageRoute(builder: (context) => const WidgetTree()),
                 )
                 : null;
           }

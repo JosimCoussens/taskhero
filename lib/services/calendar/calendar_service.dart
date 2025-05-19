@@ -36,4 +36,9 @@ class CalendarService {
     );
     return createdCalendar.id!; // Save this ID and use it for event creation
   }
+
+  static void updateEventDate(Todo todo) async {
+    CalendarClient calendarClient = CalendarClient();
+    calendarClient.updateDate(todo);
+  }
 }

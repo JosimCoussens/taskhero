@@ -44,7 +44,7 @@ class CalendarClient {
   }
 
   Future<void> delete(String eventId) async {
-    // Check if the event exists
+    // Check if the event exists return if not
     String calendarId = await CalendarService.createCustomCalendar();
     final eventList = await calendar?.events.list(calendarId);
     final existingEvent =
@@ -52,6 +52,41 @@ class CalendarClient {
     if (existingEvent == null) {
       return;
     }
+    // Delete the event
     await calendar?.events.delete(calendarId, eventId);
+  }
+
+  void updateDate(Todo todo) async {
+    String calendarId = await CalendarService.createCustomCalendar();
+    final eventList = await calendar?.events.list(calendarId);
+    final existingEvent =
+        eventList?.items?.where((event) => event.id == todo.id).firstOrNull;
+    if (existingEvent == null) {
+      return;
+    }
+    // Update the event
+    EventDateTime start = EventDateTime();
+    start.dateTime = DateTime(
+      todo.date.year,
+      todo.date.month,
+      todo.date.day,
+      0,
+      0,
+    );
+    start.timeZone = "GMT+05:30";
+    existingEvent.start = start;
+
+    EventDateTime end = EventDateTime();
+    end.timeZone = "GMT+05:30";
+    end.dateTime = DateTime(
+      todo.date.year,
+      todo.date.month,
+      todo.date.day,
+      23,
+      59,
+    );
+    existingEvent.end = end;
+
+    await calendar?.events.update(existingEvent, calendarId, existingEvent.id!);
   }
 }

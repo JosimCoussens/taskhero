@@ -111,7 +111,11 @@ class TodoService {
 
     // Update and save the todo
     var todoFromDb = await _getTodo(todo.id!);
-    todoFromDb.update(todo.toMap());
+    var newTodo = todo.toMap();
+    if (todo.repeatCycle != 0) {
+      CalendarService.updateEventDate(todo);
+    }
+    todoFromDb.update(newTodo);
   }
 
   static Future<void> _setXp(Todo todo) async {

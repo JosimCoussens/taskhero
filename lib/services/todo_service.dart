@@ -74,6 +74,7 @@ class TodoService {
     // Generate unique id
     String id = DateTime.now().millisecondsSinceEpoch.toString();
     newTask.id = id;
+    // Set the task in the database
     FirebaseFirestore.instance
         .collection('users')
         .doc(AppParams.userId)

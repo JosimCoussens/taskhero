@@ -60,11 +60,10 @@ class CalendarPageState extends State<CalendarPage> {
       child: Padding(
         padding: const EdgeInsets.all(AppParams.generalSpacing),
         child: Column(
+          spacing: AppParams.generalSpacing,
           children: [
             _buildCalendarHeader(),
-            const SizedBox(height: 16),
             _showActionButtons(),
-            const SizedBox(height: 12),
             showTaskList(
               _selectedButtonIndex == 0 ? uncompletedTodos : completedTodos,
               () {
@@ -242,6 +241,7 @@ class CalendarPageState extends State<CalendarPage> {
 
   Row _showActionButtons() {
     return Row(
+      spacing: AppParams.generalSpacing / 2,
       children: [
         Expanded(
           child: ElevatedButton.icon(
@@ -275,7 +275,6 @@ class CalendarPageState extends State<CalendarPage> {
             ),
           ),
         ),
-        const SizedBox(width: 12),
         Expanded(
           child: ElevatedButton.icon(
             icon: Icon(

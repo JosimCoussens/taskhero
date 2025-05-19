@@ -1,12 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:taskhero/classes/todo.dart';
 import 'package:taskhero/components/todo_widget.dart';
+import 'package:taskhero/constants.dart';
 import 'package:taskhero/services/todo_service.dart';
 
 Expanded showTaskList(List<Todo> todos, Function refreshList) {
   return Expanded(
     child: ListView.builder(
-      padding: const EdgeInsets.only(top: 8),
       itemCount: todos.length,
       itemBuilder: (context, index) {
         final todo = todos[index];
@@ -24,6 +24,8 @@ Expanded showTaskList(List<Todo> todos, Function refreshList) {
                 refreshList();
               },
             ),
+            if (index != todos.length - 1)
+              const SizedBox(height: AppParams.generalSpacing / 2),
           ],
         );
       },

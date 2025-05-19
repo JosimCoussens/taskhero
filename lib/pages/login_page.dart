@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:taskhero/auth.dart';
 import 'package:taskhero/constants.dart';
 import 'package:taskhero/pages/home_page.dart';
@@ -144,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
   Column credentialsInputFields(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 20,
+      spacing: 10,
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(8.0),
@@ -167,7 +168,53 @@ class _LoginPageState extends State<LoginPage> {
         _errorMessage(),
         _submitButton(context),
         _loginOrRegisterButton(),
+        // Google sign in button
+        divider(),
+        _loginWithGoogleButton(),
       ],
+    );
+  }
+
+  SizedBox _loginWithGoogleButton() {
+    return SizedBox(
+      width: double.infinity,
+      height: 60,
+      child: ElevatedButton(
+        onPressed: () async {
+          bool isLogged = await Auth().signInWithGoogle();
+          await UserService.createUser(FirebaseAuth.instance.currentUser!.uid);
+          AppParams.userId = FirebaseAuth.instance.currentUser!.uid;
+          if (isLogged) {
+            mounted
+                ? Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                )
+                : null;
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: const BorderSide(color: AppColors.primaryLight, width: 2),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 10,
+          children: [
+            SvgPicture.asset('assets/images/google.svg', height: 24, width: 24),
+            const Text(
+              'Sign in with Google',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

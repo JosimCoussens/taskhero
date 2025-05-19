@@ -20,8 +20,8 @@ Expanded showTaskList(List<Todo> todos, Function refreshList) {
               },
               () async {
                 todos.remove(todo);
-                await TodoService.delete(todo);
                 refreshList();
+                await TodoService.delete(todo);
               },
             ),
             if (index != todos.length - 1)

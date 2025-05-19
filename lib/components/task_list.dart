@@ -16,6 +16,7 @@ Expanded showTaskList(List<Todo> todos, Function refreshList) {
               todo,
               () async {
                 await TodoService.toggleCompletion(todo);
+                refreshList();
               },
               () async {
                 todos.remove(todo);

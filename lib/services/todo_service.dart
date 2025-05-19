@@ -85,9 +85,12 @@ class TodoService {
   }
 
   static Future<void> toggleCompletion(Todo todo) async {
+    // If the task is already completed, set it to not completed
     if (todo.isCompleted == true) {
       todo.isCompleted = false;
-    } else {
+    }
+    // Set task to completed and update todo date if todo is recurring
+    else {
       switch (todo.repeatCycle) {
         case 0: // No repeat
           todo.isCompleted = !todo.isCompleted;
@@ -108,13 +111,17 @@ class TodoService {
     }
     // Update xp
     _setXp(todo);
-
-    // Update and save the todo
-    var todoFromDb = await _getTodo(todo.id!);
-    var newTodo = todo.toMap();
+    // Update calendar if recurring task
     if (todo.repeatCycle != 0) {
       CalendarService.updateEventDate(todo);
     }
+    // Delete event if task is not recurring
+    else if (todo.isCompleted) {
+      CalendarService.deleteEvent(todo.id!);
+    }
+    // Update todo in database
+    var todoFromDb = await _getTodo(todo.id!);
+    var newTodo = todo.toMap();
     todoFromDb.update(newTodo);
   }
 

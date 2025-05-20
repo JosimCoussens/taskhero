@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:taskhero/auth.dart';
-import 'package:taskhero/constants.dart';
-import 'package:taskhero/pages/home_page.dart';
-import 'package:taskhero/pages/intro_page.dart';
-import 'package:taskhero/services/item_service.dart';
-import 'package:taskhero/services/level_service.dart';
-import 'package:taskhero/services/money_service.dart';
-import 'package:taskhero/services/xp_service.dart';
+import 'package:taskhero/data/auth/auth.dart';
+import 'package:taskhero/core/constants.dart';
+import 'package:taskhero/ui/home_page.dart';
+import 'package:taskhero/ui/intro_page.dart';
+import 'package:taskhero/data/shop/item_service.dart';
+import 'package:taskhero/data/leveling/level_service.dart';
+import 'package:taskhero/data/shop/money_service.dart';
+import 'package:taskhero/data/leveling/xp_service.dart';
 
 class WidgetTree extends StatefulWidget {
   const WidgetTree({super.key});

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:taskhero/data/auth/auth.dart';
+import 'package:taskhero/data/user_service.dart';
 import 'package:taskhero/ui/header/progressbar.dart';
 import 'package:taskhero/ui/header/user_overlay.dart';
 import 'package:taskhero/core/constants.dart';
@@ -60,9 +61,9 @@ class _AppHeaderState extends State<AppHeader> {
       child: CircleAvatar(
         radius: 18,
         backgroundImage:
-            AppParams.googleProfileImage == null
-                ? AssetImage(AppParams.defaultProfileImage)
-                : NetworkImage(AppParams.googleProfileImage!),
+            UserService.loggedInWithGoogle()
+                ? NetworkImage(AppParams.googleProfileImage!)
+                : AssetImage(AppParams.defaultProfileImage),
       ),
     );
   }

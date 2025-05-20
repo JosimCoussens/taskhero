@@ -4,6 +4,7 @@ import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/data/calendar/calendar_service.dart';
 import 'package:taskhero/data/leveling/level_service.dart';
 import 'package:taskhero/data/leveling/xp_service.dart';
+import 'package:taskhero/data/user_service.dart';
 
 class TodoService {
   static Future<List<Todo>> getAll() async {
@@ -82,7 +83,9 @@ class TodoService {
         .doc(id)
         .set(newTask.toMap());
     // Add the event to the calendar
-    await CalendarService.createEvent(newTask);
+    if (UserService.loggedInWithGoogle()) {
+      await CalendarService.createEvent(newTask);
+    }
   }
 
   static Future<void> toggleCompletion(Todo todo) async {
@@ -112,13 +115,15 @@ class TodoService {
     }
     // Update xp
     _setXp(todo);
-    // Update calendar if recurring task
-    if (todo.repeatCycle != 0) {
-      CalendarService.updateEventDate(todo);
-    }
-    // Delete event if task is not recurring
-    else if (todo.isCompleted) {
-      CalendarService.deleteEvent(todo.id!);
+    if (UserService.loggedInWithGoogle()) {
+      // Update calendar if recurring task
+      if (todo.repeatCycle != 0) {
+        CalendarService.updateEventDate(todo);
+      }
+      // Delete event if task is not recurring
+      else if (todo.isCompleted) {
+        CalendarService.deleteEvent(todo.id!);
+      }
     }
     // Update todo in database
     var todoFromDb = await _getTodo(todo.id!);
@@ -199,7 +204,9 @@ class TodoService {
 
   static Future<void> delete(Todo todo) async {
     // Delete the event from the calendar
-    CalendarService.deleteEvent(todo.id!);
+    if (UserService.loggedInWithGoogle()) {
+      CalendarService.deleteEvent(todo.id!);
+    }
     // Delete the todo from the database
     return _getTodo(todo.id!).then((doc) => doc.delete());
   }

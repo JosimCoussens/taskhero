@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/data/auth/auth.dart';
 import 'package:taskhero/core/constants.dart';
+import 'package:taskhero/data/user_service.dart';
 import 'package:taskhero/ui/home/home_page.dart';
 import 'package:taskhero/ui/intro_page.dart';
 import 'package:taskhero/data/shop/item_service.dart';
@@ -30,7 +31,7 @@ class _WidgetTreeState extends State<WidgetTree> {
             future: Future.wait([
               _getMoneyAndXp(),
               _getItems(),
-              Auth().initializeCalendar(),
+              if (UserService.loggedInWithGoogle()) Auth().initializeCalendar(),
             ]),
             builder: (context, futureSnapshot) {
               // If the future is still loading, show a loading indicator

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:taskhero/core/constants.dart';
 
 class UserService {
   static Future<void> createUser(String userUid) async {
@@ -8,5 +9,9 @@ class UserService {
       'inventory': [],
       'level': 0,
     });
+  }
+
+  static bool loggedInWithGoogle() {
+    return AppParams.loginMethod == "google.com" ? true : false;
   }
 }

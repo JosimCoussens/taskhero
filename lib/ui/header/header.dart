@@ -5,6 +5,7 @@ import 'package:taskhero/data/user_service.dart';
 import 'package:taskhero/ui/header/progressbar.dart';
 import 'package:taskhero/ui/header/user_overlay.dart';
 import 'package:taskhero/core/constants.dart';
+import 'package:taskhero/ui/login_page.dart';
 
 class AppHeader extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -44,7 +45,7 @@ class _AppHeaderState extends State<AppHeader> {
               _PageTitle(widget: widget),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [_userLevel(), _userAvatar(context)],
+                children: [_logoutButton(), _userAvatar(context)],
               ),
             ],
           ),
@@ -56,7 +57,9 @@ class _AppHeaderState extends State<AppHeader> {
 
   GestureDetector _userAvatar(BuildContext context) {
     return GestureDetector(
-      onTap: () => _toggleUserMenu(context),
+      onTap: () {
+        _toggleUserMenu(context);
+      },
       // Make sure picture fits the circle
       child: CircleAvatar(
         radius: 18,
@@ -68,25 +71,18 @@ class _AppHeaderState extends State<AppHeader> {
     );
   }
 
-  Row _userLevel() {
-    return Row(
-      children: [
-        ValueListenableBuilder(
-          valueListenable: AppParams.level,
-          builder: (context, xp, _) {
-            return Text(
-              AppParams.level.value.toString(),
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          },
-        ),
-        const SizedBox(width: 4),
-        Image.asset(AppParams.coinPath, height: 20, width: 20),
-      ],
+  GestureDetector _logoutButton() {
+    return GestureDetector(
+      onTap: () async {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+        );
+        await Auth().signOut();
+      },
+      child: Row(
+        children: [Icon(Icons.logout, color: AppColors.primary, size: 32)],
+      ),
     );
   }
 

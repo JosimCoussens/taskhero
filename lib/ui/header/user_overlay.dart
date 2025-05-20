@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:taskhero/data/auth/auth.dart';
 import 'package:taskhero/ui/header/header.dart';
-import 'package:taskhero/ui/login_page.dart';
 
 OverlayEntry userOverlay(
   Offset offset,
@@ -35,30 +33,9 @@ OverlayEntry userOverlay(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        userEmail,
-                        style: const TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(height: 10),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: () async {
-                          removeOverlay();
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LoginPage(),
-                            ),
-                          );
-                          await Auth().signOut();
-                        },
-                        child: const Text('Sign Out'),
-                      ),
-                    ],
+                  child: Text(
+                    userEmail,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
                 ),
               ),

@@ -11,7 +11,11 @@ Container showContent(
   String backgroundImagePath,
 ) {
   return Container(
-    padding: const EdgeInsets.all(AppParams.generalSpacing),
+    padding: const EdgeInsets.only(
+      top: AppParams.generalSpacing,
+      left: AppParams.generalSpacing,
+      right: AppParams.generalSpacing,
+    ),
     width: double.infinity,
     decoration: BoxDecoration(
       image: DecorationImage(

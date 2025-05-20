@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/core/classes/todo.dart';
 import 'package:taskhero/ui/app_bar/presentation/bottom_app_bar.dart';
+import 'package:taskhero/ui/home/components/empty_state.dart';
+import 'package:taskhero/ui/home/components/section_header.dart';
 import 'package:taskhero/ui/levelup_dialog.dart';
 import 'package:taskhero/ui/todo/presentation/task_list.dart';
 import 'package:taskhero/ui/header/header.dart';
@@ -64,7 +66,7 @@ class HomePageState extends State<HomePage> {
 
   Widget _buildContent() {
     if (uncompletedTodos.isEmpty) {
-      return _buildEmptyState();
+      return buildEmptyState();
     }
 
     return SafeArea(
@@ -78,8 +80,9 @@ class HomePageState extends State<HomePage> {
           ),
         ),
         child: Column(
+          spacing: AppParams.generalSpacing,
           children: [
-            _buildSectionHeader('What do you want to do today?'),
+            buildSectionHeader('What do you want to do today?'),
             showTaskList(uncompletedTodos, () {
               setState(() {
                 _loadTodos();
@@ -97,47 +100,5 @@ class HomePageState extends State<HomePage> {
     setState(() {
       uncompletedTodos = updatedTodos;
     });
-  }
-
-  Widget _buildSectionHeader(String title) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: AppColors.primaryLight,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildEmptyState() {
-    return SafeArea(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/knight.png', height: 300),
-            const SizedBox(height: 20),
-            const Text(
-              'What do you want to do today?',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Tap + to add your tasks',
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 30),
-          ],
-        ),
-      ),
-    );
   }
 }

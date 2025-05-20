@@ -29,8 +29,6 @@ class _AppHeaderState extends State<AppHeader> {
 
   @override
   Widget build(BuildContext context) {
-    String avatarPath = AppParams.avatarPath;
-
     return AppBar(
       automaticallyImplyLeading: false,
       backgroundColor: Colors.white,
@@ -45,7 +43,7 @@ class _AppHeaderState extends State<AppHeader> {
               _PageTitle(widget: widget),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [_userMoney(), _userAvatar(context, avatarPath)],
+                children: [_userMoney(), _userAvatar(context)],
               ),
             ],
           ),
@@ -55,10 +53,17 @@ class _AppHeaderState extends State<AppHeader> {
     );
   }
 
-  GestureDetector _userAvatar(BuildContext context, String avatarPath) {
+  GestureDetector _userAvatar(BuildContext context) {
     return GestureDetector(
       onTap: () => _toggleUserMenu(context),
-      child: CircleAvatar(radius: 18, backgroundImage: AssetImage(avatarPath)),
+      // Make sure picture fits the circle
+      child: CircleAvatar(
+        radius: 18,
+        backgroundImage:
+            AppParams.googleProfileImage == null
+                ? AssetImage(AppParams.defaultProfileImage)
+                : NetworkImage(AppParams.googleProfileImage!),
+      ),
     );
   }
 

@@ -11,8 +11,9 @@ class AppColors {
 class AppParams {
   static String? userId;
   static String? loginMethod;
+  static String? googleProfileImage;
+  static String defaultProfileImage = 'assets/images/avatar.png';
 
-  static const String avatarPath = 'assets/images/avatar.png';
   static const String coinPath = 'assets/images/coin.png';
   static const String xpPath = 'assets/images/xp_coin.png';
   static const String calendarName = 'taskhero';

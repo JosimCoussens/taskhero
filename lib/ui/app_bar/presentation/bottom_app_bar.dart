@@ -3,7 +3,7 @@ import 'package:taskhero/core/classes/todo.dart';
 import 'package:taskhero/ui/widgets.dart';
 import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/ui/calendar_page.dart';
-import 'package:taskhero/ui/home_page.dart';
+import 'package:taskhero/ui/home/home_page.dart';
 import 'package:taskhero/ui/shop/presentation/inventory_page.dart';
 import 'package:taskhero/ui/shop/presentation/shop_page.dart';
 import 'package:taskhero/data/todo_service.dart';

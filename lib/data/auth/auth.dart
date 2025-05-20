@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
 import 'package:http/http.dart' as http;
+import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/data/calendar/calendar_client.dart';
 import 'package:taskhero/data/auth/google_client.dart';
 
@@ -33,6 +34,9 @@ class Auth {
       if (auth == null) return null;
 
       final client = GoogleHttpClient(auth.accessToken!);
+      if (account?.photoUrl != null) {
+        AppParams.googleProfileImage = account!.photoUrl!;
+      }
       return client;
     } catch (e) {
       return null;

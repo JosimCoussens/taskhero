@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/data/auth/auth.dart';
 import 'package:taskhero/core/constants.dart';
-import 'package:taskhero/ui/home_page.dart';
+import 'package:taskhero/ui/home/home_page.dart';
 import 'package:taskhero/ui/intro_page.dart';
 import 'package:taskhero/data/shop/item_service.dart';
 import 'package:taskhero/data/leveling/level_service.dart';

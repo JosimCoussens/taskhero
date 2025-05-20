@@ -69,6 +69,7 @@ flutter:
     - assets/images/
     - assets/images/helmets/
     - assets/images/shields/
+    - assets/images/weapons/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

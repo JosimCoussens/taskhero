@@ -44,7 +44,7 @@ class _AppHeaderState extends State<AppHeader> {
               _PageTitle(widget: widget),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [_userMoney(), _userAvatar(context)],
+                children: [_userLevel(), _userAvatar(context)],
               ),
             ],
           ),
@@ -68,14 +68,14 @@ class _AppHeaderState extends State<AppHeader> {
     );
   }
 
-  Row _userMoney() {
+  Row _userLevel() {
     return Row(
       children: [
         ValueListenableBuilder(
-          valueListenable: AppParams.money,
+          valueListenable: AppParams.level,
           builder: (context, xp, _) {
             return Text(
-              AppParams.money.value.toString(),
+              AppParams.level.value.toString(),
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 16,

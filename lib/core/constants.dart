@@ -81,49 +81,83 @@ class AppParams {
     ),
   ];
   static List<Item> allItems = [
+    // Weapons
     Item(
-      id: 0,
-      name: 'Silver Sword',
+      name: 'Sword',
       category: ItemCategory.Weapons,
-      imagePath: 'assets/images/sword.png',
-      isPurchased: false,
-      price: 25,
+      imagePath: 'assets/images/weapons/sword.png',
+      levelRequirement: 1,
     ),
     Item(
-      id: 1,
       name: 'Axe',
       category: ItemCategory.Weapons,
-      imagePath: 'assets/images/axe.png',
-      isPurchased: false,
-      price: 20,
+      imagePath: 'assets/images/weapons/axe.png',
+      levelRequirement: 2,
     ),
     Item(
-      id: 2,
       name: 'Bow',
       category: ItemCategory.Weapons,
-      imagePath: 'assets/images/bow.png',
-      isPurchased: false,
-      price: 20,
+      imagePath: 'assets/images/weapons/bow.png',
+      levelRequirement: 3,
     ),
+    // Armour
     Item(
-      id: 3,
       name: 'Helmet 1',
       category: ItemCategory.Armour,
       imagePath: 'assets/images/helmets/helmet_1.png',
-      isPurchased: false,
-      price: 15,
+      levelRequirement: 1,
     ),
     Item(
-      id: 4,
+      name: 'Helmet 2',
+      category: ItemCategory.Armour,
+      imagePath: 'assets/images/helmets/helmet_2.png',
+      levelRequirement: 2,
+    ),
+    Item(
+      name: 'Helmet 3',
+      category: ItemCategory.Armour,
+      imagePath: 'assets/images/helmets/helmet_3.png',
+      levelRequirement: 3,
+    ),
+    Item(
+      name: 'Helmet 4',
+      category: ItemCategory.Armour,
+      imagePath: 'assets/images/helmets/helmet_4.png',
+      levelRequirement: 4,
+    ),
+    Item(
+      name: 'Helmet 5',
+      category: ItemCategory.Armour,
+      imagePath: 'assets/images/helmets/helmet_5.png',
+      levelRequirement: 5,
+    ),
+    // Shields
+    Item(
       name: 'Shield 1',
       category: ItemCategory.Shields,
       imagePath: 'assets/images/shields/shield_1.png',
-      isPurchased: false,
-      price: 15,
+      levelRequirement: 1,
+    ),
+    Item(
+      name: 'Shield 2',
+      category: ItemCategory.Shields,
+      imagePath: 'assets/images/shields/shield_2.png',
+      levelRequirement: 2,
+    ),
+    Item(
+      name: 'Shield 3',
+      category: ItemCategory.Shields,
+      imagePath: 'assets/images/shields/shield_3.png',
+      levelRequirement: 3,
+    ),
+    Item(
+      name: 'Shield 4',
+      category: ItemCategory.Shields,
+      imagePath: 'assets/images/shields/shield_4.png',
+      levelRequirement: 4,
     ),
   ];
 
-  static ValueNotifier<int> money = ValueNotifier<int>(0);
   static ValueNotifier<int> xp = ValueNotifier<int>(0);
   static ValueNotifier<int> level = ValueNotifier<int>(0);
   static ValueNotifier<bool> showLevelUpDialog = ValueNotifier<bool>(false);

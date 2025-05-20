@@ -4,9 +4,7 @@ import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/data/user_service.dart';
 import 'package:taskhero/ui/home/home_page.dart';
 import 'package:taskhero/ui/intro_page.dart';
-import 'package:taskhero/data/shop/item_service.dart';
 import 'package:taskhero/data/leveling/level_service.dart';
-import 'package:taskhero/data/shop/money_service.dart';
 import 'package:taskhero/data/leveling/xp_service.dart';
 
 class WidgetTree extends StatefulWidget {
@@ -29,8 +27,7 @@ class _WidgetTreeState extends State<WidgetTree> {
           AppParams.userId = snapshot.data!.uid;
           return FutureBuilder(
             future: Future.wait([
-              _getMoneyAndXp(),
-              _getItems(),
+              _getXp(),
               if (UserService.loggedInWithGoogle()) Auth().initializeCalendar(),
             ]),
             builder: (context, futureSnapshot) {
@@ -50,13 +47,8 @@ class _WidgetTreeState extends State<WidgetTree> {
     );
   }
 
-  Future<void> _getMoneyAndXp() async {
-    AppParams.money.value = await MoneyService.getMoney();
+  Future<void> _getXp() async {
     AppParams.xp.value = await XpService.getXp();
     AppParams.level.value = await LevelService.getLevel();
-  }
-
-  Future<void> _getItems() async {
-    await ItemService.setAppItems();
   }
 }

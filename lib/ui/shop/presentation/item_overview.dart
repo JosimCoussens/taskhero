@@ -69,6 +69,7 @@ SizedBox buildInventory(
                   categoryItems,
                   itemWidth,
                   onEquipped,
+                  context,
                 );
               }).toList(),
         ),
@@ -82,6 +83,7 @@ Column buildCategorySection(
   List<Item> categoryItems,
   double itemWidth,
   VoidCallback onEquipped,
+  BuildContext context,
 ) {
   return Column(
     children: [
@@ -92,7 +94,7 @@ Column buildCategorySection(
           spacing: AppParams.generalSpacing / 2,
           children: [
             buildCategoryName(category),
-            buildCategoryItems(categoryItems, itemWidth, onEquipped),
+            buildCategoryItems(categoryItems, itemWidth, onEquipped, context),
           ],
         ),
       ),
@@ -104,6 +106,7 @@ Wrap buildCategoryItems(
   List<Item> categoryItems,
   double itemWidth,
   VoidCallback onEquipped,
+  BuildContext context,
 ) {
   return Wrap(
     spacing: AppParams.generalSpacing / 2,
@@ -111,7 +114,7 @@ Wrap buildCategoryItems(
     alignment: WrapAlignment.start,
     children: [
       ...categoryItems.map((item) {
-        return ShopItem(item, itemWidth, onEquipped);
+        return ShopItem(item, itemWidth, onEquipped, context);
       }),
     ],
   );

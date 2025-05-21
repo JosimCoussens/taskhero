@@ -68,30 +68,33 @@ Widget _buildUnlockedSection(
             child: FittedBox(
               child:
                   isUnlocked
-                      ? Text(
-                        isEquipped ? 'Unequip' : 'Equip',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                      : Row(
-                        children: [
-                          Text(
-                            'Level ${item.levelRequirement}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Icon(Icons.lock, color: Colors.white, size: 16),
-                        ],
-                      ),
+                      ? _unlockedButtonSection(isEquipped)
+                      : _lockedButtonSection(item),
             ),
           ),
         ),
       );
     },
+  );
+}
+
+Row _lockedButtonSection(Item item) {
+  return Row(
+    children: [
+      Text(
+        'Level ${item.levelRequirement}',
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(width: 4),
+      Icon(Icons.lock, color: Colors.white, size: 16),
+    ],
+  );
+}
+
+Widget _unlockedButtonSection(bool isEquipped) {
+  return Icon(
+    isEquipped ? Icons.check_circle : Icons.add_circle_outline,
+    color: isEquipped ? Colors.greenAccent : Colors.white,
+    size: 18,
   );
 }

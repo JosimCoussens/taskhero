@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:taskhero/core/classes/todo.dart';
 import 'package:taskhero/ui/todo/presentation/todo_widget.dart';
@@ -18,9 +16,11 @@ Expanded showTaskList(List<Todo> todos, Function refreshList) {
               todo,
               () async {
                 int addedXp = await TodoService.toggleCompletion(todo);
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(_showXpgainDialog(addedXp));
+                if (context.mounted) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(_showXpgainDialog(addedXp));
+                }
                 refreshList();
               },
               () async {

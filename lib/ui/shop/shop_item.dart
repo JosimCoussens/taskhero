@@ -4,7 +4,7 @@ import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/data/shop/item_service.dart';
 
 // ignore: non_constant_identifier_names
-Container ShopItem(Item item, double itemWidth) {
+Container ShopItem(Item item, double itemWidth, VoidCallback onEquipped) {
   double imageHeight = 80;
   double bottomHeight = 30;
 
@@ -27,50 +27,71 @@ Container ShopItem(Item item, double itemWidth) {
               child: Image.asset(item.imagePath, fit: BoxFit.contain),
             ),
           ),
-          _buildUnlockedSection(bottomHeight, item),
+          _buildUnlockedSection(bottomHeight, item, onEquipped),
         ],
       ),
     ),
   );
 }
 
-Container _buildUnlockedSection(double height, Item item) {
+Widget _buildUnlockedSection(
+  double height,
+  Item item,
+  VoidCallback onEquipped,
+) {
   var isUnlocked = ItemService.isUnlocked(item);
-  return Container(
-    height: height,
-    width: double.infinity,
-    decoration: BoxDecoration(
-      color: isUnlocked ? AppColors.primaryLight : Colors.red,
-      borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(8),
-        bottomRight: Radius.circular(8),
-      ),
-    ),
-    child: Center(
-      child: FittedBox(
-        child:
-            isUnlocked
-                ? Text(
-                  'Unlocked',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-                : Row(
-                  children: [
-                    Text(
-                      'Level ${item.levelRequirement}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+  return FutureBuilder(
+    future: ItemService.isEquipped(item),
+    builder: (context, snapshot) {
+      final isEquipped = snapshot.data ?? false;
+      return GestureDetector(
+        onTap: () async {
+          if (isEquipped) {
+            await ItemService.unequip(item);
+            onEquipped();
+          } else {
+            await ItemService.equip(item);
+            onEquipped();
+          }
+        },
+        child: Container(
+          height: height,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: isUnlocked ? AppColors.primaryLight : Colors.red,
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(8),
+              bottomRight: Radius.circular(8),
+            ),
+          ),
+          child: Center(
+            child: FittedBox(
+              child:
+                  isUnlocked
+                      ? Text(
+                        isEquipped ? 'Unequip' : 'Equip',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                      : Row(
+                        children: [
+                          Text(
+                            'Level ${item.levelRequirement}',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(Icons.lock, color: Colors.white, size: 16),
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(Icons.lock, color: Colors.white, size: 16),
-                  ],
-                ),
-      ),
-    ),
+            ),
+          ),
+        ),
+      );
+    },
   );
 }

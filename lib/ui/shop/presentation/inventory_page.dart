@@ -29,6 +29,9 @@ class _InventoryPageState extends State<InventoryPage> {
         unlockedItems,
         _buildEmptyInventoryMessage,
         'assets/images/armoury.png',
+        () {
+          setState(() {}); // Refresh the inventory
+        },
       ),
       bottomNavigationBar: bottomAppBar(context, () {
         setState(() {});

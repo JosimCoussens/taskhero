@@ -29,7 +29,15 @@ class _ShopPageState extends State<ShopPage> {
     var allItems = AppParams.allItems;
     return Scaffold(
       appBar: AppHeader(title: 'Shop'),
-      body: showContent(context, allItems, () {}, 'assets/images/market.png'),
+      body: showContent(
+        context,
+        allItems,
+        () {},
+        'assets/images/market.png',
+        () {
+          setState(() {}); // Refresh the inventory
+        },
+      ),
       bottomNavigationBar: bottomAppBar(context, () {
         setState(() {});
       }),

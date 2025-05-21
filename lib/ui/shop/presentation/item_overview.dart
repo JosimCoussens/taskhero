@@ -9,6 +9,7 @@ Container showContent(
   List<Item> items,
   Function onEmpty,
   String backgroundImagePath,
+  VoidCallback onEquipped,
 ) {
   return Container(
     padding: const EdgeInsets.only(
@@ -24,11 +25,16 @@ Container showContent(
         fit: BoxFit.cover,
       ),
     ),
-    child: items.isEmpty ? onEmpty() : buildInventory(context, items),
+    child:
+        items.isEmpty ? onEmpty() : buildInventory(context, items, onEquipped),
   );
 }
 
-SizedBox buildInventory(BuildContext context, List<Item> items) {
+SizedBox buildInventory(
+  BuildContext context,
+  List<Item> items,
+  VoidCallback onEquipped,
+) {
   // Configuration for grid layout
   final int amountPerRow = 4;
   late double itemWidth;
@@ -58,7 +64,12 @@ SizedBox buildInventory(BuildContext context, List<Item> items) {
               categories.map((category) {
                 var categoryItems =
                     items.where((item) => item.category == category).toList();
-                return buildCategorySection(category, categoryItems, itemWidth);
+                return buildCategorySection(
+                  category,
+                  categoryItems,
+                  itemWidth,
+                  onEquipped,
+                );
               }).toList(),
         ),
       ),
@@ -70,6 +81,7 @@ Column buildCategorySection(
   ItemCategory category,
   List<Item> categoryItems,
   double itemWidth,
+  VoidCallback onEquipped,
 ) {
   return Column(
     children: [
@@ -80,7 +92,7 @@ Column buildCategorySection(
           spacing: AppParams.generalSpacing / 2,
           children: [
             buildCategoryName(category),
-            buildCategoryItems(categoryItems, itemWidth),
+            buildCategoryItems(categoryItems, itemWidth, onEquipped),
           ],
         ),
       ),
@@ -88,14 +100,18 @@ Column buildCategorySection(
   );
 }
 
-Wrap buildCategoryItems(List<Item> categoryItems, double itemWidth) {
+Wrap buildCategoryItems(
+  List<Item> categoryItems,
+  double itemWidth,
+  VoidCallback onEquipped,
+) {
   return Wrap(
     spacing: AppParams.generalSpacing / 2,
     runSpacing: AppParams.generalSpacing / 2,
     alignment: WrapAlignment.start,
     children: [
       ...categoryItems.map((item) {
-        return ShopItem(item, itemWidth);
+        return ShopItem(item, itemWidth, onEquipped);
       }),
     ],
   );

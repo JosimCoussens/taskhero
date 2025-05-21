@@ -8,6 +8,10 @@ class AppColors {
   static const Color primary = Color(0xff114873);
 }
 
+class DatabaseParams {
+  static String equippedTableName = 'equippedItems';
+}
+
 class AppParams {
   static String? userId;
   static String? loginMethod;
@@ -83,78 +87,102 @@ class AppParams {
   static List<Item> allItems = [
     // Weapons
     Item(
+      id: 0,
       name: 'Sword',
       category: ItemCategory.Weapons,
       imagePath: 'assets/images/weapons/sword.png',
       levelRequirement: 1,
+      xpGain: 1.025,
     ),
     Item(
+      id: 1,
       name: 'Axe',
       category: ItemCategory.Weapons,
       imagePath: 'assets/images/weapons/axe.png',
       levelRequirement: 2,
+      xpGain: 1.05,
     ),
     Item(
+      id: 2,
       name: 'Bow',
       category: ItemCategory.Weapons,
       imagePath: 'assets/images/weapons/bow.png',
       levelRequirement: 3,
+      xpGain: 1.1,
     ),
     // Armour
     Item(
+      id: 3,
       name: 'Helmet 1',
       category: ItemCategory.Armour,
       imagePath: 'assets/images/helmets/helmet_1.png',
       levelRequirement: 1,
+      xpGain: 1.025,
     ),
     Item(
+      id: 4,
       name: 'Helmet 2',
       category: ItemCategory.Armour,
       imagePath: 'assets/images/helmets/helmet_2.png',
       levelRequirement: 2,
+      xpGain: 1.05,
     ),
     Item(
+      id: 5,
       name: 'Helmet 3',
       category: ItemCategory.Armour,
       imagePath: 'assets/images/helmets/helmet_3.png',
       levelRequirement: 3,
+      xpGain: 1.1,
     ),
     Item(
+      id: 6,
       name: 'Helmet 4',
       category: ItemCategory.Armour,
       imagePath: 'assets/images/helmets/helmet_4.png',
       levelRequirement: 4,
+      xpGain: 1.25,
     ),
     Item(
+      id: 7,
       name: 'Helmet 5',
       category: ItemCategory.Armour,
       imagePath: 'assets/images/helmets/helmet_5.png',
       levelRequirement: 5,
+      xpGain: 1.5,
     ),
     // Shields
     Item(
+      id: 8,
       name: 'Shield 1',
       category: ItemCategory.Shields,
       imagePath: 'assets/images/shields/shield_1.png',
       levelRequirement: 1,
+      xpGain: 1.025,
     ),
     Item(
+      id: 9,
       name: 'Shield 2',
       category: ItemCategory.Shields,
       imagePath: 'assets/images/shields/shield_2.png',
       levelRequirement: 2,
+      xpGain: 1.05,
     ),
     Item(
+      id: 10,
       name: 'Shield 3',
       category: ItemCategory.Shields,
       imagePath: 'assets/images/shields/shield_3.png',
       levelRequirement: 3,
+      xpGain: 1.1,
     ),
     Item(
+      id: 11,
       name: 'Shield 4',
       category: ItemCategory.Shields,
       imagePath: 'assets/images/shields/shield_4.png',
       levelRequirement: 4,
+      xpGain: 1.25,
     ),
   ];
 

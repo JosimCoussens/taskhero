@@ -3,20 +3,19 @@
 enum ItemCategory { Weapons, Armour, Shields }
 
 class Item {
-  int? id;
+  int id;
   String name;
   ItemCategory category;
   String imagePath;
   int levelRequirement;
+  double xpGain;
 
   Item({
-    this.id,
+    required this.id,
     required this.name,
     required this.category,
     required this.imagePath,
     required this.levelRequirement,
+    required this.xpGain,
   });
-
-  // Optional: Category to String
-  String get categoryName => category.name;
 }

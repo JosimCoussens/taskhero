@@ -1,4 +1,6 @@
-import 'package:flutter/widgets.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:flutter/material.dart';
 import 'package:taskhero/core/classes/todo.dart';
 import 'package:taskhero/ui/todo/presentation/todo_widget.dart';
 import 'package:taskhero/core/constants.dart';
@@ -15,7 +17,10 @@ Expanded showTaskList(List<Todo> todos, Function refreshList) {
             TodoWidget(
               todo,
               () async {
-                await TodoService.toggleCompletion(todo);
+                int addedXp = await TodoService.toggleCompletion(todo);
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(_showXpgainDialog(addedXp));
                 refreshList();
               },
               () async {
@@ -30,5 +35,15 @@ Expanded showTaskList(List<Todo> todos, Function refreshList) {
         );
       },
     ),
+  );
+}
+
+SnackBar _showXpgainDialog(int addedXp) {
+  return SnackBar(
+    content: Text('You gained $addedXp XP!'),
+    duration: Duration(seconds: 2),
+    behavior: SnackBarBehavior.floating,
+    backgroundColor: AppColors.primaryLight,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
   );
 }

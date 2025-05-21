@@ -4,6 +4,7 @@ import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/data/calendar/calendar_service.dart';
 import 'package:taskhero/data/leveling/level_service.dart';
 import 'package:taskhero/data/leveling/xp_service.dart';
+import 'package:taskhero/data/shop/item_service.dart';
 import 'package:taskhero/data/user_service.dart';
 
 class TodoService {
@@ -88,7 +89,7 @@ class TodoService {
     }
   }
 
-  static Future<void> toggleCompletion(Todo todo) async {
+  static Future<int> toggleCompletion(Todo todo) async {
     // If the task is already completed, set it to not completed
     if (todo.isCompleted == true) {
       todo.isCompleted = false;
@@ -114,7 +115,7 @@ class TodoService {
       }
     }
     // Update xp
-    _setXp(todo);
+    int addedXp = await _setXp(todo);
     if (UserService.loggedInWithGoogle()) {
       // Update calendar if recurring task
       if (todo.repeatCycle != 0) {
@@ -129,9 +130,10 @@ class TodoService {
     var todoFromDb = await _getTodo(todo.id!);
     var newTodo = todo.toMap();
     todoFromDb.update(newTodo);
+    return addedXp;
   }
 
-  static Future<void> _setXp(Todo todo) async {
+  static Future<int> _setXp(Todo todo) async {
     // Update xp
     int xpToAdd = 0;
     int baseXp = 50;
@@ -146,8 +148,15 @@ class TodoService {
         xpToAdd = (baseXp * 1.25).ceil().toInt();
         break;
     }
-
+    // Apply xp bonus from item
+    var equippedItems = await ItemService.getEquipped();
+    double totalBonusFromEquipped = 1;
+    for (var item in equippedItems) {
+      totalBonusFromEquipped += item.xpGain - 1;
+    }
+    xpToAdd = (xpToAdd * totalBonusFromEquipped).ceil().toInt();
     int newXp = AppParams.xp.value + xpToAdd;
+    // Check if user leveled up and act accordingly
     int requiredXp = XpService.requiredXp();
     if (newXp >= requiredXp) {
       LevelService.setLevel(AppParams.level.value + 1);
@@ -155,6 +164,7 @@ class TodoService {
     } else {
       await XpService.setXp(newXp);
     }
+    return xpToAdd;
   }
 
   static Future<DocumentReference<Map<String, dynamic>>> _getTodo(

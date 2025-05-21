@@ -93,12 +93,4 @@ class HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  Future<void> toggleCompletion(Todo todo) async {
-    await TodoService.toggleCompletion(todo);
-    final updatedTodos = await TodoService.getAllUncompleted();
-    setState(() {
-      uncompletedTodos = updatedTodos;
-    });
-  }
 }

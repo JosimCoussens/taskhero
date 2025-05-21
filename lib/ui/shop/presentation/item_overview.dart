@@ -64,12 +64,19 @@ SizedBox buildInventory(
               categories.map((category) {
                 var categoryItems =
                     items.where((item) => item.category == category).toList();
-                return buildCategorySection(
-                  category,
-                  categoryItems,
-                  itemWidth,
-                  onEquipped,
-                  context,
+                bool isLastCategory = category == categories.last;
+                return Padding(
+                  // Give it padding at the bottom
+                  padding: EdgeInsets.only(
+                    bottom: isLastCategory ? AppParams.generalSpacing * 2 : 0,
+                  ),
+                  child: buildCategorySection(
+                    category,
+                    categoryItems,
+                    itemWidth,
+                    onEquipped,
+                    context,
+                  ),
                 );
               }).toList(),
         ),

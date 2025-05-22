@@ -212,9 +212,9 @@ class TodoService {
     return todos;
   }
 
-  static Future<void> delete(Todo todo) async {
+  static Future<void> delete(Todo todo, bool deleteEvent) async {
     // Delete the event from the calendar
-    if (UserService.loggedInWithGoogle()) {
+    if (UserService.loggedInWithGoogle() && deleteEvent) {
       CalendarService.deleteEvent(todo.id!);
     }
     // Delete the todo from the database
@@ -238,5 +238,16 @@ class TodoService {
     });
 
     return todos.length;
+  }
+
+  Future<void> deleteCompleted() async {
+    // Get all completed tasks
+    List<Todo> completedTasks = await getAll().then(
+      (todos) => todos.where((todo) => todo.isCompleted == true).toList(),
+    );
+    // Delete each completed task
+    for (var task in completedTasks) {
+      await delete(task, false);
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/core/classes/item.dart';
+import 'package:taskhero/data/shop/item_service.dart';
 import 'package:taskhero/ui/app_bar/presentation/bottom_app_bar.dart';
 import 'package:taskhero/ui/header/header.dart';
 import 'package:taskhero/ui/shop/presentation/item_overview.dart';
@@ -46,9 +47,15 @@ class _ShopPageState extends State<ShopPage> {
         child:
             allItems.isEmpty
                 ? null
-                : buildInventory(context, allItems, () {
-                  setState(() {});
-                }),
+                : FutureBuilder(
+                  future: ItemService.getEquipped(),
+                  builder: (context, snapshot) {
+                    var equippedItems = snapshot.data ?? [];
+                    return buildInventory(context, allItems, equippedItems, () {
+                      setState(() {});
+                    });
+                  },
+                ),
       ),
       bottomNavigationBar: bottomAppBar(context, () {
         setState(() {});

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskhero/core/classes/item.dart';
 import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/ui/app_bar/presentation/bottom_app_bar.dart';
 import 'package:taskhero/core/styles.dart';
@@ -36,13 +37,24 @@ class _InventoryPageState extends State<InventoryPage> {
         child:
             unlockedItems.isEmpty
                 ? _buildEmptyInventoryMessage()
-                : Column(
-                  children: [
-                    _showEquipped(),
-                    buildInventory(context, unlockedItems, () {
-                      setState(() {});
-                    }),
-                  ],
+                : FutureBuilder(
+                  future: ItemService.getEquipped(),
+                  builder: (context, snapshot) {
+                    var equippedItems = snapshot.data ?? [];
+                    return Column(
+                      children: [
+                        _showEquipped(equippedItems),
+                        buildInventory(
+                          context,
+                          unlockedItems,
+                          equippedItems,
+                          () {
+                            setState(() {});
+                          },
+                        ),
+                      ],
+                    );
+                  },
                 ),
       ),
       bottomNavigationBar: bottomAppBar(context, () {
@@ -51,7 +63,7 @@ class _InventoryPageState extends State<InventoryPage> {
     );
   }
 
-  Widget _showEquipped() {
+  Widget _showEquipped(List<Item> equippedItems) {
     return Text('test', style: TextStyle(color: Colors.white));
   }
 

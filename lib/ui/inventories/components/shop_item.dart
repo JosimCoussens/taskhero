@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:taskhero/core/classes/item.dart';
 import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/data/shop/item_service.dart';
-import 'package:taskhero/ui/shop/presentation/item/details_dialog.dart';
+import 'package:taskhero/ui/inventories/components/details_dialog.dart';
 
 // ignore: non_constant_identifier_names
 Container ShopItem(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:taskhero/core/classes/item.dart';
 import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/data/shop/item_service.dart';
-import 'package:taskhero/ui/shop/presentation/item/shop_item.dart';
+import 'package:taskhero/ui/inventories/components/shop_item.dart';
 
 SizedBox buildInventory(
   BuildContext context,
@@ -30,35 +30,33 @@ SizedBox buildInventory(
     width: double.infinity,
     child: SizedBox(
       width: double.infinity,
-      child: SingleChildScrollView(
-        child: Column(
-          spacing: AppParams.generalSpacing,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:
-              categories.map((category) {
-                var categoryItems =
-                    items.where((item) => item.category == category).toList();
-                var equippedCategoryItems =
-                    categoryItems
-                        .where((item) => equippedItems.contains(item))
-                        .toList();
-                bool isLastCategory = category == categories.last;
-                return Padding(
-                  // Give it padding at the bottom
-                  padding: EdgeInsets.only(
-                    bottom: isLastCategory ? AppParams.generalSpacing * 2 : 0,
-                  ),
-                  child: buildCategorySection(
-                    category,
-                    categoryItems,
-                    equippedCategoryItems,
-                    itemWidth,
-                    onEquipped,
-                    context,
-                  ),
-                );
-              }).toList(),
-        ),
+      child: Column(
+        spacing: AppParams.generalSpacing,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:
+            categories.map((category) {
+              var categoryItems =
+                  items.where((item) => item.category == category).toList();
+              var equippedCategoryItems =
+                  categoryItems
+                      .where((item) => equippedItems.contains(item))
+                      .toList();
+              bool isLastCategory = category == categories.last;
+              return Padding(
+                // Give it padding at the bottom
+                padding: EdgeInsets.only(
+                  bottom: isLastCategory ? AppParams.generalSpacing * 2 : 0,
+                ),
+                child: buildCategorySection(
+                  category,
+                  categoryItems,
+                  equippedCategoryItems,
+                  itemWidth,
+                  onEquipped,
+                  context,
+                ),
+              );
+            }).toList(),
       ),
     ),
   );

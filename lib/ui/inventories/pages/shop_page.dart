@@ -3,7 +3,7 @@ import 'package:taskhero/core/classes/item.dart';
 import 'package:taskhero/data/shop/item_service.dart';
 import 'package:taskhero/ui/app_bar/presentation/bottom_app_bar.dart';
 import 'package:taskhero/ui/header/header.dart';
-import 'package:taskhero/ui/shop/presentation/item_overview.dart';
+import 'package:taskhero/ui/inventories/components/item_overview.dart';
 import 'package:taskhero/core/constants.dart';
 
 class ShopPage extends StatefulWidget {
@@ -37,9 +37,10 @@ class _ShopPageState extends State<ShopPage> {
           right: AppParams.generalSpacing,
         ),
         width: double.infinity,
+        height: double.infinity,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/armoury.png'),
+            image: AssetImage('assets/images/market.png'),
             colorFilter: AppParams.backgroundImageColorFilter,
             fit: BoxFit.cover,
           ),
@@ -51,9 +52,16 @@ class _ShopPageState extends State<ShopPage> {
                   future: ItemService.getEquipped(),
                   builder: (context, snapshot) {
                     var equippedItems = snapshot.data ?? [];
-                    return buildInventory(context, allItems, equippedItems, () {
-                      setState(() {});
-                    });
+                    return SingleChildScrollView(
+                      child: buildInventory(
+                        context,
+                        allItems,
+                        equippedItems,
+                        () {
+                          setState(() {});
+                        },
+                      ),
+                    );
                   },
                 ),
       ),

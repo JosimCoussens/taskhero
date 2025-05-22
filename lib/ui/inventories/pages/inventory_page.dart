@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:taskhero/core/classes/item.dart';
 import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/ui/app_bar/presentation/bottom_app_bar.dart';
 import 'package:taskhero/core/styles.dart';
 import 'package:taskhero/ui/header/header.dart';
-import 'package:taskhero/ui/shop/presentation/item_overview.dart';
-import 'package:taskhero/ui/shop/presentation/shop_page.dart';
+import 'package:taskhero/ui/inventories/components/inventory/equipped_overview.dart';
+import 'package:taskhero/ui/inventories/components/item_overview.dart';
+import 'package:taskhero/ui/inventories/pages/shop_page.dart';
 import 'package:taskhero/data/shop/item_service.dart';
 
 class InventoryPage extends StatefulWidget {
@@ -33,6 +33,7 @@ class _InventoryPageState extends State<InventoryPage> {
           right: AppParams.generalSpacing,
         ),
         width: double.infinity,
+        height: double.infinity,
         decoration: showBackgroundImage(),
         child:
             unlockedItems.isEmpty
@@ -41,18 +42,20 @@ class _InventoryPageState extends State<InventoryPage> {
                   future: ItemService.getEquipped(),
                   builder: (context, snapshot) {
                     var equippedItems = snapshot.data ?? [];
-                    return Column(
-                      children: [
-                        _showEquipped(equippedItems),
-                        buildInventory(
-                          context,
-                          unlockedItems,
-                          equippedItems,
-                          () {
-                            setState(() {});
-                          },
-                        ),
-                      ],
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          equippedGear(equippedItems),
+                          buildInventory(
+                            context,
+                            unlockedItems,
+                            equippedItems,
+                            () {
+                              setState(() {});
+                            },
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
@@ -61,10 +64,6 @@ class _InventoryPageState extends State<InventoryPage> {
         setState(() {});
       }),
     );
-  }
-
-  Widget _showEquipped(List<Item> equippedItems) {
-    return Text('test', style: TextStyle(color: Colors.white));
   }
 
   Widget _buildEmptyInventoryMessage() {

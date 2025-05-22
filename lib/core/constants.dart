@@ -89,7 +89,7 @@ class AppParams {
     Item(
       id: 0,
       name: 'Sword',
-      category: ItemCategory.Weapons,
+      category: ItemCategory.Weapon,
       imagePath: 'assets/images/weapons/sword.png',
       levelRequirement: 1,
       xpGain: 1.025,
@@ -97,7 +97,7 @@ class AppParams {
     Item(
       id: 1,
       name: 'Axe',
-      category: ItemCategory.Weapons,
+      category: ItemCategory.Weapon,
       imagePath: 'assets/images/weapons/axe.png',
       levelRequirement: 2,
       xpGain: 1.05,
@@ -105,7 +105,7 @@ class AppParams {
     Item(
       id: 2,
       name: 'Bow',
-      category: ItemCategory.Weapons,
+      category: ItemCategory.Weapon,
       imagePath: 'assets/images/weapons/bow.png',
       levelRequirement: 3,
       xpGain: 1.1,
@@ -155,7 +155,7 @@ class AppParams {
     Item(
       id: 8,
       name: 'Shield 1',
-      category: ItemCategory.Shields,
+      category: ItemCategory.Shield,
       imagePath: 'assets/images/shields/shield_1.png',
       levelRequirement: 1,
       xpGain: 1.025,
@@ -163,7 +163,7 @@ class AppParams {
     Item(
       id: 9,
       name: 'Shield 2',
-      category: ItemCategory.Shields,
+      category: ItemCategory.Shield,
       imagePath: 'assets/images/shields/shield_2.png',
       levelRequirement: 2,
       xpGain: 1.05,
@@ -171,7 +171,7 @@ class AppParams {
     Item(
       id: 10,
       name: 'Shield 3',
-      category: ItemCategory.Shields,
+      category: ItemCategory.Shield,
       imagePath: 'assets/images/shields/shield_3.png',
       levelRequirement: 3,
       xpGain: 1.1,
@@ -179,7 +179,7 @@ class AppParams {
     Item(
       id: 11,
       name: 'Shield 4',
-      category: ItemCategory.Shields,
+      category: ItemCategory.Shield,
       imagePath: 'assets/images/shields/shield_4.png',
       levelRequirement: 4,
       xpGain: 1.25,

@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-enum ItemCategory { Weapons, Armour, Shields }
+enum ItemCategory { Weapon, Armour, Shield }
 
 class Item {
   int id;

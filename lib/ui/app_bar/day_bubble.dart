@@ -82,20 +82,22 @@ class _DayBubbleState extends State<DayBubble> {
                   future: TodoService.getTodoAmount(widget.day),
                   builder: (context, snapshot) {
                     return snapshot.data != null
-                        ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            for (int i = 0; i < snapshot.data!; i++)
-                              // Show max 3 dots
-                              if (i <= 4)
-                                Icon(
-                                  Icons.circle,
-                                  color: Colors.green,
-                                  size: 8,
-                                ),
-                          ],
-                        )
-                        : const SizedBox();
+                        ? snapshot.data! > 0
+                            ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                for (int i = 0; i < snapshot.data!; i++)
+                                  // Show max 3 dots
+                                  if (i <= 4)
+                                    Icon(
+                                      Icons.circle,
+                                      color: Colors.green,
+                                      size: 8,
+                                    ),
+                              ],
+                            )
+                            : const SizedBox(height: 8)
+                        : const SizedBox.shrink();
                   },
                 ),
               ],

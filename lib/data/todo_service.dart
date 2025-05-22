@@ -220,4 +220,23 @@ class TodoService {
     // Delete the todo from the database
     return _getTodo(todo.id!).then((doc) => doc.delete());
   }
+
+  static Future<int> getTodoAmount(DateTime day) async {
+    final todosSnapshot =
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(AppParams.userId)
+            .collection('todos')
+            .where('isCompleted', isEqualTo: false)
+            .get();
+
+    final todos = todosSnapshot.docs.where((todo) {
+      final todoDate = todo['date'].toDate();
+      return todoDate.year == day.year &&
+          todoDate.month == day.month &&
+          todoDate.day == day.day;
+    });
+
+    return todos.length;
+  }
 }

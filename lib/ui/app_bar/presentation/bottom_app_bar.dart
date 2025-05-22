@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:taskhero/core/classes/todo.dart';
 import 'package:taskhero/ui/widgets.dart';
 import 'package:taskhero/core/constants.dart';
-import 'package:taskhero/ui/calendar_page.dart';
+import 'package:taskhero/ui/calendar/calendar_page.dart';
 import 'package:taskhero/ui/home/home_page.dart';
 import 'package:taskhero/ui/inventories/pages/inventory_page.dart';
 import 'package:taskhero/ui/inventories/pages/shop_page.dart';

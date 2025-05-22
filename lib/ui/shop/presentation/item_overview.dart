@@ -4,32 +4,6 @@ import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/data/shop/item_service.dart';
 import 'package:taskhero/ui/shop/presentation/item/shop_item.dart';
 
-Container showContent(
-  BuildContext context,
-  List<Item> items,
-  Function onEmpty,
-  String backgroundImagePath,
-  VoidCallback onEquipped,
-) {
-  return Container(
-    padding: const EdgeInsets.only(
-      top: AppParams.generalSpacing,
-      left: AppParams.generalSpacing,
-      right: AppParams.generalSpacing,
-    ),
-    width: double.infinity,
-    decoration: BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage(backgroundImagePath),
-        colorFilter: AppParams.backgroundImageColorFilter,
-        fit: BoxFit.cover,
-      ),
-    ),
-    child:
-        items.isEmpty ? onEmpty() : buildInventory(context, items, onEquipped),
-  );
-}
-
 SizedBox buildInventory(
   BuildContext context,
   List<Item> items,
@@ -52,35 +26,58 @@ SizedBox buildInventory(
       amountPerRow;
 
   return SizedBox(
-    height: double.infinity,
     width: double.infinity,
     child: SizedBox(
       width: double.infinity,
       child: SingleChildScrollView(
-        child: Column(
-          spacing: AppParams.generalSpacing,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:
-              categories.map((category) {
-                var categoryItems =
-                    items.where((item) => item.category == category).toList();
-                bool isLastCategory = category == categories.last;
-                return Padding(
-                  // Give it padding at the bottom
-                  padding: EdgeInsets.only(
-                    bottom: isLastCategory ? AppParams.generalSpacing * 2 : 0,
-                  ),
-                  child: buildCategorySection(
-                    category,
-                    categoryItems,
-                    itemWidth,
-                    onEquipped,
-                    context,
-                  ),
-                );
-              }).toList(),
+        child: FutureBuilder(
+          future: ItemService.getEquipped(),
+          builder: (context, snapshot) {
+            var equippedItems = snapshot.data ?? [];
+            return Column(
+              spacing: AppParams.generalSpacing,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:
+                  categories.map((category) {
+                    var categoryItems =
+                        items
+                            .where((item) => item.category == category)
+                            .toList();
+                    var equippedCategoryItems =
+                        categoryItems
+                            .where((item) => equippedItems.contains(item))
+                            .toList();
+                    bool isLastCategory = category == categories.last;
+                    return Padding(
+                      // Give it padding at the bottom
+                      padding: EdgeInsets.only(
+                        bottom:
+                            isLastCategory ? AppParams.generalSpacing * 2 : 0,
+                      ),
+                      child: buildCategorySection(
+                        category,
+                        categoryItems,
+                        equippedCategoryItems,
+                        itemWidth,
+                        onEquipped,
+                        context,
+                      ),
+                    );
+                  }).toList(),
+            );
+          },
         ),
       ),
+    ),
+  );
+}
+
+BoxDecoration showBackgroundImage() {
+  return BoxDecoration(
+    image: DecorationImage(
+      image: AssetImage('assets/images/armoury.png'),
+      colorFilter: AppParams.backgroundImageColorFilter,
+      fit: BoxFit.cover,
     ),
   );
 }
@@ -88,6 +85,7 @@ SizedBox buildInventory(
 Column buildCategorySection(
   ItemCategory category,
   List<Item> categoryItems,
+  List<Item> equippedCategoryItems,
   double itemWidth,
   VoidCallback onEquipped,
   BuildContext context,
@@ -101,7 +99,13 @@ Column buildCategorySection(
           spacing: AppParams.generalSpacing / 2,
           children: [
             buildCategoryName(category),
-            buildCategoryItems(categoryItems, itemWidth, onEquipped, context),
+            buildCategoryItems(
+              categoryItems,
+              equippedCategoryItems,
+              itemWidth,
+              onEquipped,
+              context,
+            ),
           ],
         ),
       ),
@@ -111,6 +115,7 @@ Column buildCategorySection(
 
 Wrap buildCategoryItems(
   List<Item> categoryItems,
+  List<Item> equippedCategoryItems,
   double itemWidth,
   VoidCallback onEquipped,
   BuildContext context,
@@ -121,7 +126,8 @@ Wrap buildCategoryItems(
     alignment: WrapAlignment.start,
     children: [
       ...categoryItems.map((item) {
-        return ShopItem(item, itemWidth, onEquipped, context);
+        bool isEquipped = equippedCategoryItems.contains(item);
+        return ShopItem(item, itemWidth, onEquipped, context, isEquipped);
       }),
     ],
   );

@@ -29,14 +29,26 @@ class _ShopPageState extends State<ShopPage> {
     var allItems = AppParams.allItems;
     return Scaffold(
       appBar: AppHeader(title: 'Shop'),
-      body: showContent(
-        context,
-        allItems,
-        () {},
-        'assets/images/market.png',
-        () {
-          setState(() {}); // Refresh the inventory
-        },
+      body: Container(
+        padding: const EdgeInsets.only(
+          top: AppParams.generalSpacing,
+          left: AppParams.generalSpacing,
+          right: AppParams.generalSpacing,
+        ),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/armoury.png'),
+            colorFilter: AppParams.backgroundImageColorFilter,
+            fit: BoxFit.cover,
+          ),
+        ),
+        child:
+            allItems.isEmpty
+                ? null
+                : buildInventory(context, allItems, () {
+                  setState(() {});
+                }),
       ),
       bottomNavigationBar: bottomAppBar(context, () {
         setState(() {});

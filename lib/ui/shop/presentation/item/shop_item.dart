@@ -10,6 +10,7 @@ Container ShopItem(
   double itemWidth,
   VoidCallback onEquipped,
   BuildContext context,
+  bool isEquipped,
 ) {
   double imageHeight = 80;
   double bottomHeight = 30;
@@ -27,7 +28,7 @@ Container ShopItem(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _buildImageSection(imageHeight, item, context),
-          _buildUnlockedSection(bottomHeight, item, onEquipped),
+          _buildUnlockedSection(bottomHeight, item, onEquipped, isEquipped),
         ],
       ),
     ),
@@ -55,47 +56,42 @@ Widget _buildImageSection(double imageHeight, Item item, BuildContext context) {
   );
 }
 
-Widget _buildUnlockedSection(
+GestureDetector _buildUnlockedSection(
   double height,
   Item item,
   VoidCallback onEquipped,
+  bool isEquipped,
 ) {
   var isUnlocked = ItemService.isUnlocked(item);
-  return FutureBuilder(
-    future: ItemService.isEquipped(item),
-    builder: (context, snapshot) {
-      final isEquipped = snapshot.data ?? false;
-      return GestureDetector(
-        onTap: () async {
-          if (isEquipped) {
-            await ItemService.unequip(item);
-            onEquipped();
-          } else {
-            await ItemService.equip(item);
-            onEquipped();
-          }
-        },
-        child: Container(
-          height: height,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: isUnlocked ? AppColors.primaryLight : Colors.red,
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(8),
-              bottomRight: Radius.circular(8),
-            ),
-          ),
-          child: Center(
-            child: FittedBox(
-              child:
-                  isUnlocked
-                      ? _unlockedButtonSection(isEquipped)
-                      : _lockedButtonSection(item),
-            ),
-          ),
-        ),
-      );
+  return GestureDetector(
+    onTap: () async {
+      if (isEquipped) {
+        await ItemService.unequip(item);
+        onEquipped();
+      } else {
+        await ItemService.equip(item);
+        onEquipped();
+      }
     },
+    child: Container(
+      height: height,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: isUnlocked ? AppColors.primaryLight : Colors.red,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(8),
+          bottomRight: Radius.circular(8),
+        ),
+      ),
+      child: Center(
+        child: FittedBox(
+          child:
+              isUnlocked
+                  ? _unlockedButtonSection(isEquipped)
+                  : _lockedButtonSection(item),
+        ),
+      ),
+    ),
   );
 }
 

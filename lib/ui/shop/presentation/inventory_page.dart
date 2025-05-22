@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/ui/app_bar/presentation/bottom_app_bar.dart';
 import 'package:taskhero/core/styles.dart';
 import 'package:taskhero/ui/header/header.dart';
@@ -24,19 +25,34 @@ class _InventoryPageState extends State<InventoryPage> {
     var unlockedItems = ItemService.getUnlockedItems();
     return Scaffold(
       appBar: AppHeader(title: 'Inventory'),
-      body: showContent(
-        context,
-        unlockedItems,
-        _buildEmptyInventoryMessage,
-        'assets/images/armoury.png',
-        () {
-          setState(() {}); // Refresh the inventory
-        },
+      body: Container(
+        padding: const EdgeInsets.only(
+          top: AppParams.generalSpacing,
+          left: AppParams.generalSpacing,
+          right: AppParams.generalSpacing,
+        ),
+        width: double.infinity,
+        decoration: showBackgroundImage(),
+        child:
+            unlockedItems.isEmpty
+                ? _buildEmptyInventoryMessage()
+                : Column(
+                  children: [
+                    _showEquipped(),
+                    buildInventory(context, unlockedItems, () {
+                      setState(() {});
+                    }),
+                  ],
+                ),
       ),
       bottomNavigationBar: bottomAppBar(context, () {
         setState(() {});
       }),
     );
+  }
+
+  Widget _showEquipped() {
+    return Text('test', style: TextStyle(color: Colors.white));
   }
 
   Widget _buildEmptyInventoryMessage() {

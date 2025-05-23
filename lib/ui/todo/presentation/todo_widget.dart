@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:taskhero/core/classes/category.dart';
 import 'package:taskhero/core/classes/todo.dart';
 import 'package:taskhero/core/constants.dart';
 
@@ -29,7 +30,7 @@ class TodoWidget extends StatelessWidget {
           children: [
             _checkmark(),
             const SizedBox(width: 12),
-            _info(),
+            _info(context),
             _category(),
           ],
         ),
@@ -51,37 +52,129 @@ class TodoWidget extends StatelessWidget {
     );
   }
 
-  Expanded _info() {
+  Expanded _info(BuildContext context) {
+    Category category = AppParams.categories.firstWhere(
+      (cat) => cat.name == todo.category,
+    );
     return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                todo.title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
+      child: GestureDetector(
+        onTap: () {
+          showTaskDetails(context, category);
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  todo.title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                overflow: TextOverflow.ellipsis,
-              ),
-              if (todo.repeatCycle > 0) ...[
-                const SizedBox(width: 8),
-                const Icon(Icons.repeat, color: Colors.white, size: 18),
+                if (todo.repeatCycle > 0) ...[
+                  const SizedBox(width: 8),
+                  const Icon(Icons.repeat, color: Colors.white, size: 18),
+                ],
               ],
+            ),
+            Text(
+              _formatDate(todo.date),
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.7),
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<dynamic> showTaskDetails(BuildContext context, Category category) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(todo.title),
+          content: Column(
+            spacing: AppParams.generalSpacing,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RichText(
+                text: TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: 'Description: ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text: todo.description,
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: 'Date: ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text: _formatDate(todo.date),
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: category.color,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    category.icon,
+                    const SizedBox(width: AppParams.generalSpacing / 2),
+                    Text(
+                      todo.category,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
-          Text(
-            _formatDate(todo.date),
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.7),
-              fontSize: 14,
+          actions: [
+            SizedBox(
+              width: double.infinity,
+              child: FloatingActionButton(
+                onPressed: () => Navigator.of(context).pop(),
+                backgroundColor: AppColors.primaryLight,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Text('Close'),
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 

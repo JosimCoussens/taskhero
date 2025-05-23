@@ -19,6 +19,54 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: credentialsInputFields(context),
+        ),
+      ),
+    );
+  }
+
+  Widget credentialsInputFields(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          spacing: AppParams.generalSpacing / 2,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Image.asset('assets/images/loginpage.jpg'),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Email', style: TextStyle(fontSize: 18)),
+                _entryField(_controllerEmail),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Password', style: TextStyle(fontSize: 18)),
+                _entryField(_controllerPassword),
+              ],
+            ),
+            _errorMessage(),
+            _submitButton(context),
+            _loginOrRegisterButton(),
+            // Google sign in button
+            divider(),
+            _loginWithGoogleButton(),
+          ],
+        ),
+      ),
+    );
+  }
+
   Future<void> signInWithEmailAndPassword() async {
     try {
       await Auth().signInWithEmailAndPassword(
@@ -113,22 +161,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [credentialsInputFields(context)],
-          ),
-        ),
-      ),
-    );
-  }
-
   Row registerText() {
     return const Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -138,39 +170,6 @@ class _LoginPageState extends State<LoginPage> {
           style: TextStyle(color: Color.fromARGB(255, 150, 150, 150)),
         ),
         Text(" Register"),
-      ],
-    );
-  }
-
-  Column credentialsInputFields(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 10,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: Image.asset('assets/images/loginpage.jpg'),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Email', style: TextStyle(fontSize: 18)),
-            _entryField(_controllerEmail),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Password', style: TextStyle(fontSize: 18)),
-            _entryField(_controllerPassword),
-          ],
-        ),
-        _errorMessage(),
-        _submitButton(context),
-        _loginOrRegisterButton(),
-        // Google sign in button
-        divider(),
-        _loginWithGoogleButton(),
       ],
     );
   }

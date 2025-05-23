@@ -39,10 +39,13 @@ class TodoWidget extends StatelessWidget {
   }
 
   Container _category() {
+    Category category = AppParams.categories.firstWhere(
+      (cat) => cat.name == todo.category,
+    );
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: todo.category == 'General' ? Colors.green : Colors.pink,
+        color: category.color,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(

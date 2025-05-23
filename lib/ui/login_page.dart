@@ -94,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         child: Text(
           isLogin ? 'Login' : 'Register',
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          style: const TextStyle(fontSize: 18, color: Colors.white),
         ),
       ),
     );
@@ -130,9 +130,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Row registerText() {
-    return Row(
+    return const Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         Text(
           "Don't have an account?",
           style: TextStyle(color: Color.fromARGB(255, 150, 150, 150)),
@@ -220,8 +220,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Row divider() {
-    return Row(
-      children: const [
+    return const Row(
+      children: [
         Expanded(
           child: Divider(color: Colors.black, thickness: 1, endIndent: 10),
         ),

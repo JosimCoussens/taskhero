@@ -25,7 +25,7 @@ class _InventoryPageState extends State<InventoryPage> {
   Widget build(BuildContext context) {
     var unlockedItems = ItemService.getUnlockedItems();
     return Scaffold(
-      appBar: AppHeader(title: 'Inventory'),
+      appBar: const AppHeader(title: 'Inventory'),
       body: Container(
         padding: const EdgeInsets.only(
           top: AppParams.generalSpacing,

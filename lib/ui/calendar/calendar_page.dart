@@ -27,7 +27,7 @@ class CalendarPageState extends State<CalendarPage> {
       valueListenable: AppParams.showLevelUpDialog,
       builder: (context, showLevelUpDialog, _) {
         return Scaffold(
-          appBar: AppHeader(title: "Calendar"),
+          appBar: const AppHeader(title: "Calendar"),
           body: showLevelUpDialog ? levelUpDialog() : showContent(),
           bottomNavigationBar: bottomAppBar(context, () {
             setState(() {

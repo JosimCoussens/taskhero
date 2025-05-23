@@ -100,10 +100,13 @@ Row _lockedButtonSection(Item item) {
     children: [
       Text(
         'Level ${item.levelRequirement}',
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       const SizedBox(width: 4),
-      Icon(Icons.lock, color: Colors.white, size: 16),
+      const Icon(Icons.lock, color: Colors.white, size: 16),
     ],
   );
 }

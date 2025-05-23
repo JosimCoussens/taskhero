@@ -26,7 +26,7 @@ class HomePageState extends State<HomePage> {
       valueListenable: AppParams.showLevelUpDialog,
       builder: (context, showLevelUpDialog, _) {
         return Scaffold(
-          appBar: AppHeader(title: "Home"),
+          appBar: const AppHeader(title: "Home"),
           body:
               isLoading
                   ? _buildLoading()

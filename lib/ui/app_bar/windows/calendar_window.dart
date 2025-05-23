@@ -17,7 +17,7 @@ Future<dynamic> showCalendar(BuildContext context) {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            WindowHeader(title: "Set Task Date"),
+            const WindowHeader(title: "Set Task Date"),
             SfDateRangePicker(
               selectionShape: DateRangePickerSelectionShape.rectangle,
               selectionColor: AppColors.primaryLight,

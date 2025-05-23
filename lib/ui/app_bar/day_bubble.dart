@@ -89,7 +89,7 @@ class _DayBubbleState extends State<DayBubble> {
                                 for (int i = 0; i < snapshot.data!; i++)
                                   // Show max 3 dots
                                   if (i <= 4)
-                                    Icon(
+                                    const Icon(
                                       Icons.circle,
                                       color: Colors.green,
                                       size: 8,

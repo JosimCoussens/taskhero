@@ -28,9 +28,9 @@ AlertDialog showDetailsDialog(
           backgroundColor: AppColors.primaryLight,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        child: SizedBox(
+        child: const SizedBox(
           width: double.infinity,
-          child: const Text(
+          child: Text(
             'Close',
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white),

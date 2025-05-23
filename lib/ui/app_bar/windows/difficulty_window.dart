@@ -31,7 +31,7 @@ Future<int?> showDifficulty(BuildContext context) {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                WindowHeader(title: "Choose Difficulty"),
+                const WindowHeader(title: "Choose Difficulty"),
                 const SizedBox(height: 16),
                 ...difficulties.map((difficulty) {
                   final isSelected =

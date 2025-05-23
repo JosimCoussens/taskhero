@@ -29,7 +29,7 @@ class _ShopPageState extends State<ShopPage> {
   Widget build(BuildContext context) {
     var allItems = AppParams.allItems;
     return Scaffold(
-      appBar: AppHeader(title: 'Shop'),
+      appBar: const AppHeader(title: 'Shop'),
       body: Container(
         padding: const EdgeInsets.only(
           top: AppParams.generalSpacing,
@@ -40,7 +40,7 @@ class _ShopPageState extends State<ShopPage> {
         height: double.infinity,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/market.png'),
+            image: const AssetImage('assets/images/market.png'),
             colorFilter: AppParams.backgroundImageColorFilter,
             fit: BoxFit.cover,
           ),

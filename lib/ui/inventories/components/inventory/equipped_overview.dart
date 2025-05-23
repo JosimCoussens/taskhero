@@ -16,7 +16,7 @@ Widget equippedGear(List<Item> equippedItems) {
     child: Column(
       spacing: AppParams.generalSpacing,
       children: [
-        Text(
+        const Text(
           'Equipped Gear',
           style: TextStyle(
             color: Colors.white,
@@ -77,7 +77,7 @@ class _ItemTile extends StatelessWidget {
                     item != null
                         ? Text(
                           itembonus!,
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         )
                         : SizedBox(width: imageSize, height: textSize),
               ),

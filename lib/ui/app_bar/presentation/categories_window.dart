@@ -26,7 +26,7 @@ Future<dynamic> showCategories(BuildContext context) {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    WindowHeader(title: "Choose Category"),
+                    const WindowHeader(title: "Choose Category"),
                     const SizedBox(height: 16),
                     GridView.count(
                       shrinkWrap: true,

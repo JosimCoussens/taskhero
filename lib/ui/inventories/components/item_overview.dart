@@ -65,7 +65,7 @@ SizedBox buildInventory(
 BoxDecoration showBackgroundImage() {
   return BoxDecoration(
     image: DecorationImage(
-      image: AssetImage('assets/images/armoury.png'),
+      image: const AssetImage('assets/images/armoury.png'),
       colorFilter: AppParams.backgroundImageColorFilter,
       fit: BoxFit.cover,
     ),

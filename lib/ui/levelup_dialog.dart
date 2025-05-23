@@ -12,7 +12,7 @@ Dialog levelUpDialog() {
       width: 300,
       height: 300,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [AppColors.primary, AppColors.primaryLight],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -44,7 +44,7 @@ Dialog levelUpDialog() {
             Text(
               'Congratulations on reaching level $reachedLevel!',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: Colors.white70),
+              style: const TextStyle(fontSize: 16, color: Colors.white70),
             ),
             unlockedItems.isNotEmpty
                 ? _showRewards(unlockedItems)

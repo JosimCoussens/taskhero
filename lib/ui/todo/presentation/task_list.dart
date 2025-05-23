@@ -41,7 +41,7 @@ Expanded showTaskList(List<Todo> todos, Function refreshList) {
 SnackBar _showXpgainDialog(int addedXp) {
   return SnackBar(
     content: Text('You gained $addedXp XP!'),
-    duration: Duration(seconds: 2),
+    duration: const Duration(seconds: 2),
     behavior: SnackBarBehavior.floating,
     backgroundColor: AppColors.primaryLight,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

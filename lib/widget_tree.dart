@@ -37,7 +37,7 @@ class _WidgetTreeState extends State<WidgetTree> {
                   child: Center(child: CircularProgressIndicator()),
                 );
               }
-              return HomePage();
+              return const HomePage();
             },
           );
         } else {

@@ -49,7 +49,7 @@ class _AppHeaderState extends State<AppHeader> {
               ),
             ],
           ),
-          ProgressBar(),
+          const ProgressBar(),
         ],
       ),
     );
@@ -80,7 +80,7 @@ class _AppHeaderState extends State<AppHeader> {
         );
         await Auth().signOut();
       },
-      child: Row(
+      child: const Row(
         children: [Icon(Icons.logout, color: AppColors.primary, size: 32)],
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/data/todo_service.dart';
 import 'package:taskhero/ui/header/header.dart';
+import 'package:taskhero/ui/statistics/statistics_page.dart';
 
 OverlayEntry userOverlay(
   Offset offset,
@@ -46,29 +47,18 @@ OverlayEntry userOverlay(
                           color: Colors.black87,
                         ),
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primaryLight,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                      _button('Delete Completed', Colors.red, () async {
+                        await TodoService().deleteCompleted();
+                        removeOverlay();
+                      }),
+                      _button('Show Statistics', AppColors.primaryLight, () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const StatisticsPage(),
                           ),
-                          onPressed: () async {
-                            await TodoService().deleteCompleted();
-                          },
-                          child: const Text(
-                            'Delete All Completed',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
+                        );
+                      }),
                     ],
                   ),
                 ),
@@ -76,5 +66,27 @@ OverlayEntry userOverlay(
             ),
           ],
         ),
+  );
+}
+
+SizedBox _button(String text, Color color, VoidCallback onPressed) {
+  return SizedBox(
+    width: double.infinity,
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      onPressed: () => onPressed(),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    ),
   );
 }

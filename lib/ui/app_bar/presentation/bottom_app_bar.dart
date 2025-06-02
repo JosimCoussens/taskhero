@@ -240,7 +240,7 @@ Row _repeatCycleSelector(int selectedRepeat, ValueChanged<int> onChanged) {
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
                     color: isSelected ? Colors.blue : Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: StylingParams.borderRadius,
                   ),
                   child: Center(
                     child: Text(

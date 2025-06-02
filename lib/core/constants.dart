@@ -12,6 +12,13 @@ class DatabaseParams {
   static String equippedTableName = 'equippedItems';
 }
 
+class StylingParams {
+  static const double borderThickness = 2.0;
+  static const BorderRadius borderRadius = BorderRadius.all(
+    Radius.circular(8.0),
+  );
+}
+
 class AppParams {
   static String? userId;
   static String? loginMethod;

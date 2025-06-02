@@ -17,7 +17,7 @@ Dialog levelUpDialog() {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: StylingParams.borderRadius,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.3),

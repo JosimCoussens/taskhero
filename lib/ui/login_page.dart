@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
           spacing: AppParams.generalSpacing / 2,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: StylingParams.borderRadius,
               child: Image.asset('assets/images/loginpage.jpg'),
             ),
             Column(
@@ -112,7 +112,9 @@ class _LoginPageState extends State<LoginPage> {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        border: const OutlineInputBorder(
+          borderRadius: StylingParams.borderRadius,
+        ),
         filled: true,
         fillColor: Colors.grey.withValues(alpha: 0.1),
         contentPadding: const EdgeInsets.symmetric(
@@ -138,7 +140,9 @@ class _LoginPageState extends State<LoginPage> {
                 : createUserWithEmailAndPassword,
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF1976D2),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape: const RoundedRectangleBorder(
+            borderRadius: StylingParams.borderRadius,
+          ),
         ),
         child: Text(
           isLogin ? 'Login' : 'Register',
@@ -194,9 +198,9 @@ class _LoginPageState extends State<LoginPage> {
           }
         },
         style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-            side: const BorderSide(color: AppColors.primaryLight, width: 2),
+          shape: const RoundedRectangleBorder(
+            borderRadius: StylingParams.borderRadius,
+            side: BorderSide(color: AppColors.primaryLight, width: 2),
           ),
         ),
         child: Row(

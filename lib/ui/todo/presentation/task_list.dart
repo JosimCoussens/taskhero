@@ -44,6 +44,8 @@ SnackBar _showXpgainDialog(int addedXp) {
     duration: const Duration(seconds: 2),
     behavior: SnackBarBehavior.floating,
     backgroundColor: AppColors.primaryLight,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    shape: const RoundedRectangleBorder(
+      borderRadius: StylingParams.borderRadius,
+    ),
   );
 }

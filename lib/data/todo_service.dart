@@ -130,6 +130,8 @@ class TodoService {
     var todoFromDb = await _getTodo(todo.id!);
     var newTodo = todo.toMap();
     todoFromDb.update(newTodo);
+    // Update day statistics
+    await UserService.updateDayStats(DateTime.now().weekday - 1);
     return addedXp;
   }
 

@@ -5,11 +5,15 @@ class Styles {
   final ButtonStyle saveButtonStyle = ElevatedButton.styleFrom(
     padding: const EdgeInsets.symmetric(vertical: 16),
     backgroundColor: AppColors.primaryLight,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+    shape: const RoundedRectangleBorder(
+      borderRadius: StylingParams.borderRadius,
+    ),
   );
   final ButtonStyle goToPageButtonStyle = ElevatedButton.styleFrom(
     padding: const EdgeInsets.all(16),
     backgroundColor: AppColors.primaryLight,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+    shape: const RoundedRectangleBorder(
+      borderRadius: StylingParams.borderRadius,
+    ),
   );
 }

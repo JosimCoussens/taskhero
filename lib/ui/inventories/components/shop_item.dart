@@ -16,9 +16,9 @@ Container ShopItem(
   double bottomHeight = 30;
 
   return Container(
-    decoration: BoxDecoration(
+    decoration: const BoxDecoration(
       color: AppColors.primary,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: StylingParams.borderRadius,
     ),
     child: SizedBox(
       width: itemWidth,

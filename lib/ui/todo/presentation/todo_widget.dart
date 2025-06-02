@@ -21,9 +21,9 @@ class TodoWidget extends StatelessWidget {
       },
       background: _dismissibleBackground(),
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: AppColors.primary,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: StylingParams.borderRadius,
         ),
         padding: const EdgeInsets.all(12),
         child: Row(
@@ -146,7 +146,7 @@ class TodoWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: category.color,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: StylingParams.borderRadius,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -169,8 +169,8 @@ class TodoWidget extends StatelessWidget {
               child: FloatingActionButton(
                 onPressed: () => Navigator.of(context).pop(),
                 backgroundColor: AppColors.primaryLight,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: StylingParams.borderRadius,
                 ),
                 child: const Text('Close'),
               ),

@@ -49,10 +49,10 @@ class _CalendarHeaderState extends State<CalendarHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.primary,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
+        borderRadius: StylingParams.borderRadius,
+        boxShadow: [
           BoxShadow(color: Colors.black26, blurRadius: 6, offset: Offset(0, 3)),
         ],
       ),

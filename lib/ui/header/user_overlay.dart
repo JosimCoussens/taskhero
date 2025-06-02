@@ -28,13 +28,13 @@ OverlayEntry userOverlay(
               right: 16,
               child: Material(
                 elevation: 8,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: StylingParams.borderRadius,
                 child: Container(
                   width: 220,
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: StylingParams.borderRadius,
                   ),
                   child: Column(
                     spacing: AppParams.generalSpacing,
@@ -58,6 +58,7 @@ OverlayEntry userOverlay(
                             builder: (context) => const StatisticsPage(),
                           ),
                         );
+                        removeOverlay();
                       }),
                     ],
                   ),
@@ -76,7 +77,9 @@ SizedBox _button(String text, Color color, VoidCallback onPressed) {
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
         padding: const EdgeInsets.symmetric(vertical: 12),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: const RoundedRectangleBorder(
+          borderRadius: StylingParams.borderRadius,
+        ),
       ),
       onPressed: () => onPressed(),
       child: Text(

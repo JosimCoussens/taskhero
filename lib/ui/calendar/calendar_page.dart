@@ -118,8 +118,8 @@ class CalendarPageState extends State<CalendarPage> {
                       ? AppColors.primaryLight
                       : AppColors.primary,
               padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+              shape: const RoundedRectangleBorder(
+                borderRadius: StylingParams.borderRadius,
               ),
               elevation: 4,
             ),
@@ -150,8 +150,8 @@ class CalendarPageState extends State<CalendarPage> {
                       ? AppColors.primaryLight
                       : AppColors.primary,
               padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+              shape: const RoundedRectangleBorder(
+                borderRadius: StylingParams.borderRadius,
               ),
               elevation: 4,
             ),

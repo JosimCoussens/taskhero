@@ -26,7 +26,9 @@ AlertDialog showDetailsDialog(
         onPressed: () => Navigator.of(context).pop(),
         style: TextButton.styleFrom(
           backgroundColor: AppColors.primaryLight,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape: const RoundedRectangleBorder(
+            borderRadius: StylingParams.borderRadius,
+          ),
         ),
         child: const SizedBox(
           width: double.infinity,

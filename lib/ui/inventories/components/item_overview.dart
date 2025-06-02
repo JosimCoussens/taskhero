@@ -131,8 +131,11 @@ Stack buildCategoryName(ItemCategory category) {
         height: 40,
         decoration: BoxDecoration(
           color: AppColors.primary,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.primaryLight, width: 2),
+          borderRadius: StylingParams.borderRadius,
+          border: Border.all(
+            color: AppColors.primaryLight,
+            width: StylingParams.borderThickness,
+          ),
         ),
       ),
       Center(

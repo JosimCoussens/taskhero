@@ -11,7 +11,10 @@ Widget equippedGear(List<Item> equippedItems) {
     decoration: BoxDecoration(
       color: AppColors.primary,
       borderRadius: BorderRadius.circular(10),
-      border: Border.all(color: AppColors.primaryLight, width: 2),
+      border: Border.all(
+        color: AppColors.primaryLight,
+        width: StylingParams.borderThickness,
+      ),
     ),
     child: Column(
       spacing: AppParams.generalSpacing,

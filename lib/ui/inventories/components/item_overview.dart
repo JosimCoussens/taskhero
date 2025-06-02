@@ -62,16 +62,6 @@ SizedBox buildInventory(
   );
 }
 
-BoxDecoration showBackgroundImage() {
-  return BoxDecoration(
-    image: DecorationImage(
-      image: const AssetImage('assets/images/armoury.png'),
-      colorFilter: AppParams.backgroundImageColorFilter,
-      fit: BoxFit.cover,
-    ),
-  );
-}
-
 Column buildCategorySection(
   ItemCategory category,
   List<Item> categoryItems,

@@ -34,7 +34,7 @@ class _InventoryPageState extends State<InventoryPage> {
         ),
         width: double.infinity,
         height: double.infinity,
-        decoration: showBackgroundImage(),
+        decoration: backgroundImage('assets/images/armoury.png'),
         child:
             unlockedItems.isEmpty
                 ? _buildEmptyInventoryMessage()

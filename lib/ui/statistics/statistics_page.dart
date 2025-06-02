@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/core/constants.dart';
+import 'package:taskhero/core/styles.dart';
 import 'package:taskhero/ui/app_bar/presentation/bottom_app_bar.dart';
 import 'package:taskhero/ui/header/header.dart';
 import 'package:taskhero/ui/statistics/widgets/bar_chart.dart';
@@ -25,13 +26,26 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   Widget _content() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          spacing: 16,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [_welcomeSection(), statsCards(), _chart(), insights()],
+    return Container(
+      decoration: backgroundImage('assets/images/armoury.png'),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            spacing: 16,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                spacing: AppParams.generalSpacing,
+                children: [
+                  _welcomeSection(),
+                  statsCards(),
+                  _chart(),
+                  insights(),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -42,15 +56,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.primary,
         borderRadius: StylingParams.borderRadius,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 20,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        border: Border.all(
+          color: AppColors.primaryLight,
+          width: StylingParams.borderThickness,
+        ),
       ),
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +71,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2D3748),
+              color: Colors.white,
             ),
           ),
           SizedBox(height: 24),

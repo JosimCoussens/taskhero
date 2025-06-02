@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/core/classes/todo.dart';
+import 'package:taskhero/core/styles.dart';
 import 'package:taskhero/ui/app_bar/presentation/bottom_app_bar.dart';
 import 'package:taskhero/ui/home/components/empty_state.dart';
 import 'package:taskhero/ui/home/components/section_header.dart';
@@ -72,13 +73,7 @@ class HomePageState extends State<HomePage> {
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: const AssetImage('assets/images/castle.png'),
-            fit: BoxFit.cover,
-            colorFilter: AppParams.backgroundImageColorFilter,
-          ),
-        ),
+        decoration: backgroundImage('assets/images/castle.png'),
         child: Column(
           spacing: AppParams.generalSpacing,
           children: [

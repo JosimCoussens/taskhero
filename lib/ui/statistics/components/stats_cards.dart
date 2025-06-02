@@ -62,16 +62,15 @@ Widget _buildStatsCard(
 ) {
   return Container(
     padding: const EdgeInsets.all(20),
-    decoration: BoxDecoration(
-      color: Colors.white,
+    decoration: const BoxDecoration(
+      color: AppColors.primary,
       borderRadius: StylingParams.borderRadius,
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withValues(alpha: 0.05),
-          blurRadius: 15,
-          offset: const Offset(0, 5),
+      border: Border.fromBorderSide(
+        BorderSide(
+          color: AppColors.primaryLight,
+          width: StylingParams.borderThickness,
         ),
-      ],
+      ),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +90,7 @@ Widget _buildStatsCard(
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF2D3748),
+                color: Colors.white,
               ),
             )
             : FutureBuilder(
@@ -102,16 +101,16 @@ Widget _buildStatsCard(
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF2D3748),
+                      color: Colors.white,
                     ),
                   ),
             ),
         const SizedBox(height: 4),
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
-            color: Colors.grey.shade600,
+            color: Colors.white,
             fontWeight: FontWeight.w500,
           ),
         ),

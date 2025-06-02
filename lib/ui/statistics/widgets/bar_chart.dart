@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/data/user_service.dart';
 
 class BarChartWidget extends StatelessWidget {
@@ -67,10 +66,7 @@ class BarChartWidget extends StatelessWidget {
       getTooltipItem:
           (group, groupIndex, rod, rodIndex) => BarTooltipItem(
             rod.toY.round().toString(),
-            const TextStyle(
-              color: AppColors.primaryLight,
-              fontWeight: FontWeight.bold,
-            ),
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
     ),
   );
@@ -85,7 +81,7 @@ class BarChartWidget extends StatelessWidget {
       child: Text(
         text,
         style: const TextStyle(
-          color: AppColors.primary,
+          color: Colors.white,
           fontWeight: FontWeight.bold,
           fontSize: 14,
         ),

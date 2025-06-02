@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/core/classes/todo.dart';
+import 'package:taskhero/core/styles.dart';
 import 'package:taskhero/ui/app_bar/presentation/bottom_app_bar.dart';
 import 'package:taskhero/ui/calendar/components/calendar_header.dart';
 import 'package:taskhero/ui/levelup_dialog.dart';
@@ -50,13 +51,7 @@ class CalendarPageState extends State<CalendarPage> {
 
   Container showContent() {
     return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: const AssetImage('assets/images/waterfall.png'),
-          colorFilter: AppParams.backgroundImageColorFilter,
-          fit: BoxFit.cover,
-        ),
-      ),
+      decoration: backgroundImage('assets/images/waterfall.png'),
       child: Padding(
         padding: const EdgeInsets.all(AppParams.generalSpacing),
         child: Column(

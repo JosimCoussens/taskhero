@@ -6,9 +6,12 @@ Container insights() {
     width: double.infinity,
     padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(
-      color: Colors.white,
+      color: AppColors.primary,
       borderRadius: StylingParams.borderRadius,
-      border: Border.all(color: Colors.grey.shade200),
+      border: Border.all(
+        color: AppColors.primaryLight,
+        width: StylingParams.borderThickness,
+      ),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -18,7 +21,7 @@ Container insights() {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.amber.shade100,
+                color: Colors.amber.withValues(alpha: 0.25),
                 borderRadius: StylingParams.borderRadius,
               ),
               child: Icon(
@@ -33,7 +36,7 @@ Container insights() {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF2D3748),
+                color: Colors.white,
               ),
             ),
           ],
@@ -58,14 +61,14 @@ Widget _buildInsightItem(String text, IconData icon) {
     padding: const EdgeInsets.only(bottom: 12),
     child: Row(
       children: [
-        Icon(icon, size: 16, color: Colors.grey.shade600),
+        Icon(icon, size: 16, color: Colors.white),
         const SizedBox(width: 12),
         Expanded(
           child: Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
-              color: Colors.grey.shade700,
+              color: Colors.white,
               height: 1.4,
             ),
           ),

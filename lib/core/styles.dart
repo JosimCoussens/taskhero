@@ -17,3 +17,13 @@ class Styles {
     ),
   );
 }
+
+BoxDecoration backgroundImage(String imagePath) {
+  return BoxDecoration(
+    image: DecorationImage(
+      image: AssetImage(imagePath),
+      colorFilter: AppParams.backgroundImageColorFilter,
+      fit: BoxFit.cover,
+    ),
+  );
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/core/classes/item.dart';
+import 'package:taskhero/core/styles.dart';
 import 'package:taskhero/data/shop/item_service.dart';
 import 'package:taskhero/ui/app_bar/presentation/bottom_app_bar.dart';
 import 'package:taskhero/ui/header/header.dart';
@@ -38,13 +39,7 @@ class _ShopPageState extends State<ShopPage> {
         ),
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: const AssetImage('assets/images/market.png'),
-            colorFilter: AppParams.backgroundImageColorFilter,
-            fit: BoxFit.cover,
-          ),
-        ),
+        decoration: backgroundImage('assets/images/market.png'),
         child:
             allItems.isEmpty
                 ? null

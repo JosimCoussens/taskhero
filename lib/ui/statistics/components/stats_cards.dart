@@ -14,6 +14,7 @@ Column statsCards() {
               Icons.check_circle,
               Colors.green,
               UserService.getTotalCompleted,
+              null,
             ),
           ),
           const SizedBox(width: 16),
@@ -23,6 +24,7 @@ Column statsCards() {
               Icons.local_fire_department,
               Colors.orange,
               TodoService.getStreak,
+              ' Days',
             ),
           ),
         ],
@@ -38,6 +40,7 @@ Column statsCards() {
               Icons.calendar_today,
               Colors.purple,
               null,
+              null,
             ),
           ),
           const SizedBox(width: 16),
@@ -46,6 +49,7 @@ Column statsCards() {
               'Average',
               Icons.trending_up,
               Colors.teal,
+              null,
               null,
             ),
           ),
@@ -60,6 +64,7 @@ Widget _buildStatsCard(
   IconData icon,
   Color color,
   Function? dataFunction,
+  String? postText,
 ) {
   return Container(
     padding: const EdgeInsets.all(20),
@@ -98,7 +103,7 @@ Widget _buildStatsCard(
               future: dataFunction(),
               builder:
                   (context, snapshot) => Text(
-                    snapshot.data.toString(),
+                    snapshot.data.toString() + (postText ?? ''),
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

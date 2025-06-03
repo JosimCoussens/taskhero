@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/core/constants.dart';
+import 'package:taskhero/data/todo_service.dart';
 import 'package:taskhero/data/user_service.dart';
 
 Column statsCards() {
@@ -21,7 +22,7 @@ Column statsCards() {
               'Streak',
               Icons.local_fire_department,
               Colors.orange,
-              null,
+              TodoService.getStreak,
             ),
           ),
         ],

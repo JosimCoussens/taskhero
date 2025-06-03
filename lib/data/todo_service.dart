@@ -15,7 +15,6 @@ class TodoService {
             .doc(AppParams.userId)
             .collection('todos')
             .get();
-
     return snapshot.docs
         .map((doc) => Todo.fromFirestore(doc.data() as Map<String, dynamic>))
         .toList();
@@ -126,6 +125,8 @@ class TodoService {
         CalendarService.deleteEvent(todo.id!);
       }
     }
+    // Set completion date if task is completed
+    todo.completionDate = todo.isCompleted ? DateTime.now() : null;
     // Update todo in database
     var todoFromDb = await _getTodo(todo.id!);
     var newTodo = todo.toMap();
@@ -242,14 +243,48 @@ class TodoService {
     return todos.length;
   }
 
+  static Future<List<Todo>> getAllCompleted() async {
+    // Get all completed tasks
+    List<Todo> all = await getAll();
+    return all.where((todo) => todo.isCompleted == true).toList();
+  }
+
   Future<void> deleteCompleted() async {
     // Get all completed tasks
-    List<Todo> completedTasks = await getAll().then(
-      (todos) => todos.where((todo) => todo.isCompleted == true).toList(),
-    );
+    var completedTasks = await getAllCompleted();
     // Delete each completed task
     for (var task in completedTasks) {
       await delete(task, false);
     }
+  }
+
+  static Future<int> getStreak() async {
+    var allCompleted = await getAllCompleted();
+    if (allCompleted.isEmpty) return 0;
+
+    // Sort by completion date, newest last
+    allCompleted.sort((a, b) => a.completionDate!.compareTo(b.completionDate!));
+
+    // Extract all unique completion dates (without time)
+    final completedDates =
+        allCompleted
+            .map(
+              (todo) => DateTime(
+                todo.completionDate!.year,
+                todo.completionDate!.month,
+                todo.completionDate!.day,
+              ),
+            )
+            .toSet();
+
+    int streak = 0;
+    DateTime day = DateTime.now();
+
+    while (completedDates.contains(DateTime(day.year, day.month, day.day))) {
+      streak++;
+      day = day.subtract(const Duration(days: 1));
+    }
+
+    return streak;
   }
 }

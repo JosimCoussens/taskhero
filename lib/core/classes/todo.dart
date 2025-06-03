@@ -9,6 +9,7 @@ class Todo {
   bool isCompleted;
   int repeatCycle;
   int difficulty;
+  DateTime? completionDate;
 
   Todo({
     this.id,
@@ -19,6 +20,7 @@ class Todo {
     this.isCompleted = false,
     this.repeatCycle = 0,
     this.difficulty = 1,
+    this.completionDate,
   }) : date = date ?? DateTime.now();
 
   // Factory method to create a Todo from Firestore document data
@@ -32,6 +34,10 @@ class Todo {
       isCompleted: data['isCompleted'] ?? false,
       repeatCycle: data['repeatCycle'] ?? 0,
       difficulty: data['difficulty'] ?? 1,
+      completionDate:
+          data['completionDate'] is Timestamp
+              ? (data['completionDate'] as Timestamp).toDate()
+              : null,
     );
   }
 
@@ -46,6 +52,8 @@ class Todo {
       'isCompleted': isCompleted,
       'repeatCycle': repeatCycle,
       'difficulty': difficulty,
+      'completionDate':
+          completionDate != null ? Timestamp.fromDate(completionDate!) : null,
     };
   }
 }

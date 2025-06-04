@@ -105,4 +105,25 @@ class DataService {
             .toSet();
     return (completedTodos.length / completedDates.length);
   }
+
+  static int getDayStats(List<Todo> completedTodos, int dayIndex) {
+    DateTime today = DateTime.now();
+    DateTime startOfToday = DateTime(today.year, today.month, today.day);
+    // Get last Monday (at 00:00)
+    DateTime lastMonday = startOfToday.subtract(
+      Duration(
+        days: startOfToday.weekday - DateTime.monday,
+      ), // DateTime.monday is 1
+    );
+    DateTime targetDay = lastMonday.add(Duration(days: dayIndex));
+    return completedTodos
+        .where(
+          (todo) =>
+              todo.completionDate!.isAfter(targetDay) &&
+              todo.completionDate!.isBefore(
+                targetDay.add(const Duration(days: 1)),
+              ),
+        )
+        .length;
+  }
 }

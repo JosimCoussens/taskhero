@@ -29,6 +29,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   Widget _content() {
     return Container(
+      width: double.infinity,
+      height: double.infinity,
       decoration: backgroundImage('assets/images/armoury.png'),
       child: SingleChildScrollView(
         child: Padding(
@@ -58,22 +60,21 @@ class _StatisticsPageState extends State<StatisticsPage> {
       children: [
         _welcomeSection(),
         statsCards(snapshot.data ?? []),
-        _chart(),
+        _chart(snapshot.data ?? []),
         insights(snapshot.data ?? []),
       ],
     );
   }
 
-  Center _showNoCompletedScreen() {
-    return Center(
-      child: Text(
-        'No completed tasks yet!',
-        style: TextStyle(color: Colors.grey.shade600, fontSize: 18),
-      ),
+  Widget _showNoCompletedScreen() {
+    return Text(
+      'No completed tasks yet!',
+      textAlign: TextAlign.center,
+      style: TextStyle(color: Colors.grey.shade600, fontSize: 18),
     );
   }
 
-  Container _chart() {
+  Container _chart(List<Todo> allCompleted) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -85,10 +86,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
           width: StylingParams.borderThickness,
         ),
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Weekly Overview',
             style: TextStyle(
               fontSize: 22,
@@ -96,8 +97,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
               color: Colors.white,
             ),
           ),
-          SizedBox(height: 24),
-          BarChartWidget(),
+          const SizedBox(height: 24),
+          BarChartWidget(allCompleted: allCompleted),
         ],
       ),
     );

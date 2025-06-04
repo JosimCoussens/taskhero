@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:taskhero/core/classes/todo.dart';
 import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/data/data_service.dart';
-import 'package:taskhero/data/todo_service.dart';
 
 Widget statsCards(List<Todo> completedTodos) {
   return _showCards(completedTodos);

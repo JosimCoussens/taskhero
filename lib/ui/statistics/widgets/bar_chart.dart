@@ -1,60 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:taskhero/data/user_service.dart';
+import 'package:taskhero/core/classes/todo.dart';
+import 'package:taskhero/data/data_service.dart';
 
 class BarChartWidget extends StatelessWidget {
-  const BarChartWidget({super.key});
+  const BarChartWidget({super.key, required this.allCompleted});
+
+  final List<Todo> allCompleted;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<BarChartGroupData>>(
-      future: _getBarGroups(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasError) {
-          return const Center(child: Text('Error loading data'));
-        }
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No data available'));
-        }
+    var maxValue = _getBarGroups(
+      allCompleted,
+    ).map((e) => e.barRods[0].toY).reduce((a, b) => a > b ? a : b);
 
-        var maxValue = snapshot.data!
-            .map((e) => e.barRods[0].toY)
-            .reduce((a, b) => a > b ? a : b);
-
-        return SizedBox(
-          height: 200,
-          child: BarChart(
-            BarChartData(
-              barTouchData: _barTouchData,
-              titlesData: _titlesData,
-              borderData: FlBorderData(show: false),
-              barGroups: snapshot.data!,
-              gridData: const FlGridData(show: false),
-              alignment: BarChartAlignment.spaceAround,
-              maxY: maxValue + 1,
-            ),
-          ),
-        );
-      },
+    return SizedBox(
+      height: 200,
+      child: BarChart(
+        BarChartData(
+          barTouchData: _barTouchData,
+          titlesData: _titlesData,
+          borderData: FlBorderData(show: false),
+          barGroups: _getBarGroups(allCompleted),
+          gridData: const FlGridData(show: false),
+          alignment: BarChartAlignment.spaceAround,
+          maxY: maxValue + 1,
+        ),
+      ),
     );
   }
 
-  static Future<List<BarChartGroupData>> _getBarGroups() async {
-    return Future.wait(
-      List.generate(7, (dayIndex) async {
-        final value = (await UserService.getDayStats(dayIndex)).toDouble();
-        return BarChartGroupData(
-          x: dayIndex,
-          barRods: [
-            BarChartRodData(toY: value, color: Colors.green, width: 24),
-          ],
-          showingTooltipIndicators: [0],
-        );
-      }),
-    );
+  static List<BarChartGroupData> _getBarGroups(List<Todo> allCompleted) {
+    return List.generate(7, (dayIndex) {
+      final value =
+          (DataService.getDayStats(allCompleted, dayIndex)).toDouble();
+      return BarChartGroupData(
+        x: dayIndex,
+        barRods: [BarChartRodData(toY: value, color: Colors.green, width: 24)],
+        showingTooltipIndicators: [0],
+      );
+    });
   }
 
   static BarTouchData get _barTouchData => BarTouchData(

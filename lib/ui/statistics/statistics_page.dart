@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskhero/core/classes/todo.dart';
 import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/core/styles.dart';
 import 'package:taskhero/data/todo_service.dart';
@@ -39,19 +40,35 @@ class _StatisticsPageState extends State<StatisticsPage> {
               FutureBuilder(
                 future: TodoService.getAllCompleted(),
                 builder:
-                    (context, snapshot) => Column(
-                      spacing: AppParams.generalSpacing,
-                      children: [
-                        _welcomeSection(),
-                        statsCards(snapshot.data ?? []),
-                        _chart(),
-                        insights(snapshot.data ?? []),
-                      ],
-                    ),
+                    (context, snapshot) =>
+                        snapshot.data == null || snapshot.data!.isEmpty
+                            ? _showNoCompletedScreen()
+                            : _showContent(snapshot),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Column _showContent(AsyncSnapshot<List<Todo>> snapshot) {
+    return Column(
+      spacing: AppParams.generalSpacing,
+      children: [
+        _welcomeSection(),
+        statsCards(snapshot.data ?? []),
+        _chart(),
+        insights(snapshot.data ?? []),
+      ],
+    );
+  }
+
+  Center _showNoCompletedScreen() {
+    return Center(
+      child: Text(
+        'No completed tasks yet!',
+        style: TextStyle(color: Colors.grey.shade600, fontSize: 18),
       ),
     );
   }

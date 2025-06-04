@@ -256,23 +256,4 @@ class TodoService {
       await delete(task, false);
     }
   }
-
-  static int getThisWeekCount(List<Todo> allCompleted) {
-    DateTime today = DateTime.now();
-    DateTime startOfToday = DateTime(today.year, today.month, today.day);
-    // Get last Monday (at 00:00)
-    DateTime lastMonday = startOfToday.subtract(
-      Duration(
-        days: startOfToday.weekday - DateTime.monday,
-      ), // DateTime.monday is 1
-    );
-    // Tomorrow at 00:00 to include full today
-    DateTime tomorrow = startOfToday.add(const Duration(days: 1));
-    return allCompleted.where((todo) {
-      final date = todo.completionDate!;
-      final dateOnly = DateTime(date.year, date.month, date.day);
-      return dateOnly.isAtSameMomentAs(lastMonday) ||
-          (dateOnly.isAfter(lastMonday) && dateOnly.isBefore(tomorrow));
-    }).length;
-  }
 }

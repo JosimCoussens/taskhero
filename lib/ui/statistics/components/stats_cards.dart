@@ -5,9 +5,7 @@ import 'package:taskhero/data/data_service.dart';
 import 'package:taskhero/data/todo_service.dart';
 
 Widget statsCards(List<Todo> completedTodos) {
-  return completedTodos.isEmpty
-      ? const Center(child: CircularProgressIndicator())
-      : _showCards(completedTodos);
+  return _showCards(completedTodos);
 }
 
 Column _showCards(List<Todo> completedTodos) {
@@ -20,8 +18,7 @@ Column _showCards(List<Todo> completedTodos) {
               'Tasks Done',
               Icons.check_circle,
               Colors.green,
-              completedTodos.length,
-              null,
+              completedTodos.length.round().toString(),
             ),
           ),
           const SizedBox(width: 16),
@@ -30,8 +27,7 @@ Column _showCards(List<Todo> completedTodos) {
               'Streak',
               Icons.local_fire_department,
               Colors.orange,
-              DataService.getStreak(completedTodos),
-              ' Days',
+              '${DataService.getStreak(completedTodos).round()} Day',
             ),
           ),
         ],
@@ -46,8 +42,7 @@ Column _showCards(List<Todo> completedTodos) {
               'This Week',
               Icons.calendar_today,
               Colors.purple,
-              TodoService.getThisWeekCount(completedTodos),
-              ' Tasks',
+              '${DataService.getThisWeekCount(completedTodos).round()} Completed',
             ),
           ),
           const SizedBox(width: 16),
@@ -56,8 +51,7 @@ Column _showCards(List<Todo> completedTodos) {
               'Average',
               Icons.trending_up,
               Colors.teal,
-              -1,
-              null,
+              '${DataService.getAverageTasksPerDay(completedTodos).toStringAsFixed(1)} Tasks/Day',
             ),
           ),
         ],
@@ -66,13 +60,7 @@ Column _showCards(List<Todo> completedTodos) {
   );
 }
 
-Widget _buildStatsCard(
-  String title,
-  IconData icon,
-  Color color,
-  int value,
-  String? postText,
-) {
+Widget _buildStatsCard(String title, IconData icon, Color color, String value) {
   return Container(
     padding: const EdgeInsets.all(20),
     decoration: const BoxDecoration(
@@ -98,9 +86,9 @@ Widget _buildStatsCard(
         ),
         const SizedBox(height: 16),
         Text(
-          value.toString() + (postText ?? ''),
+          value,
           style: const TextStyle(
-            fontSize: 24,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),

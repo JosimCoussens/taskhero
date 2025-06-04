@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:taskhero/core/classes/todo.dart';
 import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/data/todo_service.dart';
-import 'package:taskhero/data/user_service.dart';
 
-Column statsCards() {
+Widget statsCards() {
+  return FutureBuilder(
+    future: TodoService.getAllCompleted(),
+    builder:
+        (context, snapshot) =>
+            snapshot.data == null
+                ? const Center(child: CircularProgressIndicator())
+                : _showCards(snapshot),
+  );
+}
+
+Column _showCards(AsyncSnapshot<List<Todo>> snapshot) {
   return Column(
     children: [
       Row(
@@ -13,7 +24,7 @@ Column statsCards() {
               'Tasks Done',
               Icons.check_circle,
               Colors.green,
-              UserService.getTotalCompleted,
+              snapshot.data!.length,
               null,
             ),
           ),
@@ -23,7 +34,7 @@ Column statsCards() {
               'Streak',
               Icons.local_fire_department,
               Colors.orange,
-              TodoService.getStreak,
+              TodoService.getStreak(snapshot.data!),
               ' Days',
             ),
           ),
@@ -39,8 +50,8 @@ Column statsCards() {
               'This Week',
               Icons.calendar_today,
               Colors.purple,
-              null,
-              null,
+              TodoService.getThisWeekCount(snapshot.data!),
+              ' Tasks',
             ),
           ),
           const SizedBox(width: 16),
@@ -49,7 +60,7 @@ Column statsCards() {
               'Average',
               Icons.trending_up,
               Colors.teal,
-              null,
+              -1,
               null,
             ),
           ),
@@ -63,7 +74,7 @@ Widget _buildStatsCard(
   String title,
   IconData icon,
   Color color,
-  Function? dataFunction,
+  int value,
   String? postText,
 ) {
   return Container(
@@ -90,27 +101,14 @@ Widget _buildStatsCard(
           child: Icon(icon, color: color, size: 24),
         ),
         const SizedBox(height: 16),
-        dataFunction == null
-            ? const Text(
-              'N/A',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            )
-            : FutureBuilder(
-              future: dataFunction(),
-              builder:
-                  (context, snapshot) => Text(
-                    snapshot.data.toString() + (postText ?? ''),
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-            ),
+        Text(
+          value.toString() + (postText ?? ''),
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
         const SizedBox(height: 4),
         Text(
           title,

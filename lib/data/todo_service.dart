@@ -244,7 +244,6 @@ class TodoService {
   }
 
   static Future<List<Todo>> getAllCompleted() async {
-    // Get all completed tasks
     List<Todo> all = await getAll();
     return all.where((todo) => todo.isCompleted == true).toList();
   }
@@ -258,8 +257,7 @@ class TodoService {
     }
   }
 
-  static Future<int> getStreak() async {
-    var allCompleted = await getAllCompleted();
+  static int getStreak(List<Todo> allCompleted) {
     if (allCompleted.isEmpty) return 0;
 
     // Sort by completion date, newest last
@@ -286,5 +284,24 @@ class TodoService {
     }
 
     return streak;
+  }
+
+  static int getThisWeekCount(List<Todo> allCompleted) {
+    DateTime today = DateTime.now();
+    DateTime startOfToday = DateTime(today.year, today.month, today.day);
+    // Get last Monday (at 00:00)
+    DateTime lastMonday = startOfToday.subtract(
+      Duration(
+        days: startOfToday.weekday - DateTime.monday,
+      ), // DateTime.monday is 1
+    );
+    // Tomorrow at 00:00 to include full today
+    DateTime tomorrow = startOfToday.add(const Duration(days: 1));
+    return allCompleted.where((todo) {
+      final date = todo.completionDate!;
+      final dateOnly = DateTime(date.year, date.month, date.day);
+      return dateOnly.isAtSameMomentAs(lastMonday) ||
+          (dateOnly.isAfter(lastMonday) && dateOnly.isBefore(tomorrow));
+    }).length;
   }
 }

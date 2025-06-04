@@ -20,11 +20,6 @@ class UserService {
         .update({'dayStatistics': stats});
   }
 
-  static Future<int> getTotalCompleted() async {
-    var dayStatsList = await getDayStatsList();
-    return dayStatsList.reduce((a, b) => a + b);
-  }
-
   static Future<List<int>> getDayStatsList() async {
     return FirebaseFirestore.instance
         .collection('users')

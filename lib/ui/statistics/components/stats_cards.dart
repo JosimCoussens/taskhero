@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/core/classes/todo.dart';
 import 'package:taskhero/core/constants.dart';
+import 'package:taskhero/data/data_service.dart';
 import 'package:taskhero/data/todo_service.dart';
 
-Widget statsCards() {
-  return FutureBuilder(
-    future: TodoService.getAllCompleted(),
-    builder:
-        (context, snapshot) =>
-            snapshot.data == null
-                ? const Center(child: CircularProgressIndicator())
-                : _showCards(snapshot),
-  );
+Widget statsCards(List<Todo> completedTodos) {
+  return completedTodos.isEmpty
+      ? const Center(child: CircularProgressIndicator())
+      : _showCards(completedTodos);
 }
 
-Column _showCards(AsyncSnapshot<List<Todo>> snapshot) {
+Column _showCards(List<Todo> completedTodos) {
   return Column(
     children: [
       Row(
@@ -24,7 +20,7 @@ Column _showCards(AsyncSnapshot<List<Todo>> snapshot) {
               'Tasks Done',
               Icons.check_circle,
               Colors.green,
-              snapshot.data!.length,
+              completedTodos.length,
               null,
             ),
           ),
@@ -34,7 +30,7 @@ Column _showCards(AsyncSnapshot<List<Todo>> snapshot) {
               'Streak',
               Icons.local_fire_department,
               Colors.orange,
-              TodoService.getStreak(snapshot.data!),
+              DataService.getStreak(completedTodos),
               ' Days',
             ),
           ),
@@ -50,7 +46,7 @@ Column _showCards(AsyncSnapshot<List<Todo>> snapshot) {
               'This Week',
               Icons.calendar_today,
               Colors.purple,
-              TodoService.getThisWeekCount(snapshot.data!),
+              TodoService.getThisWeekCount(completedTodos),
               ' Tasks',
             ),
           ),

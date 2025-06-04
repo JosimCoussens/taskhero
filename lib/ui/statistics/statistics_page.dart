@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskhero/core/constants.dart';
 import 'package:taskhero/core/styles.dart';
+import 'package:taskhero/data/todo_service.dart';
 import 'package:taskhero/ui/app_bar/presentation/bottom_app_bar.dart';
 import 'package:taskhero/ui/header/header.dart';
 import 'package:taskhero/ui/statistics/widgets/bar_chart.dart';
@@ -35,14 +36,18 @@ class _StatisticsPageState extends State<StatisticsPage> {
             spacing: 16,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                spacing: AppParams.generalSpacing,
-                children: [
-                  _welcomeSection(),
-                  statsCards(),
-                  _chart(),
-                  insights(),
-                ],
+              FutureBuilder(
+                future: TodoService.getAllCompleted(),
+                builder:
+                    (context, snapshot) => Column(
+                      spacing: AppParams.generalSpacing,
+                      children: [
+                        _welcomeSection(),
+                        statsCards(snapshot.data ?? []),
+                        _chart(),
+                        insights(snapshot.data ?? []),
+                      ],
+                    ),
               ),
             ],
           ),

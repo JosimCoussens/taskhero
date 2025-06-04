@@ -257,35 +257,6 @@ class TodoService {
     }
   }
 
-  static int getStreak(List<Todo> allCompleted) {
-    if (allCompleted.isEmpty) return 0;
-
-    // Sort by completion date, newest last
-    allCompleted.sort((a, b) => a.completionDate!.compareTo(b.completionDate!));
-
-    // Extract all unique completion dates (without time)
-    final completedDates =
-        allCompleted
-            .map(
-              (todo) => DateTime(
-                todo.completionDate!.year,
-                todo.completionDate!.month,
-                todo.completionDate!.day,
-              ),
-            )
-            .toSet();
-
-    int streak = 0;
-    DateTime day = DateTime.now();
-
-    while (completedDates.contains(DateTime(day.year, day.month, day.day))) {
-      streak++;
-      day = day.subtract(const Duration(days: 1));
-    }
-
-    return streak;
-  }
-
   static int getThisWeekCount(List<Todo> allCompleted) {
     DateTime today = DateTime.now();
     DateTime startOfToday = DateTime(today.year, today.month, today.day);

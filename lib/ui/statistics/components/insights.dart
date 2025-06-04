@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:taskhero/core/classes/todo.dart';
 import 'package:taskhero/core/constants.dart';
+import 'package:taskhero/data/data_service.dart';
 
-Container insights() {
+Container insights(List<Todo> completedTodos) {
   return Container(
     width: double.infinity,
     padding: const EdgeInsets.all(20),
@@ -42,13 +44,16 @@ Container insights() {
           ],
         ),
         const SizedBox(height: 16),
-        _buildInsightItem('Your most productive day is Tuesday', Icons.star),
         _buildInsightItem(
-          'You complete 23% more tasks in the morning',
+          'Your most productive day is ${DataService.getMostProductiveDay(completedTodos)}',
+          Icons.star,
+        ),
+        _buildInsightItem(
+          'You complete most tasks at ${DataService.getMostProductiveTime(completedTodos)}',
           Icons.wb_sunny,
         ),
         _buildInsightItem(
-          'Keep up the great work! You\'re on a 7-day streak',
+          'Keep up the great work! You\'re on a ${DataService.getStreak(completedTodos)}-day streak',
           Icons.emoji_events,
         ),
       ],

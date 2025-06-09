@@ -16,7 +16,7 @@ Expanded showTaskList(List<Todo> todos, Function refreshList) {
               todo,
               () async {
                 int addedXp = await TodoService.toggleCompletion(todo);
-                if (context.mounted) {
+                if (context.mounted && addedXp > 0) {
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(_showXpgainDialog(addedXp));

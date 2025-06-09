@@ -37,8 +37,7 @@ class CalendarService {
     return createdCalendar.id!; // Save this ID and use it for event creation
   }
 
-  static void updateEventDate(Todo todo) async {
-    CalendarClient calendarClient = CalendarClient();
-    calendarClient.updateDate(todo);
+  static Future<void> toggleStatus(String eventId) async {
+    await CalendarClient.toggleStatus(eventId);
   }
 }

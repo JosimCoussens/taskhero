@@ -125,10 +125,10 @@ class TodoService {
       }
     }
     // Update xp
-    int addedXp = await _setXp(todo);
+    int addedXp = todo.isCompleted ? await _setXp(todo) : 0;
     // Delete event
-    if (UserService.loggedInWithGoogle() && todo.isCompleted) {
-      CalendarService.deleteEvent(todo.id!);
+    if (UserService.loggedInWithGoogle()) {
+      await CalendarService.toggleStatus(todo.id!);
     }
     // Set completion date if task is completed
     todo.completionDate = todo.isCompleted ? DateTime.now() : null;

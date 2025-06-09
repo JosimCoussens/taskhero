@@ -70,7 +70,7 @@ class TodoService {
             .toList(),
   );
 
-  addTask(Todo newTask) async {
+  static Future<void> addTask(Todo newTask) async {
     if (AppParams.userId == null) throw Exception('User not logged in.');
     // Generate unique id
     String id = DateTime.now().millisecondsSinceEpoch.toString();
@@ -93,44 +93,48 @@ class TodoService {
     if (todo.isCompleted == true) {
       todo.isCompleted = false;
     }
-    // Set task to completed and update todo date if todo is recurring
+    // Set task to completed and create new todo if it is a recurring task
     else {
+      Todo todoToAdd = Todo.clone(todo);
       switch (todo.repeatCycle) {
         case 0: // No repeat
           todo.isCompleted = !todo.isCompleted;
           break;
         case 1: // Daily
-          todo.date = todo.date.add(const Duration(days: 1));
+          todoToAdd.date = todoToAdd.date.add(const Duration(days: 1));
+          await addTask(todoToAdd);
+          todo.isCompleted = !todo.isCompleted;
           break;
         case 2: // Weekly
-          todo.date = todo.date.add(const Duration(days: 7));
+          todoToAdd.date = todoToAdd.date.add(const Duration(days: 7));
+          await addTask(todoToAdd);
+          todo.isCompleted = !todo.isCompleted;
           break;
         case 3: // Monthly
-          todo.date =
+          todoToAdd.date =
               todo.date.month < 12
-                  ? DateTime(todo.date.year, todo.date.month + 1, todo.date.day)
-                  : DateTime(todo.date.year + 1, 1, todo.date.day);
+                  ? DateTime(
+                    todoToAdd.date.year,
+                    todoToAdd.date.month + 1,
+                    todoToAdd.date.day,
+                  )
+                  : DateTime(todoToAdd.date.year + 1, 1, todoToAdd.date.day);
+          await addTask(todoToAdd);
+          todo.isCompleted = !todo.isCompleted;
           break;
       }
     }
     // Update xp
     int addedXp = await _setXp(todo);
-    if (UserService.loggedInWithGoogle()) {
-      // Update calendar if recurring task
-      if (todo.repeatCycle != 0) {
-        CalendarService.updateEventDate(todo);
-      }
-      // Delete event if task is not recurring
-      else if (todo.isCompleted) {
-        CalendarService.deleteEvent(todo.id!);
-      }
+    // Delete event
+    if (UserService.loggedInWithGoogle() && todo.isCompleted) {
+      CalendarService.deleteEvent(todo.id!);
     }
     // Set completion date if task is completed
     todo.completionDate = todo.isCompleted ? DateTime.now() : null;
     // Update todo in database
     var todoFromDb = await _getTodo(todo.id!);
-    var newTodo = todo.toMap();
-    todoFromDb.update(newTodo);
+    await todoFromDb.update(todo.toMap());
     return addedXp;
   }
 

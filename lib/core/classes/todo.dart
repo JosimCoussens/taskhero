@@ -56,4 +56,18 @@ class Todo {
           completionDate != null ? Timestamp.fromDate(completionDate!) : null,
     };
   }
+
+  static Todo clone(Todo todo) {
+    return Todo(
+      id: todo.id,
+      title: todo.title,
+      description: todo.description,
+      date: todo.date,
+      category: todo.category,
+      isCompleted: todo.isCompleted,
+      repeatCycle: todo.repeatCycle,
+      difficulty: todo.difficulty,
+      completionDate: todo.completionDate,
+    );
+  }
 }

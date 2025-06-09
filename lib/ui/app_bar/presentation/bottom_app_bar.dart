@@ -191,7 +191,7 @@ Row _taskActionIcons(
             category: category ?? 'General',
           );
 
-          await TodoService().addTask(newTask);
+          await TodoService.addTask(newTask);
           onTaskAdded.call();
           if (context.mounted) Navigator.of(context).pop();
         },

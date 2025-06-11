@@ -144,13 +144,13 @@ class TodoService {
     int baseXp = 50;
     switch (todo.difficulty) {
       case 0: // Easy
-        xpToAdd = (baseXp * 0.75).ceil().toInt();
+        xpToAdd = (baseXp * 0.5).ceil().toInt();
         break;
       case 1: // Medium
         xpToAdd = (baseXp * 1).toInt();
         break;
       case 2: // Hard
-        xpToAdd = (baseXp * 1.25).ceil().toInt();
+        xpToAdd = (baseXp * 2).ceil().toInt();
         break;
     }
     // Apply xp bonus from item

@@ -102,7 +102,15 @@ class TodoWidget extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(todo.title),
+          title: Row(
+            spacing: AppParams.generalSpacing / 2,
+            children: [
+              Text(todo.title),
+              todo.repeatCycle > 0
+                  ? const Icon(Icons.repeat, color: Colors.black, size: 18)
+                  : const SizedBox.shrink(),
+            ],
+          ),
           content: Column(
             spacing: AppParams.generalSpacing,
             mainAxisSize: MainAxisSize.min,
@@ -137,6 +145,28 @@ class TodoWidget extends StatelessWidget {
                     ),
                     TextSpan(
                       text: _formatDate(todo.date),
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: 'Difficulty: ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text:
+                          todo.difficulty == 0
+                              ? 'Easy'
+                              : todo.difficulty == 1
+                              ? 'Medium'
+                              : 'Hard',
                       style: const TextStyle(color: Colors.black),
                     ),
                   ],

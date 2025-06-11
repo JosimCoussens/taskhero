@@ -50,7 +50,9 @@ class _ItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     var item = items.where((item) => item.category == category).firstOrNull;
     String? itembonus =
-        item != null ? '+${((item.xpGain - 1) * 100).round()}% XP' : null;
+        item != null
+            ? '+${((item.xpGain - 1) * 100).toStringAsFixed(2)}% XP'
+            : null;
     double imageSize = 80;
     double textSize = 20;
     return Column(
